@@ -1,0 +1,34 @@
+updates to ML
+
+
+
+OLD
+X preface has typos
+X p. 7 check quotation marks on 'just work'
+X sidnote 4 link broken (requires http://)
+X p. 12 remove some of the boxiness/borders of that graph
+X p. 14 check sidenote 17 for spacing ('tuning'par)
+X p. 16 explain last line in high bias, lambda as penalty coef, but this really should be estimated rather than set
+X p. 17 remove comma in first line of adding another
+X p. 18 sidenote 22 caps for cross val and finally Generalized Cross-Validation measure (GCV); also going 'through' not 'to', or 'doing'
+X p. 19 delete 'also known as f1 score' already have in parens
+p. 20 phi coefficient- cite peirce in margin?
+X 'area under a ROC curve' spell out ROC and undo redundancy
+X p. 21 there 'are' two-way interactions
+X p. 21footnote 27 and to or
+X p. 22 model assessment- sidenote ensembles
+X p. 24 unnecessary break for line 'The methods... '
+X p. 24 chang 'an quad core' to 'a quad core'
+X p. 25 undo 'unwanted' line with %in% and just leave c() with next line using wanted instead of !wanted
+X or just change to wanted = and remove bang
+X p. 25 change 5 closest k neighbors to just 5 closest or k closest
+X general- space after pound for comments
+X p. 26 1st para-values 'of' k to try out; remove comment on set.seed
+X p. 27 i.e. just guessing the more prevalent 'not good' category; ROC curve analysis to ROC analysis
+X p. 28 Visually we can see them as layers (not in as); Overly complex... suffer from high variance and will thus be less generalizable
+X p. 30 or somewhere, note how it is plain that wine ratings mostly reflect how easy it gets you drunk.  boones/franzia anyone?
+X p. 31 maybe pretty up that 2nd tree
+X p. 39 ... we might have HAVE in the past...; ready-to-analyze state...; make MORE sense within the Bayesian framework
+X p. 40 keep it and 'yourself' on the path to your goal
+X p. 42 and prior, shrinkage toward zero to just shrinkage, sometimes to zero
+X Hastie Tibs reference has both 3rd and 5th printing, change to 10th

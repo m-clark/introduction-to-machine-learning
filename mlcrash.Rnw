@@ -1,0 +1,128 @@
+\documentclass[english,nohyper,titlepage]{tufte-handout}
+\usepackage{charter}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\rmdefault}
+\usepackage[latin9]{inputenc}
+\usepackage{color}
+\usepackage{natbib}
+%\usepackage{cite}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[unicode=true,pdfusetitle,bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+            breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=true] {hyperref}
+\hypersetup{urlcolor= RedOrange, citecolor=RedOrange, linkcolor=RedOrange}
+\fancyhf{}% clear previous contents of running heads/feet
+\fancyhead[RE]{\footnotesize{Machine Learning\qquad{} \thepage}}
+\fancyhead[LO]{\footnotesize{\thepage \qquad{}Applications in R}}
+%\rhead{myrhead}
+\makeatletter
+\newcommand{\sgn}{\operatorname{sgn}} %define the sign operator
+
+
+\title{\LARGE An Introduction to Machine Learning \\ 
+\noindent \normalsize With Applications in R\normalsize}
+
+\author{{\small Michael Clark\\
+         \noindent Center for Social Research\\
+         \noindent University of Notre Dame\\}}
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+
+\AtBeginDocument{
+\def\labelitemi{} %%%%\(\cdot\) remove bullet
+}
+
+\makeatother
+
+\begin{document}
+\bibliographystyle{apa}
+
+\maketitle
+\pagebreak{}
+\tableofcontents{}
+\pagebreak{}
+<<chunkopts, include=F>>=
+opts_chunk$set(concordance=TRUE)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Preface}
+
+The purpose of this document is to provide a conceptual introduction to statistical or machine learning (ML) techniques for those that might not normally be exposed to such approaches during their typical required statistical training\sidenote{I generally have in mind social science researchers but hopefully keep present the material broadly enough for anyone that may be interested.}.  Machine learning\sidenote{Also referred to as applied statistical learning, statistical engineering, data science or data mining in other contexts.} can be described as a form of a statistics, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in the social sciences and other disciplines.  The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.
+
+If one surveys the number of techniques available in ML without context, it will surely be overwhelming in terms of the sheer number of those approaches, as well as the various tweaks and variations of them.  However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional ones as well.  While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application\sidenote{Indeed, there is evidence that with large enough samples many techniques converge to similar performance.} and kept at the conceptual level as much as possible.  However, some applied examples of more common techniques will be provided in detail.
+
+As for prerequisite knowledge, I will assume a basic familiarity with regression analyses typically presented to those in applied disciplines, particularly those of the social sciences.  Regarding programming, one should be at least somewhat familiar with using R and Rstudio, and either of my introductions \href{http://www.nd.edu/~mclark19/learn/Introduction_to_R.pdf}{here} and \href{http://www.nd.edu/~mclark19/learn/Introduction_to_R_II.pdf}{here} will be plenty.  Note that I won't do as much explaining of the R code as in those introductions, and in some cases I will be more concerned with getting to a result than clearly detailing the path to it.  Armed with such introductory knowledge as can be found in those documents, if there are parts of R code that are unclear one would have the tools to investigate and discover for themselves the details, which results in more learning anyway.
+
+\marginnote{The latest version of this document is dated \today{} (original March 2013).}
+\pagebreak{}
+
+<<intro, child='intro/intro.Rnw'>>=
+@
+
+<<tools, child='tools/tools.Rnw'>>=
+@
+
+%\SweaveInput{lossfunc/loss.Rnw}
+<<loss, child='lossfunc/loss.Rnw'>>=
+@
+
+<<regularization, child='regularization/regularization.Rnw'>>=
+@
+
+<<biasvar, child='biasvar/biasvar.Rnw'>>=
+@
+
+<<crossval, child='crossval/crossval.Rnw'>>=
+@
+
+<<models, child='models/models.Rnw'>>=
+@
+
+<<overview, child='overview/overview.Rnw'>>=
+@
+
+<<blackbox, child='blackbox/blackbox.Rnw'>>=
+@
+
+
+<<other, child='other/other.Rnw'>>=
+@
+
+<<summary, child='summary/summary.Rnw'>>=
+@
+
+
+
+
+
+\pagebreak
+<<glossary, child='glossary.Rnw'>>=
+@
+
+
+
+
+
+
+\pagebreak
+
+
+
+\bibliography{MLtechrep}
+I had a lot of sources in putting this together, but I note these in particular as I feel they can either provide the appropriate context to begin, help with the transition from more standard approaches, or serve as a definitive reference for various methods.
+
+%\nocite{banko_scaling_2001}  % remove page numbers from bib file
+%\nocite{tibshirani_regression_1996}
+\nocite{breiman_statistical_2001}
+\nocite{wood_generalized_2006}
+\nocite{hastie_elements_2009}
+\nocite{harrell_regression_2001}
+\nocite{domingos_few_2012} % remove page numbers from bib file
+\nocite{murphy_machine_2012}
+
+
+
+\end{document}

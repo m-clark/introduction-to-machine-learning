@@ -1,0 +1,37 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\astroncite{Breiman}{2001}]{breiman_statistical_2001}
+Breiman, L. (2001).
+\newblock Statistical modeling: The two cultures (with comments and a rejoinder
+  by the author).
+\newblock {\em Statistical Science}, 16(3):199--231.
+\newblock Mathematical Reviews number ({MathSciNet):} {MR1874152}.
+
+\bibitem[\protect\astroncite{Domingos}{2012}]{domingos_few_2012}
+Domingos, P. (2012).
+\newblock A few useful things to know about machine learning.
+\newblock {\em Commun. {ACM}}, 55(10).
+
+\bibitem[\protect\astroncite{Harrell}{2001}]{harrell_regression_2001}
+Harrell, F.~E. (2001).
+\newblock {\em Regression Modeling Strategies: With Applications to Linear
+  Models, Logistic Regression, and Survival Analysis}.
+\newblock Springer.
+
+\bibitem[\protect\astroncite{Hastie et~al.}{2009}]{hastie_elements_2009}
+Hastie, T., Tibshirani, R., and Friedman, J. (2009).
+\newblock {\em The Elements of Statistical Learning: Data Mining, Inference,
+  and Prediction, Second Edition}.
+\newblock Springer, 2nd ed. 2009. corr. 10th printing. edition.
+
+\bibitem[\protect\astroncite{Murphy}{2012}]{murphy_machine_2012}
+Murphy, K.~P. (2012).
+\newblock {\em Machine Learning: A Probabilistic Perspective}.
+\newblock The {MIT} Press.
+
+\bibitem[\protect\astroncite{Wood}{2006}]{wood_generalized_2006}
+Wood, S.~N. (2006).
+\newblock {\em Generalized additive models: an introduction with R}, volume~66.
+\newblock {CRC} Press.
+
+\end{thebibliography}

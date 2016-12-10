@@ -1,0 +1,34 @@
+% !Rnw root = ../mlcrash.Rnw
+
+<<introsetup, cache=FALSE, include=FALSE>>=
+opts_knit$set(self.contained=FALSE)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Introduction: Explanation \& Prediction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newthought{For any particular analysis conducted}, emphasis can be placed on understanding the underlying mechanisms which have specific theoretical underpinnings, versus a focus that dwells more on performance and, more to the point, future performance.  These are not mutually exclusive goals in the least, and probably most studies contain a little of both in some form or fashion.  I will refer to the former emphasis as that of \emph{explanation}, and the latter that of \emph{prediction}.
+
+In studies with a more explanatory focus, traditionally analysis concerns a single data set.  For example, one assumes a data generating distribution for the response, and one evaluates the overall fit of a single model to the data at hand, e.g. in terms of R-squared, and statistical significance for the various predictors in the model.  One assesses how well the model lines up with the theory that led to the analysis, and modifies it accordingly, if need be, for future studies to consider.  Some studies may look at  predictions for specific, possibly hypothetical values of the predictors, or examine the particular nature of individual predictors effects.  In many cases, only a single model is considered.  In general though, little attempt is made to explicitly understand how well the model will do with future data, but we hope to have gained greater insight as to the underlying mechanisms guiding the response of interest.  Following \citet{breiman_statistical_2001}, this would be more akin to the \emph{data modeling culture}.
+
+For the other type of study focused on prediction, newer techniques are available that are far more focused on performance, not only for the current data under examination but for future data the selected model might be applied to.  While still possible, relative predictor importance is less of an issue, and oftentimes there may be no particular theory to drive the analysis.  There may be thousands of input variables, such that no simple summary would likely be possible anyway.  However, many of the techniques applied in such analyses are quite powerful, and steps are taken to ensure better results for new data.  Again referencing \citet*{breiman_statistical_2001}, this perspective is more of the \emph{algorithmic modeling culture}.
+
+While the two approaches are not exclusive, I present two extreme views of the situation:
+
+\begin{quote}
+To paraphrase provocatively, 'machine learning is statistics minus any checking of models and assumptions'.
+\textasciitilde Brian Ripley, 2004
+\end{quote}
+\begin{quote}
+... the focus in the statistical community on data models has:\\
+Led to irrelevant theory and questionable scientific conclusions.\\
+Kept statisticians from using more suitable algorithmic models.\\
+Prevented statisticians from working on exciting new problems.
+\textasciitilde Leo Brieman, 2001
+\end{quote}
+
+
+Respective departments of computer science and statistics now overlap more than ever as more relaxed views seem to prevail today, but there are potential drawbacks to placing too much emphasis on either approach historically associated with them.  Models that 'just work' have the potential to be dangerous if they are little understood.  Situations for which much time is spent sorting out details for an ill-fitting model suffers the converse problem- some (though often perhaps very little actually) understanding with little pragmatism.  While this paper will focus on more algorithmic approaches, guidance will be provided with an eye toward their use in situations where the typical data modeling approach would be applied, thereby hopefully shedding some light on a path toward obtaining the best of both worlds.
+
+\section{Some Terminology}
+For those used to statistical concepts such as dependent variables, clustering, and predictors, etc. you will have to get used to some differences in terminology\sidenote{See  \href{http://stat.stanford.edu/~tibs/stat315a/glossary.pdf}{this} for a comparison.} such as targets, unsupervised learning, and inputs etc.  This doesn't take too much, even if it is somewhat annoying when one is first starting out.  I won't be too beholden to either in this paper, and it should be clear from the context what's being referred to.  Initially I will start off mostly with non-ML terms and note in brackets it's ML version to help the orientation along.
