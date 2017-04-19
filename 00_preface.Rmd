@@ -8,6 +8,15 @@ As for prerequisite knowledge, I will assume a basic familiarity with regression
 
 <span class="marginnote">The latest version of this document is dated `r Sys.Date()` (original March 2013).</span>
 
+Color coding in text:
+
+- <span class="emph">emphasis</span>
+- <span class="pack">package</span>
+- <span class="func">function</span>
+- <span class="objclass">object/class</span>
+- [link]()
+
+A final note, this document is prepared testing mostly with the Chrome and Firefox browsers on large screens.  While capable of being perused on smaller screens largely without issue, I'm far more interested in how it looks in more viable context.
 
 [^mlothername]: Also referred to as applied statistical learning, statistical engineering, data science or data mining in other contexts.
 

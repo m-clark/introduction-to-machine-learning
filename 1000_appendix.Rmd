@@ -1,0 +1,70 @@
+# Appendix
+
+
+## Bias Variance Demo
+
+```{r biasvar_demo, eval=FALSE}
+x = runif(1000)
+ytrue = sin(3*pi*x)
+basedat = cbind(x,ytrue)[order(x),]
+
+gendatfunc = function(noise=.5, n=1000){
+  x = runif(n)
+  y = sin(3*pi*x) + rnorm(n, sd=noise) # truth
+  d = cbind(x, y)
+  d
+}
+
+gendat = replicate(100, gendatfunc(n=100))
+str(gendat)
+
+library(kernlab)
+
+rbf1 = apply(gendat, 3, function(d) predict(gausspr(y~x, data=data.frame(d), kpar=list(sigma=.5)), newdata = data.frame(x), type='response'))
+rbf2 = apply(gendat, 3, function(d) predict(gausspr(y~x, data=data.frame(d)), newdata = data.frame(x), type='response') )
+
+library(ggplot2); library(tidyverse); library(gridExtra)
+
+rbf1_samp = rbf1 %>% 
+  data.frame %>% 
+  cbind(x, .) %>%
+  slice(sample(1:100, 25)) %>% 
+  gather(key=sample, value=yhat, -x)
+
+rbf2_samp = rbf2 %>% 
+  data.frame %>% 
+  cbind(x, .) %>%
+  slice(sample(1:100, 25)) %>% 
+  gather(key=sample, value=yhat, -x)
+
+g1 = ggplot(data=data.frame(basedat)) +
+  geom_blank() +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf1_samp) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='Low Variance') + 
+  lazerhawk::theme_trueMinimal()
+
+g2 = ggplot(data=data.frame(basedat)) +
+  geom_line(aes(x=x, y=ytrue), color='#1e90ff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf1))) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='High Bias') + 
+  lazerhawk::theme_trueMinimal()
+
+g3 = ggplot(data=data.frame(basedat)) +
+  geom_blank() +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf2_samp) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='High Variance') + 
+  lazerhawk::theme_trueMinimal()
+
+g4 = ggplot(data=data.frame(basedat)) +
+  geom_line(aes(x=x, y=ytrue), color='#1e90ff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf2))) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='Low Bias') + 
+  lazerhawk::theme_trueMinimal()
+
+grid.arrange(g1, g2, g3, g4, ncol=2)
+```
+
