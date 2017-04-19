@@ -1,0 +1,100 @@
+# The Loss Function
+
+
+<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function $f(X)$ to make predictions of y from those input variables.  We also need a function to penalize errors in prediction- a <span class="emph">loss function</span>, $L(Y, f(X))$.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+
+## Continuous Outcomes
+
+### Squared Error
+
+The classic loss function for linear models with continuous response is the squared error loss function, or the residual sum of squares.
+
+
+$$L(Y, f(X)) = \sum(y-f(X))^2$$
+
+
+### Absolute Error
+For an approach more robust to extreme observations, we might choose absolute rather than squared error as follows.  In this case, predictions are a conditional median rather than a conditional mean.
+
+
+$$L(Y, f(X)) = \sum|(y-f(X))|$$
+
+### Negative Log-likelihood
+We can also think of our usual likelihood methods learned in a standard applied statistics course as incorporating a loss function that is the negative log-likelihood pertaining to the model of interest.  If we assume a normal distribution for the response we can note the loss function as:
+
+
+$$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
+
+In this case it would converge to the same answer as the squared error/least squares solution.
+
+
+### R Example
+
+The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (beta) that minimize the squared error.  X is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  y is the continuous variable to be modeled[^optimfunc].
+
+
+```{r squareloss}
+sqerrloss = function(beta, X, y){
+  mu = X%*%beta
+  sum((y-mu)^2)
+}
+
+# data setup
+set.seed(123)
+N = 100
+X = cbind(1, rnorm(N), rnorm(N))
+beta = c(0, -.5, .5)
+y =  rnorm(N, X%*%beta, sd=1)
+
+# results
+our_func = optim(par=c(0,0,0), fn=sqerrloss, X=X, y=y, method='BFGS')
+lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
+rbind(c(our_func$par, our_func$value), c(coef(lm_result), sum(resid(lm_result)^2)))
+```
+
+
+## Categorical Outcomes
+
+Here we'll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though we'll have different options.
+
+### Misclassification
+
+Probably the most straightforward is misclassification, or 0-1 loss.  If we note $f$ as the prediction, and for convenience we assume a [-1,1] response instead of a [0,1] response:
+
+
+$$L(Y, f(X)) = \sum I(y\neq \mathrm{sign}(f))$$
+
+In the above, $I$ is the indicator function, and so we are simply summing misclassifications.
+
+
+### Binomial log-likelihood
+
+
+$$L(Y, f(X)) = \sum log(1 + e^{-2yf})$$
+
+The above is in deviance form<span class="marginnote">Deviance can conceptually be thought of as the GLM version of residual variance.</span>, but is equivalent to binomial log likelihood if $y$ is on the 0-1 scale.
+
+### Exponential
+
+Exponential loss is yet another loss function at our disposal.
+
+
+$$L(Y, f(X)) = \sum e^{-yf}$$
+
+### Hinge Loss
+
+A final loss function to consider, typically used with support vector machines, is the hinge loss function.
+
+$$L(Y, f(X)) = \max(1-yf, 0)$$
+
+Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.
+
+<span class="marginnote"><img src="img/lossfuncs.png" style="display:block; margin: 0 auto;"></span>
+
+Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly so the worse the misclassification (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  At right is a depiction of the loss as a functions above, taken from @hastie_elements_2009.
+
+
+
+[^optimfunc]: Type ?optim at the console for more detail.
+
+[^catregloss]: For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also.  We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).

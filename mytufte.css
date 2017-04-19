@@ -89,12 +89,12 @@ pre code.r {
 }
 
 li.tocify-item.list-group-item.active {
-  background-color: rgb(97,151,213);             /* background of current section in toc */
+  background-color: #B2001D;             /* background of current section in toc  rgb(97,151,213)*/
 }
 
 h1, h2, h3, h4, h5 {
-  color:rgb(97,151,213);
-  /* color:#B2001D; */  /* stan red*/
+  /* color:rgb(97,151,213); */
+   color: #B2001D;   /* stan red*/
 }
 
 

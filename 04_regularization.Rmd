@@ -1,0 +1,62 @@
+# Regularization
+
+<span class="newthought">It is important to note</span> that a model fit to a single data set might do very well with the data at hand, but then suffer when predicting independent data[^biasvar].  Also, oftentimes we are interested in a 'best' subset of predictors among a great many, and in this scenario the estimated coefficients are overly optimistic.  This general issue can be improved by shrinking estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction.
+
+Penalized estimation will provide estimates with some shrinkage, and we can use it with little additional effort with our common procedures.  Concretely, let's apply this to the standard linear model, where we are finding estimates of $\beta$ that minimize the squared error loss.
+
+
+$$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2}$$
+
+In words, we're finding the coefficients that minimize the sum of the squared residuals.  With the approach to regression here we just add a penalty component to the procedure as follows.
+
+
+$$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2} + \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
+
+In the above equation, $\lambda$ is our penalty term[^penterm] for which larger values will result in more shrinkage.  It's applied to the $L_1$ or Manhattan norm of the coefficients, $\beta_1,\beta_2...\beta_p$, i.e. *not including the intercept* $\beta_0$, and is the sum of their absolute values (commonly referred to as the <span class="emph">lasso</span>[^lasso]). For generalized linear and additive models, we can conceptually express a penalized likelihood as follows:
+
+
+$$l_p(\beta) = l(\beta) - \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
+
+As we are maximizing the likelihood the penalty is a subtraction, but nothing inherently different is shown.  This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.
+
+<span class="marginnote">Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.</span>It should be noted that we can go about the regularization in different ways.  For example, using the squared $L_2$ norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization), and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. 
+
+
+
+## R Example
+
+In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. 
+
+```{r regularization}
+sqerrloss_reg = function(beta, X, y, lambda=.1){
+  mu = X%*%beta
+  sum((y-mu)^2) + lambda*sum(abs(beta[-1]))
+}
+
+regularized_result = optim(par=c(0,0,0), fn=sqerrloss_reg, X=X, y=y, method='BFGS')
+rbind(c(our_func$par, our_func$value), 
+      c(coef(lm_result),sum(resid(lm_result)^2)), 
+      c(regularized_result$par, regularized_result$value) )
+
+# Create test data
+set.seed(1:3)
+N_test = 50
+X_test = cbind(1, rnorm(N_test), rnorm(N_test))
+y_test = rnorm(N_test, X_test%*%beta, sd=1)
+
+# squared error loss
+crossprod(y_test - predict(lm_result, newdata = data.frame(X_test[,-1])))  
+crossprod(y_test - X_test%*%regularized_result$par)
+```
+
+From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad.
+
+In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact biased, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
+
+[^biasvar]: In terminology we will discuss further later, such models might have low bias but notable variance.
+
+[^penterm]: This can be set explicitly or also estimated via a validation approach.  As we do not know it beforehand, we can estimate it on a validation data set (not the test set) and then use the estimated value when estimating coefficients via cross-validation with the test set.  We will talk more about validation later.
+
+[^lasso]: See Tibshirani (1996) Regression shrinkage and selection via the lasso.
+
+[^lambda]: As noted previously, in practice $\lambda$ would be estimated via some validation procedure.
