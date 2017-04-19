@@ -1,0 +1,53 @@
+---
+title: "An Introduction to Machine Learning"
+author:  |
+  <div class="title"><span style="font-size:125%; font-variant:small-caps; ">Michael Clark</span><br>
+  <img src="img/signature-acronym.png" style="width:33%; padding:10px 0;"> <br>
+  <img src="img/ARC-acronym-signature.png" style="width:22%; padding:10px 0;"> </div>
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: 
+    bookdown::gitbook:
+      css: [standard_html.css]
+      highlight: pygments
+      number_sections: false
+      toc_depth: 2
+      config:
+        search: yes
+        # edit: false
+        fontsettings:
+          family: san-serif
+          size: 2
+always_allow_html: yes
+font-import: http://fonts.googleapis.com/css?family=Roboto|Open+Sans
+font-family: 'Roboto'
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+description: "An introduction to machine learning for applied researchers."
+cover-image: img/nineteeneightyR.png
+url: 'https\://m-clark.github.io/docs/'  # evidently the \: is required or you'll get text in the title/toc area
+github-repo:  m-clark/introduction-to-machine-learning/
+nocite: | 
+  @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
+  @fahrmeir2013regression
+
+---
+
+
+
+
+```{r setup, include=FALSE, eval=TRUE}
+knitr::opts_chunk$set(echo = T, message=F, warning=F, comment=NA, autodep=F, eval=T, cache.rebuild=F, cache=T,
+                      R.options=list(width=120), fig.width=8, fig.align = 'center')
+```
+
+```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
+library(plotly); library(hrbrthemes); library(lazerhawk); library(caret); 
+library(broom); library(pander); library(modelr); library(tidyverse)
+```
+
+# 
+```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
+knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
+```
