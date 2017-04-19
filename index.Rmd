@@ -7,6 +7,11 @@ author:  |
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
+    bookdown::tufte_html_book: 
+      toc: yes
+      number_sections: false
+      css: [standard_html.css, toc.css, mytufte.css]
+      split_by: rmd
     bookdown::gitbook:
       css: [standard_html.css]
       highlight: pygments
@@ -22,6 +27,7 @@ always_allow_html: yes
 font-import: http://fonts.googleapis.com/css?family=Roboto|Open+Sans
 font-family: 'Roboto'
 documentclass: book
+bibliography: ['MLtechrep.bib']
 biblio-style: apalike
 link-citations: yes
 description: "An introduction to machine learning for applied researchers."
@@ -51,3 +57,4 @@ library(broom); library(pander); library(modelr); library(tidyverse)
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
 ```
+
