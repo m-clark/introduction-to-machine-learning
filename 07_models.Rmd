@@ -1,0 +1,141 @@
+# Model Assessment & Selection
+
+<span class="newthought">In typical model comparison</span> within the standard linear model framework, there are a number of ways in which we might assess performance across competing models.  For standard OLS regression we might examine adjusted-$R^2$, or with the generalized linear models we might pick a model with the lowest AIC[^aic].  As we have already discussed, in the machine learning context we are interested in models that reduce e.g. squared error loss (regression) or misclassification error (classification).  However in dealing with many models some differences in performance may be arbitrary.
+
+## Beyond Classification Accuracy: Other Measures of Performance
+
+In typical classification situations we are interested in overall accuracy.  However there are situations, not uncommon, in which simple accuracy isn't a good measure of performance.  As an example, consider the prediction of the occurrence of a rare disease. Guessing a non-event every time might result in 99.9% accuracy, but that isn't how we would prefer to go about assessing some classifier's performance.
+To demonstrate other sources of classification information, we will use the following 2x2 table that shows values of some binary outcome (0 = non-event, 1 = event occurs) to the predictions made by some model for that response (arbitrary model).  Both a table of actual values, often called a <span class="emph">confusion matrix</span>[^confusion], and an abstract version are provided.
+
+
+<!-- between the combined failure of pander datatable and div in tufte (ignores width) this hack gets clean tables side by side via a ghosted third column-->
+
+<div class="col3" width=50%> 
+```{r confusionMatrix, echo=F}
+freqs = matrix(c('', '', '', 'Actual',
+                 '', '', '1', '0', 
+                 'Predicted', '1', '41','21',
+                 '', '0', '16','13'), 4, 4, byrow=T)
+lets = matrix(c('', '', '', 'Actual',
+                 '', '', '1', '0', 
+                 'Predicted', '1', 'A','B',
+                 '', '0', 'C','D'), 4, 4, byrow=T)
+lets = data.frame(lets)
+colnames(lets) = c('','','','')
+# freqs %>% 
+#   pander::pander(justify='lrrr', split.cells = c('0%', "70%", "10%", "10%", "10%"), 
+#                  emphasize.italics.rows=1, emphasize.italics.cols=1,
+#                  emphasize.strong.rows=1, emphasize.strong.cols=1, width=200)
+# lets %>% 
+#   pander::pander(justify='lrrr', 
+#                  emphasize.italics.rows=1, emphasize.italics.cols=1,
+#                  emphasize.strong.rows=1, emphasize.strong.cols=1, width='200px')
+library(DT)
+datatable(freqs,  options=list(dom='t', 
+                             ordering=F, 
+                             columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+          width='35%', colnames=rep('', 4), rownames=F) %>% 
+  formatStyle(columns=1:4, backgroundColor='#fffff8')
+
+htmltools::br()
+
+datatable(lets, options=list(dom='t', 
+                             ordering=F, 
+                             columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+          width='35%', colnames=rep('', 4), rownames=F) %>% 
+  formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+
+htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+```
+</div>
+
+
+
+<span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.
+
+<span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about `r round((41+13)/91,2)*100`%.
+
+<span class="emph">Error Rate</span>: 1 - Accuracy.
+
+<span class="emph">Sensitivity</span>: is the proportion of correctly predicted positives to all true positive events: A/(A+C).  In the above example this would be 41/57, about `r round(41/57,2)*100`%. High sensitivity would suggest a low type II error rate (see below), or high statistical power. Also known as *true positive rate*.
+
+<span class="emph">Specificity</span>: is the proportion of correctly predicted negatives to all true negative events: D/(B+D).  In the above example this would be 13/34, about `r round(13/34,2)*100`%. High specificity would suggest a low type I error rate (see below). Also known as *true negative rate*.
+
+<span class="emph">Postive Predictive Value</span> (PPV): proportion of true positives of those that are predicted positives: A/A+B. In the above example this would be 41/62, about `r round(41/62,2)*100`%.
+
+<span class="emph">Negative Predictive Value</span> (NPV): proportion of true negatives of those that are predicted negative: D/C+D. In the above example this would be 13/29, about `r round(13/29,2)*100`%.
+
+<span class="emph">Precision</span>:  See PPV.
+
+<span class="emph">Recall</span>: See sensitivity.
+
+<span class="emph">Lift</span>: Ratio of positive predictions given actual positives to the proportion of positive predictions out of the total: (A/(A+C))/((A+B)/Total). In the above example this would be (41/(41+16))/((41+21)/(91)), or `r round((41/(41+16))/((41+21)/(91)),2)`.
+
+<span class="emph">F Score</span> (F1 score): Harmonic mean of precision and recall: 2\*(Precision\*Recall)/(Precision+Recall). In the above example this would be 2\*(.66\*.72)/(.66+.72), about `r round(2*(.66*.72)/(.66+.72),2)`.
+
+<span class="emph">Type I Error Rate</span> (false positive rate): proportion of true negatives that are incorrectly predicted positive: B/B+D. In the above example this would be 21/34, about `r round(21/34,2)*100`%.  Also known as *alpha*.
+
+<span class="emph">Type II Error Rate</span> (false negative rate): proportion of true positives that are incorrectly predicted negative: C/C+A. In the above example this would be 16/57, about `r round(16/57,2)*100`%. Also known as *beta*.
+
+<span class="emph">False Discovery Rate</span>: proportion of false positives among all positive predictions: B/A+B. In the above example this would be 21/62, about `r round(21/62,2)*100`%.  Often used in multiple comparison testing in the context of ANOVA.
+
+<span class="emph">Phi coefficient</span>: A measure of association: (A\*D - B\*C)/(sqrt((A+C)\*(D+B)\*(A+B)\*(D+C))).  In the above example this would be `r psych::phi(matrix(c(41,16,21,13),2))`.
+
+
+Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.\sidenote{Table based on table 5.3 in \citet{murphy_machine_2012}}:
+
+```{r confusionMatrix2, echo=F, cache=F}
+cm1 = matrix(c('', '', '', 'Actual',
+                 '', '', '1', '0',
+                 'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','F₊/N₋ = FPR = Type I',
+                 '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T) %>% data.frame(stringsAsFactors=F)
+cm2 = matrix(c('', '', '', 'Actual',
+                 '', '', '1', '0',
+                 'Predicted', '1', '$T_+/N_+$ = TPR = sensitivity = recall','$F_+/N_-$ = FPR = Type I',
+                 '', '0', '$F_-/N_+$ = FNR = Type II','$T_-/N_-$ = TNR = specificity'), 4, 4, byrow=T)
+
+library(DT)
+DT::datatable(cm1, options=list(dom='t',
+                            ordering=F,
+                            columnDefs = list(list(className = 'dt-right', targets = 1:3))),
+          width='35%', colnames=rep('', 4), rownames=F) %>%
+  formatStyle(columns=1:4, backgroundColor='#fffff8')
+
+# cm1
+# 
+
+# htmltools::br()
+# 
+# datatable(lets, options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+
+```
+
+
+
+
+\vspace{.25cm}
+
+{\footnotesize
+\noindent\begin{tabular}{llll}
+&  & Actual  & \\
+& & 1 & 0 \\
+\hline
+Predicted & 1 & $T_+/N_+$ = TPR = sensitivity = recall & $F_+/N_-$ = FPR = Type I \\
+& 0 & $F_-/N_+$ = FNR = Type II & $T_-/N_-$ = TNR = specificity \\
+\hline
+\end{tabular}
+}
+
+
+
+There are many other measures such as area under a Receiver Operating Curve (<span class="emph">ROC</span>), <span class="emph">odds ratio</span>, and even more names for some of the above.  The gist is that given any particular situation you might be interested in one or several of them, and it would generally be a good idea to look at a few.
+
+
+[^aic]: In situations where it is appropriate to calculate in the first place, AIC can often compare to the bootstrap and k-fold cross-validation approaches.
+
+[^confusion]: This term has always struck me as highly sub-optimal.
