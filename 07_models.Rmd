@@ -51,7 +51,6 @@ htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
 </div>
 
 
-
 <span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.
 
 <span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about `r round((41+13)/91,2)*100`%.
@@ -85,11 +84,14 @@ htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
 
 Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.\sidenote{Table based on table 5.3 in \citet{murphy_machine_2012}}:
 
+REDO LATER
+
+
 ```{r confusionMatrix2, echo=F, cache=F}
 cm1 = matrix(c('', '', '', 'Actual',
                  '', '', '1', '0',
-                 'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','F₊/N₋ = FPR = Type I',
-                 '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T) %>% data.frame(stringsAsFactors=F)
+                 'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','\\(F₊/N₋\\) = FPR = Type I',
+                 '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T)# %>% data.frame(stringsAsFactors=F)
 cm2 = matrix(c('', '', '', 'Actual',
                  '', '', '1', '0',
                  'Predicted', '1', '$T_+/N_+$ = TPR = sensitivity = recall','$F_+/N_-$ = FPR = Type I',
@@ -116,21 +118,14 @@ DT::datatable(cm1, options=list(dom='t',
 ```
 
 
+```{r testunicode, cache=FALSE, echo=FALSE, eval=FALSE}
+testdf <- data.frame(locationName= c("台北","新北市","台南市"), TEMP=c(30,29,28))
+testdf
 
 
-\vspace{.25cm}
-
-{\footnotesize
-\noindent\begin{tabular}{llll}
-&  & Actual  & \\
-& & 1 & 0 \\
-\hline
-Predicted & 1 & $T_+/N_+$ = TPR = sensitivity = recall & $F_+/N_-$ = FPR = Type I \\
-& 0 & $F_-/N_+$ = FNR = Type II & $T_-/N_-$ = TNR = specificity \\
-\hline
-\end{tabular}
-}
-
+library(DT)
+datatable(testdf)
+```
 
 
 There are many other measures such as area under a Receiver Operating Curve (<span class="emph">ROC</span>), <span class="emph">odds ratio</span>, and even more names for some of the above.  The gist is that given any particular situation you might be interested in one or several of them, and it would generally be a good idea to look at a few.
