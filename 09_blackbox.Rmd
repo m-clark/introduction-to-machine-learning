@@ -1,0 +1,337 @@
+# Opening the Black Box
+
+<span class="newthought">It's now time to see some of this in action</span>. In the following we will try a variety of techniques so as to get a better feel for the sorts of things we might try out.
+
+
+## The Dataset
+
+We will use the wine data set from the UCI Machine Learning data repository.  The goal is to predict wine quality, of which there are 7 values (integers 3-9).  We will turn this into a binary classification task to predict whether a wine is 'good' or not, which is arbitrarily chosen as 6 or higher.  After getting the hang of things one might redo the analysis as a multiclass problem or even toy with regression approaches, just note there are very few 3s or 9s so you really only have 5 values to work with.  The original data along with detailed description can be found [here](http://archive.ics.uci.edu/ml/datasets/Wine+Quality), but aside from quality it contains predictors such as residual sugar, alcohol content, acidity and other characteristics of the wine[^wineraters].
+
+The original data is separated into white and red data sets. I have combined them and created additional variables: `color` and its numeric version `white` indicating white or red, and `good`, indicating scores greater than or equal to 6 (denoted as 'Good', else 'Bad').  The following will show some basic numeric information about the data[^sulfur].
+
+```{r dataprep, echo=FALSE}
+red = read.csv('data/winequality-red.csv', sep=';')
+white = read.csv('data/winequality-white.csv', sep=';')
+wine = rbind(data.frame(color='red', white=0, red) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))),
+             data.frame(color='white', white=1, white) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))))
+write.csv(wine, 'data/wine.csv', row.names=F)
+
+```
+
+
+```{r readwine, echo=1}
+wine = read.csv('data/wine.csv')
+DT::datatable(wine, options=list(dom='ftp', scrollX=T), width='50%')
+```
+
+## R Implementation
+
+I will use the <span class="pack">caret</span> package in R.  Caret makes implementation of validation, data partitioning, performance assessment, and prediction and other procedures about as easy as it can be in this environment.  However, caret is mostly using other R packages that have more information about the specific functions underlying the process, and those should be investigated for additional information.  Check out the \href{http://caret.r-forge.r-project.org/}{caret home page} for more detail. The methods selected here were chosen for breadth of approach, to give a good sense of the variety of techniques available.
+
+<span class="marginnote"></span>In what follows, the associated packages and functions used are: 
+- <span class="pack">caret</span>: <span class="func">knn</span>
+- <span class="pack">nnet</span>: <span class="func">nnet</span>
+- <span class="pack">randomForest</span>: <span class="func">randomForest</span>
+- <span class="pack">kernlab</span>: <span class="func">ksvm</span>
+
+In addition to caret, it's a good idea to use your computer's resources as much as possible, or some of these procedures may take a notably long time, and more so with the more data you have.  The <span class="pack">caret</span> package will do this behind the scenes, but you first need to set things up. Say, for example, you have a quad core processor, meaning your processor has four cores essentially acting as independent CPUs. You can set up R for parallel processing, then run caret as you normally would.  The following code demonstrates how, but see [this](https://topepo.github.io/caret/parallel-processing.html) for details.
+
+
+```{r parallel, eval=FALSE}
+library(doParallel)
+registerDoParallel(cores = 7)
+
+## All subsequent models are then run in parallel
+model <- train(y ~ ., data = training, method = "rf")
+```
+
+## Feature Selection *&* The Data Partition
+
+This data set is large enough to leave a holdout sample, allowing us to initially search for the best of a given modeling approach over a grid of tuning parameters specific to the technique.  To iterate previous discussion, we don't want test performance contaminated with the tuning process.  With the best model at $t$ tuning parameter(s), we will assess performance with prediction on the holdout set.
+
+I also made some decisions to deal with the notable collinearity in the data, which can severely hamper some methods.  We can look at the simple correlation matrix to start
+
+
+```{r winecor}
+wine %>% 
+  select_if(is.numeric) %>% 
+  cor %>% 
+  heatR::corrheat()
+```
+
+
+I ran regressions to examine the r-squared for each predictor in a model as if it were the dependent variable predicted by the other input variables.  The highest was for density at over 96%, and further investigation suggested color and either sulfur dioxide are largely captured by the other variables already also.  These will not be considered in the following models.
+
+
+
+<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are 6497 total observations of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will normalize the continuous variables to the [0,1] range.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set we will go ahead and do it now.
+
+
+```{r partition}
+library(caret)
+set.seed(1234) # so that the indices will be the same when re-run
+trainIndices = createDataPartition(wine$good, p=.8, list=F)
+
+wine_train = wine %>% 
+  select(-free.sulfur.dioxide, -density, -quality, -color, -white) %>% 
+  slice(trainIndices)
+
+wine_test = wine %>% 
+  select(-free.sulfur.dioxide, -density, -quality, -color, -white) %>% 
+  slice(-trainIndices)
+# prep_test = preProcess(wine_test[,-10], method="range")
+# wine_test = data.frame(predict(prep_test, wine_test[,-10]), good=wine_test[ ,10])
+```
+
+
+Let's take an initial peek at how the predictors separate on the target.  In the following I'm 'predicting' the pre-possessed data so as to get the transformed data.  Again, we'll leave the preprocessing to the training process eventually, but here it will put them on the same scale for visual display. For reasons unknown, this uses the <span class="pack">lattice</span> package, despite the package author being a member of the RStudio team.
+
+
+```{r featureplot}
+wine_trainplot = predict(preProcess(select(wine_train, -good), method="range"), 
+                         select(wine_train, -good))
+featurePlot(wine_trainplot, wine_train$good, "box")
+```
+
+
+For the training set, it looks like alcohol content[^drunkratings], volatile acidity and chlorides separate most with regard to good classification. While this might give us some food for thought, note that the figure does not give insight into interaction effects, which methods such as trees will get at.
+
+
+## $k$-nearest Neighbors
+
+Consider the typical distance matrix[^dist] that is often used for cluster analysis of observations[^unsupervised]. If we choose something like *Euclidean distance* as a metric, each point in the matrix gives the value of how far an observation is from some other, given their respective values on a set of variables.
+
+K-nearest neighbors approaches exploit this information for predictive purposes.  Let us take a classification example, and $k = 5$ neighbors.  For a given observation $x_i$, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables.  The class that is predicted is whatever class the majority of the neighbors are labeled as[^knnvis].  For continuous outcomes we might take the mean of those neighbors as the prediction.
+
+So how many neighbors would work best? This is an example of a tuning parameter, i.e. $k$, for which we have no knowledge about its value without doing some initial digging.  As such we will select the tuning parameter as part of the validation process.
+
+The caret package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for k to try out[^knntune].
+
+
+```{r knn_train}
+set.seed(1234)
+cv_opts = trainControl(method="cv", number=10)
+knn_opts = data.frame(.k=c(seq(3, 11, 2), 25, 51, 101)) #odd to avoid ties
+results_knn = train(good~., data=wine_train, method="knn",
+                    preProcess="range", trControl=cv_opts,
+                    tuneGrid = knn_opts)
+
+results_knn
+```
+
+In this case it looks like choosing the nearest five neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $kappa$, which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
+
+```{r knn_test, echo=-3}
+preds_knn = predict(results_knn, wine_test[,-10])
+confusionMatrix(preds_knn, wine_test[,10], positive='Good')
+conf_knn = confusionMatrix(preds_knn, wine_test[,10], positive='Good') #create an object to use in Sexpr
+```
+
+
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_knn$overall[1]*100, 2)`%. The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics such as sensitivity during the training process which might help.  Also feature combination or other avenues might help improve the results as well.
+
+Additional information reflects the importance of predictors. For most methods accessed by caret, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100.  Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).<span class="marginnote">You can quickly obtain this plot via the <span class="func">dotplot</span> function.</span>
+
+```{r knnvarimp, echo=FALSE, dev='svglite', fig.align='center'}
+g = varImp(results_knn)$importance %>%
+  select(Good) %>% 
+  mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Good)])) %>% 
+  ggplot() +
+  geom_point(aes(x=Variable, y=Good, size=Good), color='#ff5503') +
+  labs(x='', y='Importance') +
+  lazerhawk::theme_trueMinimal() +
+  theme(axis.text.x=element_text(angle=-45, hjust=0))
+# plotly::ggplotly()  # tufte + plotly still means no latex
+g
+```
+
+
+### Strengths *&* Weaknesses
+
+**Strengths**[^knn_strength]:
+
+- Intuitive approach.
+- Robust to outliers on the predictors.
+
+
+**Weaknesses**
+
+- Susceptible to irrelevant features.
+- Susceptible to correlated inputs.
+- Ability to handle data of mixed types.
+- Big data. Though approaches are available that help in this regard.
+
+To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to the above issues and their relatively poor predictive capability.  However, they are conceptually simple, and thus a good way to start getting used to machine learning appraoches, as k-nn regression doesn't take one too far afield from what they already know (i.e. regression, distance matrix/clustering).
+
+<!-- %%% -->
+<!-- \section{Neural Nets} -->
+<!-- \marginnote{\includegraphics[scale=.5]{images/neural_net}} -->
+<!-- Neural nets have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense they can be thought of as nonlinear regression.  Visually however, we can see them as layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer or to predict the output, which is the final layer\sidenote{There can be many output variables in this approach.}.  All the layers between the input and output are usually referred to as 'hidden' layers. If there were no hidden layers then it becomes the standard regression problem. -->
+
+<!-- One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Along with the complexity is the notion of \emph{weight decay}, however this is the same as the regularization function we discussed in a previous section, where a penalty term would be applied to a norm of the weights. -->
+
+<!-- A comment about the following: if you are not set up for utilizing multiple processors the following might be relatively slow.  You can replace the method with $"nnet"$ and shorten the tuneLength to 3 which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the caret package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function\sidenote{For this example, ultimately the primary function is \texttt{\textcolor{red}{nnet}} in the \emph{\textcolor{blue}{nnet}} package} has additional arguments, you may pass those on in the train function itself.  Here I am increasing the 'maxit', or maximum iterations, argument. -->
+
+<!-- <<nnet_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, echo=2:3, tidy=FALSE, dependson=-3>>= -->
+<!-- set.seed(1234) -->
+<!-- results_nnet = train(good~., data=wine_train, method="avNNet",  -->
+<!--                      trControl=cv_opts, preProcess="range",  -->
+<!--                      tuneLength=5, trace=F, maxit=1000) -->
+<!-- results_nnet -->
+<!-- @ -->
+
+<!-- We see that the best model has \Sexpr{results_nnet$finalModel$tuneValue$.size} hidden layer nodes and a decay parameter of \Sexpr{results_nnet$finalModel$tuneValue$.decay}.  Typically you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30), but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5\% using up to 50 hidden units\sidenote{There are some rules of thumb, but using regularization and cross-validation is a much better way to 'guess'.}. -->
+
+<!-- <<nnet_test, size='footnotesize', message=FALSE, warning=FALSE, cache=F, tidy=FALSE, echo=1:2, dependson=-1>>= -->
+<!-- preds_nnet = predict(results_nnet, wine_test[,-10]) -->
+<!-- confusionMatrix(preds_nnet, wine_test[,10], positive='Good') -->
+<!-- conf_nnet = confusionMatrix(preds_nnet, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
+<!-- @ -->
+
+<!-- We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (\Sexpr{round(conf_nnet$overall[1]*100, 2)}\%), sensitivity, specificity etc. -->
+
+<!-- \subsection{Strengths \& Weaknesses} -->
+
+<!-- \emph{Strengths} -->
+<!-- \begin{itemize} -->
+<!--   \item Good prediction generally. -->
+<!--   \item Incorporating the predictive power of different combinations of inputs. -->
+<!--   \item Some tolerance to correlated inputs. -->
+<!-- \end{itemize} -->
+
+
+<!-- \noindent\emph{Weaknesses} -->
+<!-- \begin{itemize} -->
+<!--   \item Susceptible to irrelevant features. -->
+<!--   \item Not robust to outliers. -->
+<!--   \item Big data with complex models. -->
+<!-- \end{itemize} -->
+
+<!-- %%% -->
+<!-- \section{Trees \& Forests} -->
+
+<!-- Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  \marginnote{\center{\includegraphics[scale=.5]{images/hypotree}}}So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.   -->
+
+
+<!-- Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  At right is a hypothetical tree reflecting this. -->
+
+<!-- \marginnote{\center{\includegraphics[scale=.5]{images/winetree}}\\ -->
+<!-- Results from the \textcolor{blue}{tree} package.} -->
+<!-- The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63 \%, a wine is classified as good\sidenote{Color me unsurprised by this finding.}. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85\% (i.e. volatility >.25, alcohol between 9.85 and 10.625), they also get classified as good.  Any remaining observations are classified as bad wines. -->
+
+<!-- Unfortunately a single tree, while highly interpretable, does pretty poorly for predictive purposes.  In standard situations we will instead use the power of many trees, i.e. a forest, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees. -->
+
+<!-- Random forests are referred to as an \emph{ensemble} method, one that is actually a combination of many models, and there are others we'll mention later.  In addition there are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here in our use of caret (called 'mtry').  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set. -->
+
+<!-- There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of mtry predictor variables etc.  But we are in the end just harnessing the power of many trees, any one of which would be highly interpretable. -->
+
+<!-- %For all 9-1 splits of the data, -->
+<!-- %Create 1000 random resamples of size $N_9$, -->
+<!-- %For each t of 1000, create a tree -->
+<!-- %At each split of each tree, randomly pick mtry predictor variables as potential splitter variables. -->
+<!-- %Examine performance on the kth partition of data. -->
+<!-- %Select the mtry that produces the best performance. -->
+<!-- %Run the test data through the selected forest. -->
+
+<!-- <<rf_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE>>= -->
+<!-- set.seed(1234) -->
+<!-- rf_opts = data.frame(.mtry=c(2:6)) -->
+<!-- results_rf = train(good~., data=wine_train, method="rf",  -->
+<!--                    preProcess='range',trControl=cv_opts, tuneGrid=rf_opts,  -->
+<!--                    n.tree=1000) -->
+<!-- results_rf -->
+<!-- @ -->
+
+<!-- The initial results look promising with mtry = \Sexpr{results_rf$bestTune$.mtry} producing the best initial result.  Now for application to the test set. -->
+
+<!-- <<rf_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>= -->
+<!-- preds_rf = predict(results_rf, wine_test[,-10]) -->
+<!-- confusionMatrix(preds_rf, wine_test[,10], positive='Good') -->
+<!-- conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
+<!-- @ -->
+
+<!-- This is our best result so far with \Sexpr{round(conf_rf$overall[1]*100,2)}\% accuracy, with a lower bound well beyond the 63\% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility. -->
+
+<!-- Incidentally, the underlying \textcolor{red}{randomForest} function here allows one to assess variable importance in a different manner\sidenote{Our previous assessment was model independent.}, and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity. -->
+
+<!-- \subsection{Strengths \& Weaknesses} -->
+
+<!-- \emph{Strengths} -->
+<!-- \begin{itemize} -->
+<!--   \item A single tree is highly interpretable. -->
+<!--   \item Tolerance to irrelevant features. -->
+<!--   \item Some tolerance to correlated inputs. -->
+<!--   \item Good with big data. -->
+<!--   \item Handling of missing values. -->
+<!-- \end{itemize} -->
+
+<!-- \marginnote{\raggedleft\includegraphics[scale=.35]{images/svm2d}\\ -->
+<!-- \includegraphics[scale=.35]{images/svm3d}\\ -->
+<!-- } -->
+
+
+<!-- \noindent\emph{Weaknesses} -->
+<!-- \begin{itemize} -->
+<!--   \item Relatively less predictive in many situations. -->
+<!--   \item Cannot work on (linear) combinations of features. -->
+<!-- \end{itemize} -->
+
+<!-- %%% -->
+
+<!-- \section{Support Vector Machines} -->
+
+<!-- Support Vector Machines (SVM) will be our last example, and is perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.    -->
+
+<!-- To better understand this process, consider the example to the right of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension\sidenote{Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.}, shown in the following graph, we might find a more clear separation. Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes (following figures, zoom in to see the margin on the second plot).  Real data will not be so clean cut, and total separation impossible, but the idea is the same. -->
+<!-- \marginnote{\raggedleft\includegraphics[scale=.30]{images/svmSeparate1}\\ -->
+<!-- \includegraphics[scale=.30]{images/svmSeparate2} -->
+<!-- } -->
+
+<!-- <<svm_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE>>= -->
+<!-- set.seed(1234) -->
+<!-- results_svm = train(good~., data=wine_train, method="svmLinear",  -->
+<!--                     preProcess="range", trControl=cv_opts, tuneLength=5) -->
+<!-- results_svm -->
+<!-- @ -->
+
+<!-- <<svm_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>= -->
+<!-- preds_svm = predict(results_svm, wine_test[,-10]) -->
+<!-- confusionMatrix(preds_svm, wine_test[,10], positive='Good') -->
+<!-- conf_svm = confusionMatrix(preds_svm, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
+<!-- @ -->
+
+<!-- Results for the initial support vector machine do not match the random forest for this data set, with accuracy of \Sexpr{round(conf_svm$overall[1]*100,2)}\%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options. -->
+
+
+<!-- \subsection{Strengths \& Weaknesses} -->
+
+<!-- \emph{Strengths} -->
+<!-- \begin{itemize} -->
+<!--   \item Good prediction in a variety of situations. -->
+<!--   \item Can utilize predictive power of linear combinations of inputs. -->
+<!-- \end{itemize} -->
+
+
+<!-- \noindent\emph{Weaknesses} -->
+<!-- \begin{itemize} -->
+<!--   \item Very black box. -->
+<!--   \item Computational scalability. -->
+<!--   \item Natural handling of mixed data types. -->
+<!-- \end{itemize} -->
+
+
+[^wineraters]: I think it would be interesting to have included characteristics of the people giving the rating.
+
+[^sulfur]: Oddly, total.sulfur.dioxide is integer for all but a handful of values.
+
+[^drunkratings]: That alcohol content is a positive predictor of 'quality' is also seen with data I've scraped from BeerAdvocate.  As such, if you are looking for a good drink via ratings, maybe temper the ratinga bit if the alcohol content is high.
+
+[^dist]: See, for example, the function <span class="func">dist</span> in base R.
+
+[^unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is not target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
+
+[^knnvis]: See the <span class="func">knn.ani</span> function in the <span class="pack">animation</span> package for a visual demonstration. [Link to demo](https://yihui.name/animation/example/knn-ani/).
+
+[^knntune]: For whatever tuning parameters are sought, the train function will expect a dataframe with a '.' before the parameter name as the column name.  Note also you can just specify a tuning length instead.  See the help file for the <span class="func">train</span> function.
+
+[^knn_strength]: See table 10.1 in @hastie_elements_2009 for a more comprehensive list for this and the other methods discussed in this section.

@@ -118,15 +118,6 @@ DT::datatable(cm1, options=list(dom='t',
 ```
 
 
-```{r testunicode, cache=FALSE, echo=FALSE, eval=FALSE}
-testdf <- data.frame(locationName= c("台北","新北市","台南市"), TEMP=c(30,29,28))
-testdf
-
-
-library(DT)
-datatable(testdf)
-```
-
 
 There are many other measures such as area under a Receiver Operating Curve (<span class="emph">ROC</span>), <span class="emph">odds ratio</span>, and even more names for some of the above.  The gist is that given any particular situation you might be interested in one or several of them, and it would generally be a good idea to look at a few.
 
