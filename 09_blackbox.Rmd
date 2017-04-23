@@ -39,7 +39,8 @@ In addition to caret, it's a good idea to use your computer's resources as much 
 
 ```{r parallel, eval=FALSE}
 library(doParallel)
-registerDoParallel(cores = 7)
+cl = makeCluster(7)
+registerDoParallel(cl)
 
 ## All subsequent models are then run in parallel
 model <- train(y ~ ., data = training, method = "rf")
@@ -108,7 +109,7 @@ So how many neighbors would work best? This is an example of a tuning parameter,
 The caret package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for k to try out[^knntune].
 
 
-```{r knn_train}
+```{r knn_train, eval=FALSE, echo=2:5}
 set.seed(1234)
 cv_opts = trainControl(method="cv", number=10)
 knn_opts = data.frame(.k=c(seq(3, 11, 2), 25, 51, 101)) #odd to avoid ties
@@ -117,7 +118,13 @@ results_knn = train(good~., data=wine_train, method="knn",
                     tuneGrid = knn_opts)
 
 results_knn
+save(results_knn, file='data/results_knn.RData')
 ```
+```{r knn_train_results, echo=FALSE}
+load('data/results_knn.RData')
+results_knn
+```
+
 
 In this case it looks like choosing the nearest five neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $kappa$, which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
 
@@ -161,59 +168,78 @@ g
 - Ability to handle data of mixed types.
 - Big data. Though approaches are available that help in this regard.
 
+### Final Thoughts
+
 To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to the above issues and their relatively poor predictive capability.  However, they are conceptually simple, and thus a good way to start getting used to machine learning appraoches, as k-nn regression doesn't take one too far afield from what they already know (i.e. regression, distance matrix/clustering).
 
-<!-- %%% -->
-<!-- \section{Neural Nets} -->
-<!-- \marginnote{\includegraphics[scale=.5]{images/neural_net}} -->
-<!-- Neural nets have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense they can be thought of as nonlinear regression.  Visually however, we can see them as layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer or to predict the output, which is the final layer\sidenote{There can be many output variables in this approach.}.  All the layers between the input and output are usually referred to as 'hidden' layers. If there were no hidden layers then it becomes the standard regression problem. -->
 
-<!-- One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Along with the complexity is the notion of \emph{weight decay}, however this is the same as the regularization function we discussed in a previous section, where a penalty term would be applied to a norm of the weights. -->
+## Neural Nets
+<span class="marginnote"><img src="img/nnet.png" style="display:block; margin: 0 auto;"></span>
 
-<!-- A comment about the following: if you are not set up for utilizing multiple processors the following might be relatively slow.  You can replace the method with $"nnet"$ and shorten the tuneLength to 3 which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the caret package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function\sidenote{For this example, ultimately the primary function is \texttt{\textcolor{red}{nnet}} in the \emph{\textcolor{blue}{nnet}} package} has additional arguments, you may pass those on in the train function itself.  Here I am increasing the 'maxit', or maximum iterations, argument. -->
+Neural nets have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense they can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer or to predict the output, or even multiple outputs, which is the final layer.  All the layers between the input and output are usually referred to as 'hidden' layers. If there were no hidden layers then it becomes the standard regression problem.  
 
-<!-- <<nnet_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, echo=2:3, tidy=FALSE, dependson=-3>>= -->
-<!-- set.seed(1234) -->
-<!-- results_nnet = train(good~., data=wine_train, method="avNNet",  -->
-<!--                      trControl=cv_opts, preProcess="range",  -->
-<!--                      tuneLength=5, trace=F, maxit=1000) -->
-<!-- results_nnet -->
-<!-- @ -->
+One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Along with the complexity is the notion of <span class="emph">weight decay</span>, however this is the same as the regularization function we discussed in a previous section, where a penalty term would be applied to a norm of the weights.
 
-<!-- We see that the best model has \Sexpr{results_nnet$finalModel$tuneValue$.size} hidden layer nodes and a decay parameter of \Sexpr{results_nnet$finalModel$tuneValue$.decay}.  Typically you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30), but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5\% using up to 50 hidden units\sidenote{There are some rules of thumb, but using regularization and cross-validation is a much better way to 'guess'.}. -->
-
-<!-- <<nnet_test, size='footnotesize', message=FALSE, warning=FALSE, cache=F, tidy=FALSE, echo=1:2, dependson=-1>>= -->
-<!-- preds_nnet = predict(results_nnet, wine_test[,-10]) -->
-<!-- confusionMatrix(preds_nnet, wine_test[,10], positive='Good') -->
-<!-- conf_nnet = confusionMatrix(preds_nnet, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
-<!-- @ -->
-
-<!-- We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (\Sexpr{round(conf_nnet$overall[1]*100, 2)}\%), sensitivity, specificity etc. -->
-
-<!-- \subsection{Strengths \& Weaknesses} -->
-
-<!-- \emph{Strengths} -->
-<!-- \begin{itemize} -->
-<!--   \item Good prediction generally. -->
-<!--   \item Incorporating the predictive power of different combinations of inputs. -->
-<!--   \item Some tolerance to correlated inputs. -->
-<!-- \end{itemize} -->
+A comment about the following: if you are not set up for utilizing multiple processors the following might be relatively slow.  You can replace the method with $"nnet"$ and shorten the tuneLength to 3 which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the caret package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function[^nnet_function] has additional arguments, you may pass those on in the train function itself.  Here I am increasing the 'maxit', or maximum iterations, argument.
 
 
-<!-- \noindent\emph{Weaknesses} -->
-<!-- \begin{itemize} -->
-<!--   \item Susceptible to irrelevant features. -->
-<!--   \item Not robust to outliers. -->
-<!--   \item Big data with complex models. -->
-<!-- \end{itemize} -->
+```{r nnet_train, echo=2:3, eval=FALSE}
+set.seed(1234)
+results_nnet = train(good~., data=wine_train, method="avNNet",
+                     trControl=cv_opts, preProcess="range",
+                     tuneLength=5, trace=F, maxit=1000)
+results_nnet
+save(results_nnet, file='data/results_nnet.RData')
+```
+```{r nnet_train_results, echo=FALSE}
+load('data/results_nnet.RData')
+results_nnet
+```
 
-<!-- %%% -->
-<!-- \section{Trees \& Forests} -->
 
-<!-- Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  \marginnote{\center{\includegraphics[scale=.5]{images/hypotree}}}So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.   -->
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r results_nnet$finalModel$tuneValue$decay`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30), but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units[^nnet_rot].
 
 
-<!-- Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  At right is a hypothetical tree reflecting this. -->
+```{r nnet_test, echo=-3}
+preds_nnet = predict(results_nnet, wine_test[,-10])
+confusionMatrix(preds_nnet, wine_test[,10], positive='Good')
+conf_nnet = confusionMatrix(preds_nnet, wine_test[,10], positive='Good') 
+```
+
+
+We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 2)`%), sensitivity, specificity etc.
+
+### Strengths *&* Weaknesses
+
+**Strengths**
+
+- Good prediction generally.
+- Incorporating the predictive power of different combinations of inputs.
+- Some tolerance to correlated inputs.
+
+**Weaknesses**
+
+- Susceptible to irrelevant features.
+- Not robust to outliers.
+- Big data with complex models.
+
+### Final Thoughts
+
+As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  As such, it's good to have a basic understanding of them.
+
+
+## Trees *&* Forests
+
+Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  \marginnote{\center{\includegraphics[scale=.5]{images/hypotree}}}So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
+
+
+Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  At right is a hypothetical tree reflecting this.
+
+```{r echo=FALSE}
+library(DiagrammeR)
+
+```
+
 
 <!-- \marginnote{\center{\includegraphics[scale=.5]{images/winetree}}\\ -->
 <!-- Results from the \textcolor{blue}{tree} package.} -->
@@ -233,52 +259,66 @@ To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to 
 <!-- %Select the mtry that produces the best performance. -->
 <!-- %Run the test data through the selected forest. -->
 
-<!-- <<rf_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE>>= -->
-<!-- set.seed(1234) -->
-<!-- rf_opts = data.frame(.mtry=c(2:6)) -->
-<!-- results_rf = train(good~., data=wine_train, method="rf",  -->
-<!--                    preProcess='range',trControl=cv_opts, tuneGrid=rf_opts,  -->
-<!--                    n.tree=1000) -->
-<!-- results_rf -->
-<!-- @ -->
 
-<!-- The initial results look promising with mtry = \Sexpr{results_rf$bestTune$.mtry} producing the best initial result.  Now for application to the test set. -->
+```{r rf_train, echo=2:4, eval=FALSE}
+set.seed(1234)
+rf_opts = data.frame(.mtry=c(2:6))
+results_rf = train(good~., data=wine_train, method="rf",
+                   preProcess='range',trControl=cv_opts, tuneGrid=rf_opts,
+                   n.tree=1000)
+results_rf
+save(results_rf, file='data/results_rf.RData')
+```
+```{r rf_train_results, echo=FALSE}
+load('data/results_rf.RData')
+results_rf
+```
 
-<!-- <<rf_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>= -->
-<!-- preds_rf = predict(results_rf, wine_test[,-10]) -->
-<!-- confusionMatrix(preds_rf, wine_test[,10], positive='Good') -->
-<!-- conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
-<!-- @ -->
+
+The initial results look promising with mtry = `r results_rf$bestTune$mtry` producing the best initial result.  Now for application to the test set.
+
+<<rf_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>=
+preds_rf = predict(results_rf, wine_test[,-10])
+confusionMatrix(preds_rf, wine_test[,10], positive='Good')
+conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good') #create an object to use in Sexpr
+@
+
+```{r rf_test, echo=-3}
+preds_rf = predict(results_rf, wine_test[,-10])
+confusionMatrix(preds_rf, wine_test[,10], positive='Good')
+conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good')
+```
+
 
 <!-- This is our best result so far with \Sexpr{round(conf_rf$overall[1]*100,2)}\% accuracy, with a lower bound well beyond the 63\% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility. -->
 
 <!-- Incidentally, the underlying \textcolor{red}{randomForest} function here allows one to assess variable importance in a different manner\sidenote{Our previous assessment was model independent.}, and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity. -->
 
-<!-- \subsection{Strengths \& Weaknesses} -->
+### Strengths *&* Weaknesses
 
-<!-- \emph{Strengths} -->
-<!-- \begin{itemize} -->
-<!--   \item A single tree is highly interpretable. -->
-<!--   \item Tolerance to irrelevant features. -->
-<!--   \item Some tolerance to correlated inputs. -->
-<!--   \item Good with big data. -->
-<!--   \item Handling of missing values. -->
-<!-- \end{itemize} -->
+**Strengths**
 
+- A single tree is highly interpretable.
+- Easily incoprorates features of different types (categorical and numeric).
+- Tolerance to irrelevant features.
+- Some tolerance to correlated inputs.
+- Good with big data.
+- Handling of missing values.
+
+**Weaknesses**
+
+- Relatively less predictive in many situations.
+- Cannot work on (linear) combinations of features.
+
+### Final Thoughts
+
+Random forests are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^notcontinuous], are relatively fast, and just plain work.
+
+## Support Vector Machines
 <!-- \marginnote{\raggedleft\includegraphics[scale=.35]{images/svm2d}\\ -->
 <!-- \includegraphics[scale=.35]{images/svm3d}\\ -->
 <!-- } -->
 
-
-<!-- \noindent\emph{Weaknesses} -->
-<!-- \begin{itemize} -->
-<!--   \item Relatively less predictive in many situations. -->
-<!--   \item Cannot work on (linear) combinations of features. -->
-<!-- \end{itemize} -->
-
-<!-- %%% -->
-
-<!-- \section{Support Vector Machines} -->
 
 <!-- Support Vector Machines (SVM) will be our last example, and is perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.    -->
 
@@ -335,3 +375,11 @@ To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to 
 [^knntune]: For whatever tuning parameters are sought, the train function will expect a dataframe with a '.' before the parameter name as the column name.  Note also you can just specify a tuning length instead.  See the help file for the <span class="func">train</span> function.
 
 [^knn_strength]: See table 10.1 in @hastie_elements_2009 for a more comprehensive list for this and the other methods discussed in this section.
+
+[^nnet_abs]: Neural nets, random forests, boosting, and additive models can all be put under the heading of basis function approaches.
+
+[^nnet_function]: For this example, ultimately the primary function is <span class="func">nnet</span> in the <span class="func">nnet</span> package that comes with base R.
+
+[^nnet_rot]: You may find some rules of thumb from older sources, but using regularization and cross-validation is a much better way to 'guess'.
+
+[rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better under conditions that don't exist naturally.
