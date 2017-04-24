@@ -230,34 +230,74 @@ As a final note, to say that neural networks have undergone a resurgence over th
 
 ## Trees *&* Forests
 
-Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  \marginnote{\center{\includegraphics[scale=.5]{images/hypotree}}}So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
+Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  \So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
 
 
-Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  At right is a hypothetical tree reflecting this.
+Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  The following is a hypothetical tree reflecting this.
 
-```{r echo=FALSE}
+```{r hypotree, echo=FALSE, cache=FALSE}
 library(DiagrammeR)
+grViz('digraph tree {
+graph [rankdir = TD  bgcolor="#fffff8"]
 
+node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
+
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
+X1 [width=.5] X2 [width=.5]; 
+Negative1 [label="Negative" shape=circle color="#ff5503" width=.5]; 
+Negative2 [label="Negative" shape=circle color="#ff5503" width=.5]; 
+Positive [ shape=circle color="#03b3ff" width=.5];
+
+edge [color=gray50 arrowhead=dot]
+X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
+X1 -> X2 [label = " > 5.75", fontcolor="gray50" fontsize="7.5%"];
+X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
+X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+
+}')
 ```
 
+Now let's see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% (i.e. volatility >.25, alcohol between 9.85 and 10.625), they also get classified as good.  Any remaining observations are classified as bad wines.  In this way, the classification tree is getting at interactions among the variables involved.
 
-<!-- \marginnote{\center{\includegraphics[scale=.5]{images/winetree}}\\ -->
-<!-- Results from the \textcolor{blue}{tree} package.} -->
-<!-- The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63 \%, a wine is classified as good\sidenote{Color me unsurprised by this finding.}. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85\% (i.e. volatility >.25, alcohol between 9.85 and 10.625), they also get classified as good.  Any remaining observations are classified as bad wines. -->
+```{r winetree, echo=FALSE, cache=FALSE}
+grViz('digraph tree {
+graph [rankdir = TD bgcolor="#fffff8"]
 
-<!-- Unfortunately a single tree, while highly interpretable, does pretty poorly for predictive purposes.  In standard situations we will instead use the power of many trees, i.e. a forest, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees. -->
+node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
 
-<!-- Random forests are referred to as an \emph{ensemble} method, one that is actually a combination of many models, and there are others we'll mention later.  In addition there are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here in our use of caret (called 'mtry').  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set. -->
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
+alcohol1 [label="alcohol" width=.5];
+alcohol2 [label="alcohol" width=.5];
+va [label="volatile.acidity" width=.5]; 
+Bad1  [label="Bad" shape=circle color="#ff5503" width=.5]; 
+Good1 [label="Good" shape=circle color="#03b3ff" width=.5];
+Good2 [label="Good" shape=circle color="#03b3ff" width=.5];
+Good3 [label="Good" shape=circle color="#03b3ff" width=.5];
 
-<!-- There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of mtry predictor variables etc.  But we are in the end just harnessing the power of many trees, any one of which would be highly interpretable. -->
+edge [color=gray50 arrowhead=dot]
+alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize="7.5%"];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
+va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize="7.5%"];
+va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
 
-<!-- %For all 9-1 splits of the data, -->
-<!-- %Create 1000 random resamples of size $N_9$, -->
-<!-- %For each t of 1000, create a tree -->
-<!-- %At each split of each tree, randomly pick mtry predictor variables as potential splitter variables. -->
-<!-- %Examine performance on the kth partition of data. -->
-<!-- %Select the mtry that produces the best performance. -->
-<!-- %Run the test data through the selected forest. -->
+}')
+```
+
+Unfortunately a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a forest, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
+
+Random forests are referred to as an <span class="emph">ensemble</span> method, one that is actually a combination of many models, and there are others we'll mention later.  In addition there are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here in our use of caret (called 'mtry').  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set.
+
+There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of mtry predictor variables etc.  But we are in the end just harnessing the power of many trees, any one of which would be highly interpretable.
+
+<!-- For all 9-1 splits of the data, -->
+<!-- Create 1000 random resamples of size $N_9$, -->
+<!-- For each t of 1000, create a tree -->
+<!-- At each split of each tree, randomly pick mtry predictor variables as potential splitter variables. -->
+<!-- Examine performance on the kth partition of data. -->
+<!-- Select the mtry that produces the best performance. -->
+<!-- Run the test data through the selected forest. -->
 
 
 ```{r rf_train, echo=2:4, eval=FALSE}
@@ -277,12 +317,6 @@ results_rf
 
 The initial results look promising with mtry = `r results_rf$bestTune$mtry` producing the best initial result.  Now for application to the test set.
 
-<<rf_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>=
-preds_rf = predict(results_rf, wine_test[,-10])
-confusionMatrix(preds_rf, wine_test[,10], positive='Good')
-conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good') #create an object to use in Sexpr
-@
-
 ```{r rf_test, echo=-3}
 preds_rf = predict(results_rf, wine_test[,-10])
 confusionMatrix(preds_rf, wine_test[,10], positive='Good')
@@ -290,9 +324,9 @@ conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good')
 ```
 
 
-<!-- This is our best result so far with \Sexpr{round(conf_rf$overall[1]*100,2)}\% accuracy, with a lower bound well beyond the 63\% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility. -->
+This is our best result so far with `r round(conf_rf$overall[1]*100,2)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility.
 
-<!-- Incidentally, the underlying \textcolor{red}{randomForest} function here allows one to assess variable importance in a different manner\sidenote{Our previous assessment was model independent.}, and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity. -->
+Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
 
 ### Strengths *&* Weaknesses
 
@@ -302,7 +336,7 @@ conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good')
 - Easily incoprorates features of different types (categorical and numeric).
 - Tolerance to irrelevant features.
 - Some tolerance to correlated inputs.
-- Good with big data.
+- Good with big data..
 - Handling of missing values.
 
 **Weaknesses**
@@ -312,52 +346,99 @@ conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good')
 
 ### Final Thoughts
 
-Random forests are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^notcontinuous], are relatively fast, and just plain work.
+Random forests are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^rf_notcontinuous], are relatively fast, allow for an assessment of variable importance, and just plain work.  Unless you have massive amounts of data, even all the complicated neural net approaches out there will struggle to do better[^100sclassifiers].  
 
 ## Support Vector Machines
 <!-- \marginnote{\raggedleft\includegraphics[scale=.35]{images/svm2d}\\ -->
 <!-- \includegraphics[scale=.35]{images/svm3d}\\ -->
 <!-- } -->
 
+<span class="marginnote"><img src="img/svm2d_temp.svg" style="display:block; margin: 0 auto;"></span>
+<span class="marginnote"><img src="img/svm3d_temp.png" style="display:block; margin: 0 auto;"></span>
 
-<!-- Support Vector Machines (SVM) will be our last example, and is perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.    -->
+```{r svm_plot, echo=FALSE, eval=FALSE}
+### svm plots
+set.seed(123)
+x = rnorm(50)
+y = rnorm(50)
+z = rnorm(50)
 
-<!-- To better understand this process, consider the example to the right of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension\sidenote{Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.}, shown in the following graph, we might find a more clear separation. Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes (following figures, zoom in to see the margin on the second plot).  Real data will not be so clean cut, and total separation impossible, but the idea is the same. -->
-<!-- \marginnote{\raggedleft\includegraphics[scale=.30]{images/svmSeparate1}\\ -->
-<!-- \includegraphics[scale=.30]{images/svmSeparate2} -->
-<!-- } -->
+#inner product space
+z = sqrt(2)*x*y
 
-<!-- <<svm_train, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE>>= -->
-<!-- set.seed(1234) -->
-<!-- results_svm = train(good~., data=wine_train, method="svmLinear",  -->
-<!--                     preProcess="range", trControl=cv_opts, tuneLength=5) -->
-<!-- results_svm -->
-<!-- @ -->
+lab = factor((x + z) > 0, labels=c("class1","class2"))
 
-<!-- <<svm_test, size='footnotesize', message=FALSE, warning=FALSE, cache=TRUE, tidy=FALSE, echo=1:2>>= -->
-<!-- preds_svm = predict(results_svm, wine_test[,-10]) -->
-<!-- confusionMatrix(preds_svm, wine_test[,10], positive='Good') -->
-<!-- conf_svm = confusionMatrix(preds_svm, wine_test[,10], positive='Good') #create an object to use in Sexpr -->
-<!-- @ -->
+d = data.frame(x,y,z,lab)
+# d2 = d[order(x,y),]
+# d3 = expand.grid(x=x,y=y); d3=d3[order(x,y),]
 
-<!-- Results for the initial support vector machine do not match the random forest for this data set, with accuracy of \Sexpr{round(conf_svm$overall[1]*100,2)}\%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options. -->
+library(ggplot2)
+g = ggplot(aes(x,y), data=d)
+g + geom_point(aes(color=lab), size=3, pch=19) + 
+  scale_color_manual(values=c("#FF5500", "#03b3ff")) +
+  lazerhawk::theme_trueMinimal()
+  # theme_minimal() + 
+  # theme(panel.grid.major=element_line(color=NA),
+  #       panel.grid.minor=element_line(color=NA))
+# 
+# library(lattice)
+# cloud(y~x+z, data=d, groups=lab, col=c("#FF5500", "#03b3ff"), pch=19, 
+#       screen = list(z = -50, x = -90), 
+#       pretty=F, par.box = c(col = "gray80"), par.settings = list(axis.line = list(col = "gray50")))
+
+plot_ly(d, x = ~x, y = ~z, z = ~y, color = ~lab, colors = c("#FF5500", "#03b3ff")) %>%
+  add_markers(marker=list(opacity=.75)) %>% 
+  lazerhawk::theme_plotly()
+```
 
 
-<!-- \subsection{Strengths \& Weaknesses} -->
 
-<!-- \emph{Strengths} -->
-<!-- \begin{itemize} -->
-<!--   \item Good prediction in a variety of situations. -->
-<!--   \item Can utilize predictive power of linear combinations of inputs. -->
-<!-- \end{itemize} -->
+Support Vector Machines (SVM) will be our last example, and are perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.
+
+To better understand this process, consider the example to the right of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes (following figures, zoom in to see the margin on the second plot).  Real data will not be so clean cut, and total separation impossible, but the idea is the same.
+\marginnote{\raggedleft\includegraphics[scale=.30]{images/svmSeparate1}\\
+\includegraphics[scale=.30]{images/svmSeparate2}
+}
 
 
-<!-- \noindent\emph{Weaknesses} -->
-<!-- \begin{itemize} -->
-<!--   \item Very black box. -->
-<!--   \item Computational scalability. -->
-<!--   \item Natural handling of mixed data types. -->
-<!-- \end{itemize} -->
+```{r svm_train, eval=FALSE, echo=2:3}
+set.seed(1234)
+results_svm = train(good~., data=wine_train, method="svmLinear",
+                    preProcess="range", trControl=cv_opts, tuneLength=5)
+results_svm
+save(results_svm, file='data/results_svm.RData')
+```
+```{r svm_train_results, echo=FALSE}
+load('data/results_svm.RData')
+results_svm
+```
+
+
+```{r svm_test, echo=-3}
+preds_svm = predict(results_svm, wine_test[,-10])
+confusionMatrix(preds_svm, wine_test[,10], positive='Good')
+conf_svm = confusionMatrix(preds_svm, wine_test[,10], positive='Good') #create an object to use in Sexpr
+```
+
+
+Results for the initial support vector machine do not match the random forest for this data set, with accuracy of `r round(conf_svm$overall[1]*100,2)`%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options.
+
+### Strengths *&* Weaknesses
+
+**Strengths**
+
+- Good prediction in a variety of situations.
+- Can utilize predictive power of linear combinations of inputs.
+
+**Weaknesses**
+
+- Very black box.
+- Computational scalability.
+- Natural handling of mixed data types.
+
+### Final Thoughts
+
+Support vector machines can provide very good prediction in a variety of settings, while do fairly poorly in others. They will often require a notable amount of tuning, whereas generalizations would esitmate such parameters as part of the process. In short, you will typically have better, more interpretable, and/or less computationally intensive options in most circumstances.
 
 
 [^wineraters]: I think it would be interesting to have included characteristics of the people giving the rating.
@@ -382,4 +463,10 @@ Random forests are one of the better off-the-shelf classifiers you'll come acros
 
 [^nnet_rot]: You may find some rules of thumb from older sources, but using regularization and cross-validation is a much better way to 'guess'.
 
-[rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better under conditions that don't exist naturally.
+[^rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better under conditions that don't exist naturally.
+
+[^rf_modelindie]: Our previous assessment was model independent.
+
+[^100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusisons.
+
+[^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.

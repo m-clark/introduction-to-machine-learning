@@ -13,7 +13,7 @@ output:
       css: [standard_html.css, toc.css, mytufte.css]
       split_by: rmd
     bookdown::gitbook:
-      css: [standard_html.css]
+      css: [standard_html.css, toc.css, mytufte.css]
       highlight: pygments
       number_sections: false
       toc_depth: 2
