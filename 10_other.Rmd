@@ -13,43 +13,112 @@ Many of the techniques used in unsupervised are commonly taught in various appli
 
 ### Latent Variable Models
 
-\marginnote{\includegraphics[scale=.35]{images/lvmodel}}
+```{r lvmodel, echo=FALSE, eval=T, dev='svg', background='#FFFFDD'}
+library(DiagrammeR)
+tags$div(style="width:25%; margin: 0 12.5%; bgcolor='transparent'",
+DiagrammeR("
+digraph DAG2 {
+ # Intialization of graph attributes
+ graph [overlap = false rankdir=TB bgcolor=transparent]
+ 
+ # Initialization of node attributes
+ node [shape = circle,
+ fontname = Helvetica,
+ color = gray80,
+ type = box,
+ fixedsize = true]
+ 
+ # Node statements
+ node [width=.75, height=.75, shape=circle, color=gray80];
+ LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50];
+ LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50];
+ 
+ node [width=1, shape=square, color=gray50, fontcolor=gray25]
+ subgraph {
+    rank=same;
+    X1 [width=.5 height=.5 label=<X<sub>1</sub>>]; 
+    X2 [width=.5 height=.5 label=<X<sub>2</sub>>]; 
+    X3 [width=.5 height=.5 label=<X<sub>3</sub>>]; 
+    X4 [width=.5 height=.5 label=<X<sub>4</sub>>]; 
+    X5 [width=.5 height=.5 label=<X<sub>5</sub>>]; 
+    X6 [width=.5 height=.5 label=<X<sub>6</sub>>]; 
+ }
+ # Initialization of edge attributes
+ edge [color = gray50, rel = yields minlen=2]
+ 
+ # Edge statements
+ LV1 -> {X1 X2 X3 X4};
+ LV2 -> {X3 X4} [style=dashed] ;
+ LV2 -> {X5 X6};
+}
+ ", type='grViz', width='100%', height='100%')
+)
+```
+
+<!-- <span class="marginnote"><img src="img/lvmodel.png" style="display:block; margin: 0 auto;"></span> -->
+
 Sometimes the desire is to reduce the dimensionality of the inputs to a more manageable set of information.  In this manner we are thinking that much of the data can be seen as having only a few sources of variability, often called latent variables or factors.  Again, this takes familiar forms such as principal components and ("exploratory") factor analysis, but would also include independence components analysis and partial least squares techniques.  Note also that these can be part of a supervised technique (e.g. principal components regression) or the main focus of analysis (as with latent variable models in structural equation modeling).
 
 
 ### Graphical Structure
 
-\marginnote {\begin{center}\includegraphics[scale=.35]{images/senategraph}\end{center} Example graph of the social network of senators based on data and filter at the following link. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph. Zoom in as necessary, and note that you may need to turn off 'enhance thin lines' in your Adobe Page Display Preferences if using it as a viewer. [link to data](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801).
+```{r senate_network, echo=FALSE, eval=T}
+# library(igraph)
+# g = read_graph('figure/senate_graph.graphml', format='graphml')
+
+library(ggnetwork)
+senate = read.csv('data/Senate_Raw.csv')
+senate_atts = read.csv('data/senate_graph (Nodes).csv')
+adj0 = lazerhawk::createAdjacency(senate, n1='Vertex.1', n2='Vertex.2', 
+                                  value='Percent_Agreement', diagonal=0)
+adj = apply(adj0, 2, as.numeric) *100
+adj[adj<65] = 0
+colnames(adj) = rownames(adj) = union(unique(senate$Vertex.1), unique(senate$Vertex.2))
+
+library(network)
+n = network(adj, directed=F, loops=F, matrix.type='adjacency')
+n = set.edge.value(n,"Weight",adj)
+n %v% "importance" = senate_atts$Betweenness.Centrality
+n %v% "class" = senate_atts$Modularity.Class
+
+
+gnet = ggnetwork(n, weights='Weight', layout='kamadakawai')
+ggsenate = ggplot(gnet, aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges(aes(), color = "gray95", show.legend=F) + #size=Weight
+  geom_nodes(aes(x, y, size=importance), color='transparent', show.legend=F) +
+  geom_nodetext(aes(label = vertex.names, size=importance, color=factor(class)), fontface = "bold", show.legend=F) +
+  scale_color_manual(values=c('#3A3A98FF', "#832424FF")) +
+  scale_size_continuous(range=c(2, 7), trans='exp') +
+  theme_blank() +
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+# ggsenate
+# ggsave(ggsenate, filename='img/senate.svg', device='svg')
+# ggsave(ggsenate, filename='img/senate.png', device='png')
+```
+
+
+<!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
+<span class="marginnote">
+```{r echo=FALSE, dev='svglite'}
+ggsenate
+```
+</span>
+Example graph of the social network of senators based on data and filter at the following link. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph [(link to data)](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801)
 
 Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain similarities among observations and examine visually the structure of those data points, where observations are placed closer together that are more similar in nature. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the correlations of inputs.
-
-```{r echo=FALSE, eval=FALSE}
-library(igraph)
-g = read_graph('figure/senate_graph.graphml', format='graphml')
-library(visNetwork)
-
-
-gd = toVisNetworkData(g)
-
-visNetwork(gd$nodes, gd$edges %>% dplyr::filter(weight>.95)) %>% 
-  visNodes(shape='circle', label='label') %>% 
-  visEdges(value='weight')
-
-visIgraph(g) %>% 
-   visNodes(#shadow=list(enabled=T, color='rgba(0,0,0,0.25)'),
-            font=list(size=12, color='#FF5503'),
-            shape='text', 
-            # scaling=list(label=list(enabled=T, min=10, max=12), max=5),  
-            color=list(background='#ff5503', highlight=list(background='salmon'))) %>% 
-   visEdges(color='#1e90ff', smooth=list(enabled=T, forceDirection='horizontal')) %>% 
-   visLayout(randomSeed=123)
-```
 
 
 ### Imputation
 
-<span class="marginnote">This and other techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span>
 We can also use these techniques when we are missing data as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation. 
+<span class="marginnote">This and other techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span>
 
 Beyond this we can infer values that are otherwise unavailable in a different sense.  Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in.  In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question.  Such <span class="emph">recommender systems</span> are widely used these days.
 
@@ -62,40 +131,43 @@ In many situations we can combine the information of multiple models to enhance 
 
 <span class="emph">Bagging</span>, or bootstrap aggregation, uses bootstrap sampling to create many data sets on which a procedure is then performed.  The final prediction is based on an average of all the predictions made for each observation.  In general, bagging helps reduce the variance while leaving bias unaffected. A conceptual outline of the procedure is provided.
 
-\medskip
-\noindent \emph{Model Generation} \\
-For $B$ number of iterations:
-\begin{enumerate}
-  \item Sample $N$ observations with replacement $B$ times to create $B$ data sets of size $N$.
-  \item Apply the learning technique to each of $B$ data sets to create $t$ models.
-  \item Store the $t$ results.
-\end{enumerate}
-\emph{Classification} \\
+
+*Model Generation*
+
+1. Sample $N$ observations with replacement $B$ times to create $B$ data sets of size $N$.
+2. Apply the learning technique to each of $B$ data sets to create $t$ models.
+3. Store the $t$ results.
+
+*Classification*
+
 For each of $t$ number of models:
-\begin{enumerate}
-  \item Predict the class of $N$ observations of the original data set.
-  \item Return the class predicted most often.
-\end{enumerate}
+
+1. Predict the class of $N$ observations of the original data set.
+2. Return the class predicted most often across the $t$ number of models (or alternatively, the proportion $t =1$ as a probability).
+
 
 ### Boosting
 
-With <span class="emph">boosting</span> we take a different approach to refitting models.  Consider a classification task in which we start with a basic learner and apply it to the data of interest.  Next the learner is refit, but with more weight (importance) given to *misclassified* observations.  This process is repeated until some stopping rule is reached.  An example of the AdaBoost algorithm is provided (in the following $\mathbb{I}$ is the indicator function).
+With <span class="emph">boosting</span> we take a different approach to refitting models.  Consider a classification task in which we start with a basic learner and apply it to the data of interest.  Next the learner is refit, but with more weight (importance) given to *misclassified* observations.  This process is repeated until some stopping rule is reached (e.g. reaching some $M$ iterations).  An example of the AdaBoost algorithm is provided (in the following $\mathbb{I}$ is the indicator function).
 
-\medskip
-\small
-\begin{itemize}
-  \item Set initial weights $w_i$ to $1/N$.
-  \item for $m=1:M$ \quad\{
-    \item \qquad Fit a classifier $m$ with given weights to the data resulting in  \\ \qquad predictions $f^{(m)}_i$ that minimizes some loss function.
-    \item \qquad Compute the error rate $err_m = \frac{\overset{N}{\underset{i=1}{\sum}} \mathbb{I}(y_i\ne f^{(m)}_i)}{\overset{N}{\underset{i=1}{\sum}}w^{(m)}_i}$
-    \item \qquad Compute $\alpha_m = \log[(1-err_m)/err_m]$
-    \item \qquad Set $w_i \leftarrow w_i\exp[\alpha_m \mathbb{I}(y_i\ne f^{(m)}_i)]$ \\
-    \} \\
-    \texttt{Return} $\sgn [\overset{M}{\underset{m=1}{\sum}}\alpha_m f^{(m)}]$
-\end{itemize}
-\normalsize
 
-\medskip
+Set initial weights $w_i$ to $1/N$.
+
+for $m=1:M$ {
+
+- Fit a classifier $m$ with given weights to the data resulting in predictions $f^{(m)}_i$ that minimizes some loss function.
+    
+- Compute the error rate $err_m = \frac{\overset{N}{\underset{i=1}{\sum}}\mathbb{I}(y_i\ne f^{(m)}_i)}{\overset{N}{\underset{i=1}{\sum}}w^{(m)}_i}$
+    
+- Compute $\alpha_m = \log[(1-err_m)/err_m]$
+    
+- Set $w_i \leftarrow w_i\exp[\alpha_m \mathbb{I}(y_i\ne f^{(m)}_i)]$
+    
+} 
+
+Return $\textrm{sign} [\overset{M}{\underset{m=1}{\sum}}\alpha_m f^{(m)}]$
+
+
 Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.
 
 ### Stacking
@@ -118,7 +190,7 @@ Variable importance was given almost full weight in the discussion of typical ap
 
 ## Natural language processing/Text Analysis
 
-In some situations the data of interest is not in a typical matrix form but in the form of textual content, i.e. a corpus of documents (loosely defined).  In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state.  The eventual goals may include using the word usage in the prediction of an outcome, perhaps modeling the usage of select terms, or examining the structure of the term usage graphically as in a network model.  In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.
+In some situations the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined).  In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state.  The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model.  In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.
 
 
 ## Bayesian Approaches
@@ -129,12 +201,13 @@ It should be noted that the approaches outlined in this document are couched in 
 
 ## More Stuff
 
-Aside from what has already been noted, there still exists a great many applications for ML such as data set shift
-\sidenote{Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.}, 
-deep learning\sidenote{Learning at different levels of representation, e.g. from an image regarding a scene to the concepts used to describe it.}, semi-supervised learning\sidenote{Learning with both labeled and unlabeled data.}, online learning\sidenote{Learning from a continuous stream of data.}, and many more.  
+Aside from what has already been noted, there still exists a great many applications for ML such as data set shift[^datasetshift], deep learning[^deep], semi-supervised learning[^semi], online learning[^online], and many more.  
 
 
+[^datasetshift]: Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.
 
+[^deep]: This includes learning at different levels of representation, e.g. from an image regarding a scene to the concepts used to describe it.
 
+[^semi]: Learning with both labeled and unlabeled data.
 
-
+[^online]: Learning from a continuous stream of data.
