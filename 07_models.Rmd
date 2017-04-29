@@ -8,46 +8,64 @@ In typical classification situations we are interested in overall accuracy.  How
 To demonstrate other sources of classification information, we will use the following 2x2 table that shows values of some binary outcome (0 = non-event, 1 = event occurs) to the predictions made by some model for that response (arbitrary model).  Both a table of actual values, often called a <span class="emph">confusion matrix</span>[^confusion], and an abstract version are provided.
 
 
-<!-- between the combined failure of pander datatable and div in tufte (ignores width) this hack gets clean tables side by side via a ghosted third column-->
+<!-- between the combined failure of pander datatable and div in tufte (ignores width and other); a 3 coloumn hack gets clean tables side by side via a ghosted third column but still may screw up.  Keeping latex for now: see # see https://stackoverflow.com/questions/38386808/render-latex-tables-in-html-using-rmarkwown -->
 
-<div class="col3" width=50%> 
+
 ```{r confusionMatrix, echo=F}
-freqs = matrix(c('', '', '', 'Actual',
-                 '', '', '1', '0', 
-                 'Predicted', '1', '41','21',
-                 '', '0', '16','13'), 4, 4, byrow=T)
-lets = matrix(c('', '', '', 'Actual',
-                 '', '', '1', '0', 
-                 'Predicted', '1', 'A','B',
-                 '', '0', 'C','D'), 4, 4, byrow=T)
-lets = data.frame(lets)
-colnames(lets) = c('','','','')
-# freqs %>% 
-#   pander::pander(justify='lrrr', split.cells = c('0%', "70%", "10%", "10%", "10%"), 
-#                  emphasize.italics.rows=1, emphasize.italics.cols=1,
-#                  emphasize.strong.rows=1, emphasize.strong.cols=1, width=200)
-# lets %>% 
-#   pander::pander(justify='lrrr', 
-#                  emphasize.italics.rows=1, emphasize.italics.cols=1,
-#                  emphasize.strong.rows=1, emphasize.strong.cols=1, width='200px')
-library(DT)
-datatable(freqs,  options=list(dom='t', 
-                             ordering=F, 
-                             columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
-          width='35%', colnames=rep('', 4), rownames=F) %>% 
-  formatStyle(columns=1:4, backgroundColor='#fffff8')
 
-htmltools::br()
+tex2markdown <- function(texstring) {
+  writeLines(text = texstring,
+             con = myfile <- tempfile(fileext = ".tex"))
+  texfile <- knitr::pandoc(input = myfile, format = "html")
+  cat(readLines(texfile), sep = "\n")
+  unlink(c(myfile, texfile))
+}
 
-datatable(lets, options=list(dom='t', 
-                             ordering=F, 
-                             columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
-          width='35%', colnames=rep('', 4), rownames=F) %>% 
-  formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+# freqs = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0', 
+#                  'Predicted', '1', '41','21',
+#                  '', '0', '16','13'), 4, 4, byrow=T)
+# lets = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0', 
+#                  'Predicted', '1', 'A','B',
+#                  '', '0', 'C','D'), 4, 4, byrow=T)
+# lets = data.frame(lets)
+# colnames(lets) = c('','','','')
+# 
+# library(DT)
+# datatable(freqs,  options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# 
+# htmltools::br()
+# 
+# datatable(lets, options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+# 
+# htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+# htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
 
-htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
-htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+
 ```
+
+
+<div class="col2">
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | 41 | 21 |
+| Predicted = 0  | 16 | 13 |
+
+
+
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | A | B |
+| Predicted = 0  | C | D |
 </div>
 
 
@@ -84,25 +102,33 @@ htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
 
 Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.\sidenote{Table based on table 5.3 in \citet{murphy_machine_2012}}:
 
-REDO LATER
 
 
-```{r confusionMatrix2, echo=F, cache=F}
-cm1 = matrix(c('', '', '', 'Actual',
-                 '', '', '1', '0',
-                 'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','\\(F₊/N₋\\) = FPR = Type I',
-                 '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T)# %>% data.frame(stringsAsFactors=F)
-cm2 = matrix(c('', '', '', 'Actual',
-                 '', '', '1', '0',
-                 'Predicted', '1', '$T_+/N_+$ = TPR = sensitivity = recall','$F_+/N_-$ = FPR = Type I',
-                 '', '0', '$F_-/N_+$ = FNR = Type II','$T_-/N_-$ = TNR = specificity'), 4, 4, byrow=T)
 
-library(DT)
-DT::datatable(cm1, options=list(dom='t',
-                            ordering=F,
-                            columnDefs = list(list(className = 'dt-right', targets = 1:3))),
-          width='35%', colnames=rep('', 4), rownames=F) %>%
-  formatStyle(columns=1:4, backgroundColor='#fffff8')
+```{r confusionMatrix2, echo=F, cache=F, results='asis', eval=T}
+# cm1 = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0',
+#                  'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','\\(F₊/N₋\\) = FPR = Type I',
+#                  '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T)# %>% data.frame(stringsAsFactors=F)
+# cm2 = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0',
+#                  'Predicted', '1', 'T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity = recall','F<sub>+</sub>/N<sub>-</sub> = FPR = Type I',
+#                  '', '0', 'F<sub>-</sub>/N<sub>+</sub> = FNR = Type II','T<sub>-</sub>/N<sub>-</sub> = TNR = specificity'), 4, 4, byrow=T)
+# 
+# library(DT)
+# DT::datatable(cm1, options=list(dom='t',
+#                             ordering=F,
+#                             columnDefs = list(list(className = 'dt-right', targets = 1:3))),
+#           width='35%', colnames=rep('', 4), rownames=F) %>%
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# 
+# 
+# DT::datatable(cm2, options=list(dom='t',
+#                             ordering=F,
+#                             columnDefs = list(list(className = 'dt-right', targets = 1:3))),
+#           width='35%', colnames=rep('', 4), rownames=F) %>%
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# htmlTable::htmlTable(cm1)
 
 # cm1
 # 
@@ -115,7 +141,15 @@ DT::datatable(cm1, options=list(dom='t',
 #           width='35%', colnames=rep('', 4), rownames=F) %>% 
 #   formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
 
+
 ```
+
+
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity =recall  | F<sub>+</sub>/N<sub>-</sub> = Type I  |
+| Predicted = 0  |  F<sub>-</sub>/N<sub>+</sub> = Type II |  T<sub>-</sub>/N<sub>_+_</sub> = TNR = specficity |
+
 
 
 

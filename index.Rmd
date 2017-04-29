@@ -7,13 +7,13 @@ author:  |
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
-    bookdown::tufte_html_book: 
+    bookdown::tufte_html_book:
       toc: yes
       number_sections: false
       css: [standard_html.css, toc.css, mytufte.css]
       split_by: rmd
     bookdown::gitbook:
-      css: [standard_html.css, toc.css, mytufte.css]
+      css: [standard_html.css]
       highlight: pygments
       number_sections: false
       toc_depth: 2
@@ -50,7 +50,7 @@ knitr::opts_chunk$set(echo = T, message=F, warning=F, comment=NA, autodep=F, eva
 
 ```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
 library(plotly); library(hrbrthemes); library(lazerhawk); library(caret); 
-library(broom); library(pander); library(modelr); library(tidyverse)
+library(broom); library(pander); library(modelr); library(tidyverse); library(htmltools)
 ```
 
 # 

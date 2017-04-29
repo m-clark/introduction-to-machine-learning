@@ -1,8 +1,9 @@
 # Other
 
-<span class="newthought">In this section, I note some other techniques</span> one may come across and others that will provide additional insight into machine learning applications.
+<span class="newthought">In this section, I note some other techniques</span> one may come across, and others that will provide additional insight into machine learning applications.
 
 ## Unsupervised Learning
+
 Unsupervised learning generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation we are more interested in the discovery of structure within the data.
 
 

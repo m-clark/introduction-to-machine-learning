@@ -1,0 +1,34 @@
+# Summary
+
+## Cautionary Notes
+
+A standard mantra in machine learning and statistics generally is that there is no free lunch.  All methods have certain assumptions, and if those don't hold the results will be problematic at best.  Also, even if in truth learner A is better than B, B can often outperform A in the finite situations we actually deal with in practice.  Furthermore, being more complicated doesn't mean a technique is better.  As previously noted, incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and they may perform quite well in some situations.
+
+
+## Some Guidelines
+
+Here are some thoughts to keep in mind, though these may be applicable to applied statistical practice generally.
+
+More data beats a cleverer algorithm, but a lot of data is not enough by itself @domingos_few_2012. 
+
+Avoid overfitting.
+
+Let the data speak for itself. 
+
+"Nothing is more practical than a good theory."[^lewin]
+
+While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes $\rightarrow$ logistic regression $\rightarrow$ knn $\rightarrow$ svm.
+
+Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal.  Some programs can even make this explicit.
+
+Keep the tuning parameter/feature selection process separate from the final test process for assessing error.
+
+Learn multiple models, selecting the best or possibly combining them.
+
+
+## Conclusion
+
+It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The field of statistics has rapidly evolved over the past two decades.  The tools available are myriad, and expanding all the time.  Rather than being overwhelmed, one should embrace the choice available, and have some fun with your data.
+
+
+[^lewin]: Kurt Lewin, and iterated by V. Vapnik for the machine learning context.
