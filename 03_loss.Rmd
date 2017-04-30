@@ -1,26 +1,32 @@
 # The Loss Function
 
 
-<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function $f(X)$ to make predictions of y from those input variables.  We also need a function to penalize errors in prediction- a <span class="emph">loss function</span>, $L(Y, f(X))$.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function $f(X)$ to make predictions of y from those input variables.  We also need a function to penalize errors in prediction, i.e. a <span class="emph">loss function</span>.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+
 
 ## Continuous Outcomes
 
 ### Squared Error
 
-The classic loss function for linear models with continuous response is the squared error loss function, or the residual sum of squares.
+The classic loss function for linear models with a continuous numeric response is the squared error loss function, or the residual sum of squares.
 
 
 $$L(Y, f(X)) = \sum(y-f(X))^2$$
 
+Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  Often they are not taught that it is one of many possible approaches.
+
+
 
 ### Absolute Error
-For an approach more robust to extreme observations, we might choose absolute rather than squared error as follows.  In this case, predictions are a conditional median rather than a conditional mean.
+
+For an approach that is more robust to extreme observations, we might choose absolute rather than squared error.  In this case, predictions are a conditional median rather than a conditional mean.
 
 
 $$L(Y, f(X)) = \sum|(y-f(X))|$$
 
 ### Negative Log-likelihood
-We can also think of our usual likelihood methods learned in a standard applied statistics course as incorporating a loss function that is the negative log-likelihood pertaining to the model of interest.  If we assume a normal distribution for the response we can note the loss function as:
+
+We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the negative log-likelihood pertaining to the model of interest.  If we assume a normal distribution for the response we can note the loss function as:
 
 
 $$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
@@ -30,7 +36,7 @@ In this case it would converge to the same answer as the squared error/least squ
 
 ### R Example
 
-The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (beta) that minimize the squared error.  X is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  y is the continuous variable to be modeled[^optimfunc].
+The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (beta) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
 
 
 ```{r squareloss}
@@ -51,6 +57,9 @@ our_func = optim(par=c(0,0,0), fn=sqerrloss, X=X, y=y, method='BFGS')
 lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
 rbind(c(our_func$par, our_func$value), c(coef(lm_result), sum(resid(lm_result)^2)))
 ```
+
+While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.
+
 
 
 ## Categorical Outcomes
@@ -94,7 +103,8 @@ Here negative values of $yf$ are misclassifications, and so correct classificati
 Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly so the worse the misclassification (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  At right is a depiction of the loss as a functions above, taken from @hastie_elements_2009.
 
 
+[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even thought it's the most widely used of all techniques.
 
-[^optimfunc]: Type ?optim at the console for more detail.
+[^optimfunc]: Type `?optim` at the console for more detail.
 
 [^catregloss]: For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also.  We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).

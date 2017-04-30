@@ -25,23 +25,41 @@ As we are maximizing the likelihood the penalty is a subtraction, but nothing in
 
 ## R Example
 
-In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. 
+In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. I've also increased the number of predictors to 10.
 
 ```{r regularization}
-sqerrloss_reg = function(beta, X, y, lambda=.1){
+# data setup
+set.seed(123)
+N = 100
+X = cbind(1, matrix(rnorm(N*10), ncol=10))
+beta = runif(ncol(X))
+y =  rnorm(N, X%*%beta, sd=2)
+
+sqerrloss_reg = function(beta, X, y, lambda=1){
   mu = X%*%beta
   sum((y-mu)^2) + lambda*sum(abs(beta[-1]))
 }
 
-regularized_result = optim(par=c(0,0,0), fn=sqerrloss_reg, X=X, y=y, method='BFGS')
-rbind(c(our_func$par, our_func$value), 
-      c(coef(lm_result),sum(resid(lm_result)^2)), 
-      c(regularized_result$par, regularized_result$value) )
+lm_result = lm(y~., data.frame(X[,-1]) )
+regularized_result = optim(par=rep(0, ncol(X)), fn=sqerrloss_reg, X=X, y=y, method='BFGS')
+```
+<br>
 
+
+```{r regularization_show_result, echo=5}
+rbind(`Standard LM`=c(coef(lm_result), `Squared Error Loss`=sum(resid(lm_result)^2)), 
+      `Regularized Model`=c(regularized_result$par, regularized_result$value)) %>% 
+  t() %>% 
+  round(3) %>% 
+  DT::datatable(options=list(dom='tp', pageLength=6, ordering=F), width='35%') %>%
+  formatStyle(columns=0:3, backgroundColor='#fffff8')
+```
+<br>
+```{r regularization_testset}
 # Create test data
-set.seed(1:3)
 N_test = 50
 X_test = cbind(1, rnorm(N_test), rnorm(N_test))
+X_test = cbind(1, matrix(rnorm(N_test*10), ncol=10))
 y_test = rnorm(N_test, X_test%*%beta, sd=1)
 
 # squared error loss
@@ -49,7 +67,7 @@ crossprod(y_test - predict(lm_result, newdata = data.frame(X_test[,-1])))
 crossprod(y_test - X_test%*%regularized_result$par)
 ```
 
-From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad.
+From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad.  On the test data however, the squared error loss is lower.
 
 In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact biased, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
 

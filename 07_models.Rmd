@@ -145,11 +145,12 @@ Note the following summary of several measures where $N_+$ and $N_-$ are the tot
 ```
 
 
+<div class="" style="text-align:center; width:75%">
 |   | Actual = 1  | Actual = 0  |
 |:-:|:-:|:-:|
 | Predicted = 1  | T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity =recall  | F<sub>+</sub>/N<sub>-</sub> = Type I  |
 | Predicted = 0  |  F<sub>-</sub>/N<sub>+</sub> = Type II |  T<sub>-</sub>/N<sub>_+_</sub> = TNR = specficity |
-
+</div>
 
 
 

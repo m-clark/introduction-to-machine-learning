@@ -10,14 +10,16 @@ For the other type of study focused on prediction, newer techniques are availabl
 
 While the two approaches are not exclusive, I present two extreme (though thankfully dated) views of the situation[^kerby]:
 
-> To paraphrase provocatively, 'machine learning is statistics minus any checking of models and assumptions'.
+*To paraphrase provocatively, 'machine learning is statistics minus any checking of models and assumptions'.*
 <br> $\sim$ Brian Ripley, 2004
 
 
-> ... the focus in the statistical community on data models has:
-<br> - Led to irrelevant theory and questionable scientific conclusions.
-<br> - Kept statisticians from using more suitable algorithmic models.
-<br> - Prevented statisticians from working on exciting new problems. <br>
+*... the focus in the statistical community on data models has:*
+
+- *Led to irrelevant theory and questionable scientific conclusions.*
+- *Kept statisticians from using more suitable algorithmic models.*
+- *Prevented statisticians from working on exciting new problems.*
+<br>
 $\sim$ Leo Brieman, 2001
 
 

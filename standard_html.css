@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5 {
   /*columns: 2 200px;*/         /* number of columns and width in pixels*/
   column-count: 2;
   column-width: 25%;
-  width: 75%;
+  width: 70%;
   column-gap: 5px;
   margin: 0 0;
   padding: 0 0;

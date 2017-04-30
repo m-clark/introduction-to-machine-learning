@@ -4,6 +4,7 @@
 ## Bias Variance Demo
 
 ```{r biasvar_demo, eval=FALSE}
+set.seed(123)
 x = runif(1000)
 ytrue = sin(3*pi*x)
 basedat = cbind(x,ytrue)[order(x),]
@@ -20,8 +21,12 @@ str(gendat)
 
 library(kernlab)
 
-rbf1 = apply(gendat, 3, function(d) predict(gausspr(y~x, data=data.frame(d), kpar=list(sigma=.5)), newdata = data.frame(x), type='response'))
-rbf2 = apply(gendat, 3, function(d) predict(gausspr(y~x, data=data.frame(d)), newdata = data.frame(x), type='response') )
+rbf1 = apply(gendat, 3, 
+             function(d) predict(gausspr(y~x, data=data.frame(d), kpar=list(sigma=.5)), 
+                                 newdata = data.frame(x), type='response'))
+rbf2 = apply(gendat, 3, 
+             function(d) predict(gausspr(y~x, data=data.frame(d)), 
+                                 newdata = data.frame(x), type='response') )
 
 library(ggplot2); library(tidyverse); library(gridExtra)
 
@@ -42,28 +47,60 @@ g1 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf1_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Variance') + 
-  lazerhawk::theme_trueMinimal()
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
 
 g2 = ggplot(data=data.frame(basedat)) +
-  geom_line(aes(x=x, y=ytrue), color='#1e90ff') +
+  geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
   geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf1))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Bias') + 
-  lazerhawk::theme_trueMinimal()
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
 
 g3 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf2_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Variance') + 
-  lazerhawk::theme_trueMinimal()
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
 
 g4 = ggplot(data=data.frame(basedat)) +
-  geom_line(aes(x=x, y=ytrue), color='#1e90ff') +
+  geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
   geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf2))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Bias') + 
-  lazerhawk::theme_trueMinimal()
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
 
 grid.arrange(g1, g2, g3, g4, ncol=2)
 ```
