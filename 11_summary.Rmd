@@ -2,7 +2,13 @@
 
 ## Cautionary Notes
 
-A standard mantra in machine learning and statistics generally is that there is no free lunch.  All methods have certain assumptions, and if those don't hold the results will be problematic at best.  Also, even if in truth learner A is better than B, B can often outperform A in the finite situations we actually deal with in practice.  Furthermore, being more complicated doesn't mean a technique is better.  As previously noted, incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and they may perform quite well in some situations.
+A standard mantra in machine learning and statistics generally is that there is [no free lunch](http://www.no-free-lunch.org/).  All methods have certain assumptions, and if those don't hold the results will be problematic at best.  Also, even if in truth learner A is better than B, B can often outperform A in the finite situations we actually deal with in practice.  
+
+In general without context, no algorithm is any better than another. Furthermore, being more complicated doesn't mean a technique is better.  As previously noted, simply incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and may perform quite well in many situations.  The basic conclusion is that 
+
+> *Machine learning **is not** magic*!
+
+ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since past.  Like any statistical technique, the reason to use ML is that is well-suited to the research or other problem at hand.
 
 
 ## Some Guidelines

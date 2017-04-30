@@ -60,7 +60,7 @@ rbind(`Standard LM`=c(coef(lm_result), `Squared Error Loss`=sum(resid(lm_result)
 N_test = 50
 X_test = cbind(1, rnorm(N_test), rnorm(N_test))
 X_test = cbind(1, matrix(rnorm(N_test*10), ncol=10))
-y_test = rnorm(N_test, X_test%*%beta, sd=1)
+y_test = rnorm(N_test, X_test%*%beta, sd=2)
 
 # squared error loss
 crossprod(y_test - predict(lm_result, newdata = data.frame(X_test[,-1])))  

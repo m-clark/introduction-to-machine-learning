@@ -13,7 +13,7 @@ The classic loss function for linear models with a continuous numeric response i
 
 $$L(Y, f(X)) = \sum(y-f(X))^2$$
 
-Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  Often they are not taught that it is one of many possible approaches.
+Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  Often they are not taught that it is one of many possible approaches.  However, the average, or <span class="emph">mean squared error</span> is commonly used as a metric of performance (or it's square root).
 
 
 

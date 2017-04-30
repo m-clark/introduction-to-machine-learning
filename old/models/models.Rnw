@@ -1,0 +1,81 @@
+% !Rnw root = ../mlcrash.Rnw
+
+<<models, cache=FALSE, include=FALSE>>=
+  opts_knit$set(self.contained=FALSE)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Model Assessment \& Selection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newthought{In typical model comparison} within the standard linear model framework, there are a number of ways in which we might assess performance across competing models.  For standard OLS regression we might examine adjusted-$R^2$, or with the generalized linear models we might pick a model with the lowest AIC\sidenote{In situations where it is appropriate to calculate in the first place, AIC can often compare to the bootstrap and k-fold cross-validation approaches.}.  As we have already discussed, in the machine learning context we are interested in models that reduce e.g. squared error loss (regression) or misclassification error (classification).  However in dealing with many models some differences in performance may be arbitrary.
+
+%%%
+\subsection{Beyond Classification Accuracy: Other Measures of Performance}
+In typical classification situations we are interested in overall accuracy.  However there are situations, not uncommon, in which simple accuracy isn't a good measure of performance.  As an example, consider the prediction of the occurrence of a rare disease. Guessing a non-event every time might result in 99.9\% accuracy, but that isn't how we would prefer to go about assessing some classifier's performance.
+To demonstrate other sources of classification information, we will use the following 2x2 table that shows values of some binary outcome (0 = non-event, 1 = event occurs) to the predictions made by some model for that response (arbitrary model).  Both a table of actual values, often called a \emph{confusion matrix}\sidenote{This term has always struck me as highly sub-optimal.}, and an abstract version are provided.
+
+
+\begin{table}[ht]
+\begin{minipage}[b]{0.45\linewidth}
+    \begin{tabular}{llrr}
+     & & & Actual \\
+     \hline
+     & & 1 & 0\\ 
+     \hline
+     Predicted & 1 &  41 &  21 \\ 
+     & 0 &  16 &  13\\ 
+     \hline
+    \end{tabular}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.45\linewidth}
+    \begin{tabular}{lrrr}
+     & & & Actual \\
+     \hline
+     & & 1 & 0\\ 
+     \hline
+     Predicted & 1 &  A &  B \\ 
+     & 0 &  C &  D\\ 
+     \hline
+    \end{tabular}
+\end{minipage}
+\end{table}
+
+\small
+\begin{description}
+  \item[True Positive, False Positive, True Negative, False Negative] Above, these are A, B, D, and C respectively.
+  \item[Accuracy] Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about 59\%.
+  \item[Error Rate] 1 - Accuracy.
+  \item[Sensitivity] is the proportion of correctly predicted positives to all true positive events: A/(A+C).  In the above example this would be 41/57, about 72\%. High sensitivity would suggest a low type II error rate (see below), or high statistical \emph{power}. Also known as true positive rate.
+  \item[Specificity] is the proportion of correctly predicted negatives to all true negative events: D/(B+D).  In the above example this would be 13/34, about 38\%. High specificity would suggest a low type I error rate (see below). Also known as true negative rate.
+  \item[Postive Predictive Value (PPV)] proportion of true positives of those that are predicted positives: A/A+B. In the above example this would be 41/62, about 66\%.
+  \item[Negative Predictive Value (NPV)] proportion of true negatives of those that are predicted negative: D/C+D. In the above example this would be 13/29, about 45\%.
+  \item[Precision]  See PPV.
+  \item[Recall] See sensitivity. 
+  \item[Lift] Ratio of positive predictions given actual positives to the proportion of positive predictions out of the total: (A/(A+C))/((A+B)/Total). In the above example this would be (41/(41+16))/((41+21)/(91)), or 1.05.
+  \item[F Score (F1 score)] Harmonic mean of precision and recall: 2*(Precision*Recall)/(Precision+Recall). In the above example this would be 2*(.66*.72)/(.66+.72), about .69.  
+  \item[Type I Error Rate (false positive rate)] proportion of true negatives that are incorrectly predicted positive: B/B+D. In the above example this would be 21/34, about 62\%.  Also known as alpha.
+  \item[Type II Error Rate (false negative rate)] proportion of true positives that are incorrectly predicted negative: C/C+A. In the above example this would be 16/57, about 28\%. Also known as beta.
+  \item[False Discovery Rate] proportion of false positives among all positive predictions: B/A+B. In the above example this would be 21/62, about 34\%.  Often used in multiple comparison testing in the context of ANOVA.
+  \item[Phi coefficient] A measure of association: (A*D - B*C)/(sqrt((A+C)*(D+B)*(A+B)*(D+C))).  In the above example this would be .11.
+\end{description}
+\normalsize
+
+Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.\sidenote{Table based on table 5.3 in \citet{murphy_machine_2012}}:
+\vspace{.25cm}
+
+{\footnotesize
+\noindent\begin{tabular}{llll}
+&  & Actual  & \\
+& & 1 & 0 \\
+\hline
+Predicted & 1 & $T_+/N_+$ = TPR = sensitivity = recall & $F_+/N_-$ = FPR = Type I \\
+& 0 & $F_-/N_+$ = FNR = Type II & $T_-/N_-$ = TNR = specificity \\
+\hline
+\end{tabular} 
+}
+
+
+\vspace{.25cm}
+There are many other measures such as area under a Receiver Operating Curve (ROC), odds ratio, and even more names for some of the above.  The gist is that given any particular situation you might be interested in one or several of them, and it would generally be a good idea to look at a few.

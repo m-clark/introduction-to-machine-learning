@@ -27,7 +27,7 @@ always_allow_html: yes
 font-import: http://fonts.googleapis.com/css?family=Roboto|Open+Sans
 font-family: 'Roboto'
 documentclass: book
-bibliography: ['MLtechrep.bib']
+bibliography: MLtechrep.bib
 biblio-style: apalike
 link-citations: yes
 description: "An introduction to machine learning for applied researchers."

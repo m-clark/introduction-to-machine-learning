@@ -1,0 +1,5 @@
+version history:
+August 2013: Reran to test caret and knitr update; removed visible commented test code, minor text changes, mostly in the beginning parts; changed some magic number columns to text in blackbox section; moved images in svm section to make footnote visible
+
+May 2013: added a couple points to regularization; updated cache etc. to R 3.0; Preface: statistical learning to 'applied' SL to distinguish from theory; 
+added info in section 6.4.4.2 and recreating figure 6.5 of Murphy text in discussion of regularization (plot put in bias-var section); Added 6.4.4.3 info to bias-variance tradeoff discussion (as footnote); added Bayesian subsection to Other section;

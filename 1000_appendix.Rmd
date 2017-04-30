@@ -105,6 +105,8 @@ g4 = ggplot(data=data.frame(basedat)) +
 grid.arrange(g1, g2, g3, g4, ncol=2)
 ```
 
+
+
 ## Programming Languages
 
 ### R
@@ -159,7 +161,7 @@ print(acc)
 
 ### Other
 
-I wouldn't recommend a proprietary tool when better open source tools are available, but I will say **Matlab** is also very popular in machine learning, and specific areas like image processing. **Julia** has been coming along as well.  Of course for maximum speed people still prefer lower level languages like **C++**, **Java**, and **Fortran**. And for whatever reason, people are reinventing ML wheels in languages like **Javascript** and other languages.  See the [awesome list](https://github.com/josephmisiti/awesome-machine-learning) for more.
+I wouldn't recommend a proprietary tool when better open source tools are available, but I will say **Matlab** is also very popular in machine learning, and specific areas like image processing. **Julia** has been coming along as well.  Of course for maximum speed people still prefer lower level languages like **C++**, **Java**, and **Fortran**. And for whatever reason, people are reinventing ML wheels in languages like **Javascript** and others.  See the [awesome list](https://github.com/josephmisiti/awesome-machine-learning) for more.
 
 What I can't recommend is a traditional statistics package like SPSS, SAS, or Stata. Not only did they miss this boat by over a decade, their offerings are slim and less capable.  It seems SAS is probably the only one that's made serious effort here, and it has some audience in the business world due to its long entrenchment there.  And you don't have to take my word for it- here's a comparison of trends at [indeed.com](https://www.indeed.com/jobtrends/q-R-and-%28%22machine-learning%22-or-%22data-science%22%29-q-python-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SAS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SPSS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Stata-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Matlab-and-%28%22machine-learning%22-or-%22data-science%22%29.html).
 

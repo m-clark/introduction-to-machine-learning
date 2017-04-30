@@ -1,4 +1,0 @@
-graphical models
-latent models
-deep learning
-dataset shift

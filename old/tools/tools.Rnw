@@ -1,0 +1,65 @@
+% !Rnw root = ../mlcrash.Rnw
+
+<<toolssetup, cache=FALSE, include=FALSE>>=
+opts_knit$set(self.contained=FALSE)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Tools You Already Have}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newthought{One thing that is important to keep in mind as you begin} is that standard techniques are still available, although we might tweak them or do more with them.  So having a basic background in statistics is all that is required to get started with machine learning.  Again, the difference between ML and traditional statistical analysis is one more of focus than method.
+
+%%%
+\section{The Standard Linear Model}
+All introductory statistics courses will cover linear regression in great detail, and it certainly can serve as a starting point here.  We can describe it as follows in matrix notation:
+
+%% changed vspace to push to next page, change back if later edits spill over to that point anyway
+\vspace{1cm}
+\noindent$y = N(\mu,\sigma^{2})$\\
+\noindent$\mu = X\beta$
+\vspace{.25cm}
+
+Where y is a normally distributed vector of responses [\emph{target}] with mean $\mu$ and constant variance $\sigma^{2}$.  X is a typical model matrix, i.e. a matrix of predictor variables and in which the first column is a vector of 1s for the intercept [\emph{bias}\sidenote{Yes, you will see 'bias' refer to an intercept, and also mean something entirely different in our discussion of bias vs. variance.}], and $\beta$ is the vector of coefficients [\emph{weights}] corresponding to the intercept and predictors in the model.
+
+What might be given less focus in applied courses however is how often it won't be the best tool for the job or even applicable in the form it is presented.  Because of this many applied researchers are still hammering screws with it, even as the explosion of statistical techniques of the past quarter century has rendered obsolete many current introductory statistical texts that are written for disciplines.  Even so, the concepts one gains in learning the standard linear model are generalizable, and even a few modifications of it, while still maintaining the basic design, can render it still very effective in situations where it is appropriate.
+
+Typically in fitting [\emph{learning}] a model we tend to talk about R-squared and statistical significance of the coefficients for a small number of predictors.  For our purposes, let the focus instead be on the residual sum of squares\sidenote{$\sum(y-f(x))^{2}$ where $f(x)$ is a function of the model predictors, and in this context a linear combination of them ($X\beta$).} with an eye towards its reduction and model comparison. We will not have a situation in which we are only considering one model fit, and so must find one that reduces the sum of the squared errors but without unnecessary complexity and overfitting, concepts we'll return to later.  Furthermore, we will be much more concerned with the model fit on new data [\emph{generalization}].
+
+%%%
+\section{Logistic Regression}
+Logistic regression is often used where the response is categorical in nature, usually with binary outcome in which some event occurs or does not occur [\emph{label}].  One could still use the standard linear model here, but you could end up with nonsensical predictions that fall outside the 0-1 range regarding the probability of the event occurring, to go along with other shortcomings.  Furthermore, it is no more effort nor is any understanding lost in using a logistic regression over the linear probability model.  It is also good to keep logistic regression in mind as we discuss other classification approaches later on.
+
+Logistic regression is also typically covered in an introduction to statistics for applied disciplines because of the pervasiveness of binary responses, or responses that have been made as such\sidenote{It is generally a bad idea to discretize continuous variables, especially the dependent variable. However contextual issues, e.g. disease diagnosis, might warrant it.}.  Like the standard linear model, just a few modifications can enable one to use it to provide better performance, particularly with new data.  The gist is, it is not the case that we have to abandon familiar tools in the move toward a machine learning perspective.
+
+
+%%%
+\section{Expansions of Those Tools}
+
+%%%
+\subsection{Generalized Linear Models}
+To begin, logistic regression is a generalized linear model assuming a binomial distribution for the response and with a logit link function as follows:
+
+\vspace{.25cm}
+\noindent$y = Bin(\mu, size=1)$\\
+\noindent$\eta = g(\mu)$\\
+\noindent$\eta = X\beta$\\
+\vspace{.25cm}
+
+This is the same presentation format as seen with the standard linear model presented before, except now we have a link function $g(.)$ and so are dealing with a transformed response.  In the case of the standard linear model, the distribution assumed is the gaussian and the link function is the identity link, i.e. no transformation is made. The link function used will depend on the analysis performed, and while there is choice in the matter, the distributions used have a typical, or canonical link function\sidenote{As another example, for the Poisson distribution, the typical link function would be the $log(\mu)$}.
+
+Generalized linear models expand the standard linear model, which is a special case of generalized linear model, beyond the gaussian distribution for the response, and allow for better fitting models of categorical, count, and skewed response variables.  We have also have a counterpart to the residual sum of squares, though we'll now refer to it as the \emph{deviance}.
+
+%%%
+\subsection{Generalized Additive Models}
+Additive models extend the generalized linear model to incorporate nonlinear relationships of predictors to the response. We might note it as follows:
+
+\vspace{.25cm}
+\noindent$y = family(\mu, ...)$\\
+\noindent$\eta = g(\mu)$\\
+\noindent$\eta = X\beta + f(X)$\\
+\vspace{.25cm}
+
+So we have the generalized linear model but also smooth functions $f(X)$ of one or more predictors.  More detail can be found in \citet{wood_generalized_2006} and I provide an introduction \href{http://www.nd.edu/~mclark19/learn/GAMS.pdf}{here}.  
+
+Things do start to get fuzzy with GAMs.  It becomes more difficult to obtain statistical inference for the smoothed terms in the model, and the nonlinearity does not always lend itself to easy interpretation.  However really this just means that we have a little more work to get the desired level of understanding.  GAMs can be seen as a segue toward more black box/algorithmic techniques.  Compared to some of those techniques in machine learning, GAMs are notably more interpretable, though perhaps less so than GLMs.  Also, part of the estimation process includes regularization and validation in determining the nature of the smooth function, topics of which we will return later.
