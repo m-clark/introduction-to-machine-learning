@@ -4,7 +4,7 @@
 
 ## Unsupervised Learning
 
-Unsupervised learning generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation we are more interested in the discovery of structure within the data.
+<span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation we are more interested in the discovery of structure within the data.
 
 
 ### Clustering
@@ -31,8 +31,8 @@ digraph DAG2 {
  
  # Node statements
  node [width=.75, height=.75, shape=circle, color=gray80];
- LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50];
- LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50];
+ LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1</sub>>];
+ LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2</sub>>];
  
  node [width=1, shape=square, color=gray50, fontcolor=gray25]
  subgraph {
@@ -110,17 +110,19 @@ ggsenate = ggplot(gnet, aes(x = x, y = y, xend = xend, yend = yend)) +
 ```{r echo=FALSE, dev='svglite'}
 ggsenate
 ```
+An example network graph of U.S. senators in 2006. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph [(link to data)](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801).
 </span>
-Example graph of the social network of senators based on data and filter at the following link. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph [(link to data)](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801)
+
+
 
 Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain similarities among observations and examine visually the structure of those data points, where observations are placed closer together that are more similar in nature. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the correlations of inputs.
 
 
 ### Imputation
 
-We can also use these techniques when we are missing data as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation. 
-<span class="marginnote">This and other techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span>
+We can also use ML techniques when we are missing data, as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation. 
 
+<span class="marginnote">Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span>
 Beyond this we can infer values that are otherwise unavailable in a different sense.  Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in.  In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question.  Such <span class="emph">recommender systems</span> are widely used these days.
 
 
@@ -130,7 +132,7 @@ In many situations we can combine the information of multiple models to enhance 
 
 ### Bagging
 
-<span class="emph">Bagging</span>, or bootstrap aggregation, uses bootstrap sampling to create many data sets on which a procedure is then performed.  The final prediction is based on an average of all the predictions made for each observation.  In general, bagging helps reduce the variance while leaving bias unaffected. A conceptual outline of the procedure is provided.
+<span class="emph">Bagging</span>, or *bootstrap aggregation*, uses bootstrap sampling to create many data sets on which a procedure is then performed.  The final prediction is based on an average of all the predictions made for each observation.  In general, bagging helps reduce the variance while leaving bias unaffected. A conceptual outline of the procedure is provided.
 
 
 *Model Generation*
@@ -147,9 +149,11 @@ For each of $t$ number of models:
 2. Return the class predicted most often across the $t$ number of models (or alternatively, the proportion $t =1$ as a probability).
 
 
+The approach would be identical for the continuous target domain, where the final prediction would be the average across all models.
+
 ### Boosting
 
-With <span class="emph">boosting</span> we take a different approach to refitting models.  Consider a classification task in which we start with a basic learner and apply it to the data of interest.  Next the learner is refit, but with more weight (importance) given to *misclassified* observations.  This process is repeated until some stopping rule is reached (e.g. reaching some $M$ iterations).  An example of the AdaBoost algorithm is provided (in the following $\mathbb{I}$ is the indicator function).
+With <span class="emph">boosting</span> we take a different approach to refitting models.  Consider a classification task in which we start with a basic learner and apply it to the data of interest.  Next, the learner is refit, but with more weight (importance) given to *misclassified* observations.  This process is repeated until some stopping rule is reached (e.g. reaching some $M$ iterations).  An example of the AdaBoost algorithm is provided (in the following $\mathbb{I}$ is the indicator function).
 
 
 Set initial weights $w_i$ to $1/N$.
@@ -158,7 +162,7 @@ for $m=1:M$ {
 
 - Fit a classifier $m$ with given weights to the data resulting in predictions $f^{(m)}_i$ that minimizes some loss function.
     
-- Compute the error rate $err_m = \frac{\overset{N}{\underset{i=1}{\sum}}\mathbb{I}(y_i\ne f^{(m)}_i)}{\overset{N}{\underset{i=1}{\sum}}w^{(m)}_i}$
+- Compute the error rate $\text{err}_m = \frac{{\sum_{i=1}^N}\mathbb{I}(y_i\ne f^{(m)}_i)}{\sum^N_{i=1}w^{(m)}_i}$
     
 - Compute $\alpha_m = \log[(1-err_m)/err_m]$
     
@@ -166,16 +170,16 @@ for $m=1:M$ {
     
 } 
 
-Return $\textrm{sign} [\overset{M}{\underset{m=1}{\sum}}\alpha_m f^{(m)}]$
+Return $\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]$
 
 
 Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.
 
 ### Stacking
 
-<span class="emph">Stacking</span> is a method that can generalize beyond a single fitting technique, though it can be applied in a fashion similar to boosting for a single technique.  While the term can refer to a specific technique, here we will use it broadly to mean any method to combine models of different forms. Consider the four approaches we demonstrated earlier: k-nearest neighbors, neural net, random forest, and the support vector machine.  We saw that they do not have the same predictive accuracy, though they weren't bad in general. Perhaps by combining their respective efforts, we could get even better prediction than using any particular one. 
+<span class="emph">Stacking</span> is a method that can generalize beyond a single fitting technique, though it can be applied in a fashion similar to boosting for a single technique.  Here we will use it broadly to mean any method to combine models of different forms. Consider the four approaches we demonstrated earlier: k-nearest neighbors, neural net, random forest, and the support vector machine.  We saw that they do not have the same predictive accuracy, though they weren't bad in general. Perhaps by combining their respective efforts, we could get even better prediction than using any particular one. 
 
-The issue then how we might combine them.  We really don't have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes.  Another approach would be to use a weighted vote, where the votes are weighted by their respective accuracies.  
+The issue then is how we might combine them.  We really don't have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes.  Another approach would be to use a weighted vote, where the votes are weighted by the accuracy of their respective models.  
 
 Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response.  With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data).  In this manner the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models.  Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.
 

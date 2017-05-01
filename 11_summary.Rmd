@@ -6,7 +6,7 @@ A standard mantra in machine learning and statistics generally is that there is 
 
 In general without context, no algorithm is any better than another. Furthermore, being more complicated doesn't mean a technique is better.  As previously noted, simply incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and may perform quite well in many situations.  The basic conclusion is that 
 
-> *Machine learning **is not** magic*!
+> *Machine learning **is not** magic!*
 
 ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since past.  Like any statistical technique, the reason to use ML is that is well-suited to the research or other problem at hand.
 
@@ -34,7 +34,7 @@ Learn multiple models, selecting the best or possibly combining them.
 
 ## Conclusion
 
-It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The field of statistics has rapidly evolved over the past two decades.  The tools available are myriad, and expanding all the time.  Rather than being overwhelmed, one should embrace the choice available, and have some fun with your data.
+It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The field of statistics has rapidly evolved over the past couple decades.  The tools available are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
 
 
 [^lewin]: Kurt Lewin, and iterated by V. Vapnik for the machine learning context.

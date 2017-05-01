@@ -177,7 +177,7 @@ What I can't recommend is a traditional statistics package like SPSS, SAS, or St
 
 <span class="emph">hypothesis</span>: a specific model $h(x)$ of all possible in the hypothesis space $\mathcal{H}$
 
-<span class="emph">input, feature, attribute</span>: independent variable, predictor variable, column
+<span class="emph">input, feature, attribute</span>: independent variable, explanatory variable, covariate, predictor variable, column
 
 <span class="emph">instance, example</span>: observation, row
 
