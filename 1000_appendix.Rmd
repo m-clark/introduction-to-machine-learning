@@ -117,7 +117,7 @@ Demonstrations for this document were done with R, and specifically the <span cl
 
 If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website.  That said, R probably isn't even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible[^rfaster].  As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.
 
-One can start with the <span class="pack">scikit</span>-learn module, using it much in the same way as was demonstrated with caret.  It will get you very far, but for some situations, you may need more heavy duty options like <span class="pack">tensorflow</span>, <span class="pack">Theano</span>, etc.
+One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with caret.  It will get you very far, but for some situations, you may need more heavy duty options like <span class="pack">tensorflow</span>, <span class="pack">Theano</span>, etc.
 
 ```{python pyrf, eval=T, echo=-c(7,10)}
 import sklearn as sk

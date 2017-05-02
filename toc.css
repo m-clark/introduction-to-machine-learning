@@ -13,7 +13,7 @@
   background: #B2001D;   /*stan red is #B2001D*/
   /*background: linear-gradient(to bottom, #333333 0%, rgb(97,151,213) 100%);   /*141414 is the darker black*/
   border-bottom: 2px solid #B2001D; /* old #0fa1e0 */
-  width: 75%;
+  width: 55%;
   font-size: 50%;
 }
 #TOC:after,
