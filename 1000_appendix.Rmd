@@ -47,60 +47,28 @@ g1 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf1_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Variance') + 
-  lazerhawk::theme_trueMinimal() +
-    theme(
-    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
-    strip.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
-  )
+  lazerhawk::theme_trueMinimal()
 
 g2 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
   geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf1))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Bias') + 
-  lazerhawk::theme_trueMinimal() +
-    theme(
-    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
-    strip.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
-  )
+  lazerhawk::theme_trueMinimal()
 
 g3 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf2_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Variance') + 
-  lazerhawk::theme_trueMinimal() +
-    theme(
-    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
-    strip.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
-  )
+  lazerhawk::theme_trueMinimal()
 
 g4 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
   geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf2))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Bias') + 
-  lazerhawk::theme_trueMinimal() +
-    theme(
-    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
-    strip.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
-  )
+  lazerhawk::theme_trueMinimal()
 
 grid.arrange(g1, g2, g3, g4, ncol=2)
 ```
@@ -166,6 +134,7 @@ What I can't recommend is a traditional statistics package like SPSS, SAS, or St
 
 ## Brief Glossary of Common Terms
 
+The following lists some common ML terms, and their more traditional statistical counterpart.
 
 <span class="emph">bias</span>: could mean the intercept (e.g. in neural nets), typically refers to the bias in bias-variance decomposition
 
@@ -185,12 +154,16 @@ What I can't recommend is a traditional statistics package like SPSS, SAS, or St
 
 <span class="emph">machine learning</span>: a form of statistics utilizing various algorithms with a goal to generalize to new data situations
 
-<span class="emph">supervised</span>: has a dependent variable
+<span class="emph">supervised</span>: has a target variable
 
 <span class="emph">target, label</span>: dependent variable, response, the outcome of interest
 
-<span class="emph">unsupervised</span>: no dependent variable; think clustering, PCA etc.
+<span class="emph">unsupervised</span>: no target variable; think clustering, PCA etc.
 
-<span class="emph">weights</span>:  coefficients, parameters
+<span class="emph">weights</span>: coefficients, parameters
+
+<span class="emph">`NULL`</span>: statistical significance (you will not be concerning yourself with p-values in ML)
+
+
 
 [^rfaster]: Actually for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.
