@@ -98,7 +98,7 @@ Things do start to get fuzzy with GAMs.  It becomes more difficult to obtain sta
 
 [^kerby]: A favorite around our office is 'Machine learning is magic!' attributed to our director Kerby Shedden, in response to a client's over enthusiasm to something they did not understand well.
 
-[^bias]: Yes, you will see 'bias' refer to an intercept, and also mean something entirely different in our discussion of bias vs. variance.  It rarely will refer to bias in the estimated parameters, because not only are we not interested in the specific value of potentially thousands of parameters, most techniques inherently induce bias to get better prediction (see the [regularization][Regularization] section).
+[^bias]: Yes, you will see 'bias' refer to an intercept, and also mean something entirely different in our discussion of bias vs. variance.  Often, techniques inherently induce bias to get better prediction (see the [regularization][Regularization] section).
 
 [^sos]: $\sum(y-f(x))^{2}$ where $f(x)$ is a function of the model predictors, and in this context a linear combination of them ($X\beta$).
 
