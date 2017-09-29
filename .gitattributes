@@ -17,7 +17,7 @@
 # RStudio files
 .Rproj.user/
 
-# primary conent
+# primary content
 *.Rmd
 
 # produced vignettes
