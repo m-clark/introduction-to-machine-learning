@@ -1,31 +1,38 @@
 ---
-title: "An Introduction to Machine Learning"
+title: <span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span>
+subtitle: <span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">An Introduction</span>
 author:  |
-  <div class="title"><span style="font-size:125%; font-variant:small-caps; ">Michael Clark</span><br><br>
-  <img src="img/signature-acronym.png" style="width:24%; padding:10px 0;"> <br>
-  <img src="img/ARC-acronym-signature.png" style="width:16.75%; padding:10px 0;"> </div>
-date: "`r Sys.Date()`"
+  <span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">Michael Clark</span> <br>
+  <span class="" style="font-size:75%">https://m-clark.github.io</span><br><br>
+  <img src="img/CSCAR_logos/signature-acronym.png" style="width:30%; padding:10px 0;" alt="University of Michigan: CSCAR"> <br>
+  <img src="img/ARC_logos/ARC-acronym-signature.png" style="width:21%; padding:10px 0;" alt="University of Michigan: Advanced Research Computing"> 
+
+date: <span style="font-style:normal;font-family:'Open Sans'">`r Sys.Date()`</span>
 site: bookdown::bookdown_site
-output: 
-    bookdown::tufte_html_book:
-      toc: yes
-      number_sections: false
-      css: [standard_html.css, toc.css, mytufte.css]
-      split_by: rmd
-    # bookdown::gitbook:
-    #   css: [standard_html.css]
-    #   highlight: pygments
-    #   number_sections: false
-    #   toc_depth: 2
-    #   config:
-    #     search: yes
-    #     # edit: false
-    #     fontsettings:
-    #       family: san-serif
-    #       size: 2
+output:
+  bookdown::gitbook:
+    css: [css/book.css, css/standard_html.css]
+    highlight: pygments
+    number_sections: false
+    config:
+      toc:
+        depth: 2
+        collapse: section
+        scroll_highlight: yes
+      edit : null
+      download: null
+      search: yes
+      sharing:
+        facebook: no
+        twitter: no
+        google: no
+        weibo: no
+        instapper: no
+        vk: no
+        all: ['twitter', 'facebook', 'google', 'weibo', 'instapaper']
 always_allow_html: yes
-font-import: http://fonts.googleapis.com/css?family=Roboto|Open+Sans
-font-family: 'Roboto'
+# font-import: https://fonts.googleapis.com/css?family=Roboto|Open+Sans
+# font-family: 'Roboto'
 documentclass: book
 bibliography: MLtechrep.bib
 biblio-style: apalike
@@ -42,10 +49,10 @@ nocite: |
 
 
 
-
-```{r setup, include=FALSE, eval=TRUE}
-knitr::opts_chunk$set(echo = T, message=F, warning=F, comment=NA, autodep=F, eval=T, cache.rebuild=F, cache=T,
-                      R.options=list(width=120), fig.width=8, fig.align = 'center')
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=NA, R.options=list(width=220),   # code 
+                      dev.args=list(bg = 'transparent'), dev='svg', fig.align='center',                 # viz
+                      cache.rebuild=F, cache=T)                                                         # cache
 ```
 
 ```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
@@ -56,5 +63,7 @@ library(broom); library(pander); library(tidyverse); library(htmltools)
 # 
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
+# knitr::include_graphics('img/ccbysa_test.png', dpi = NA)
+# knitr::include_graphics('img/mc.png', dpi = NA)
 ```
 

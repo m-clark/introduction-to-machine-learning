@@ -66,8 +66,12 @@ Sometimes the desire is to reduce the dimensionality of the inputs to a more man
 ```{r senate_network, echo=FALSE, eval=T}
 # library(igraph)
 # g = read_graph('figure/senate_graph.graphml', format='graphml')
-
+library(GGally)
+library(network)
+library(sna)
 library(ggnetwork)
+library(ggplot2)
+
 senate = read.csv('data/Senate_Raw.csv')
 senate_atts = read.csv('data/senate_graph (Nodes).csv')
 adj0 = lazerhawk::createAdjacency(senate, n1='Vertex.1', n2='Vertex.2', 
@@ -82,11 +86,11 @@ n = set.edge.value(n,"Weight",adj)
 n %v% "importance" = senate_atts$Betweenness.Centrality
 n %v% "class" = senate_atts$Modularity.Class
 
-
-gnet = ggnetwork(n, weights='Weight', layout='kamadakawai')
-ggsenate = ggplot(gnet, aes(x = x, y = y, xend = xend, yend = yend)) +
+# As of 2017-09, ggnetwork is abandoned. The [,1] fixes the error, but switch to visnetwork or something
+gnet = ggnetwork::ggnetwork(n, weights='Weight', layout='kamadakawai')
+ggsenate = ggplot(gnet, aes(x = x[,1], y = y[,1], xend = xend[,1], yend = yend[,1])) +
   geom_edges(aes(), color = "gray95", show.legend=F) + #size=Weight
-  geom_nodes(aes(x, y, size=importance), color='transparent', show.legend=F) +
+  geom_nodes(aes(x[,1], y[,1], size=importance), color='transparent', show.legend=F) +
   geom_nodetext(aes(label = vertex.names, size=importance, color=factor(class)), fontface = "bold", show.legend=F) +
   scale_color_manual(values=c('#3A3A98FF', "#832424FF")) +
   scale_size_continuous(range=c(2, 7), trans='exp') +

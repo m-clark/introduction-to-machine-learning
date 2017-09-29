@@ -355,9 +355,10 @@ results_knn
 In this case it looks like choosing the nearest five neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $kappa$, which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
 
 ```{r knn_test, echo=-3}
-preds_knn = predict(results_knn, wine_test[,-10])
-confusionMatrix(preds_knn, wine_test[,10], positive='Good')
-conf_knn = confusionMatrix(preds_knn, wine_test[,10], positive='Good') #create an object to use in Sexpr
+preds_knn = predict(results_knn, wine_test)
+good_observed = wine_test %>% pull(good)
+confusionMatrix(preds_knn, good_observed, positive='Good')
+conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') #create an object to use in Sexpr
 ```
 
 
@@ -435,9 +436,9 @@ We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden
 
 
 ```{r nnet_test, echo=-3}
-preds_nnet = predict(results_nnet, wine_test[,-10])
-confusionMatrix(preds_nnet, wine_test[,10], positive='Good')
-conf_nnet = confusionMatrix(preds_nnet, wine_test[,10], positive='Good') 
+preds_nnet = predict(results_nnet, wine_test)
+confusionMatrix(preds_nnet, good_observed, positive='Good')
+conf_nnet = confusionMatrix(preds_nnet, good_observed, positive='Good') 
 ```
 
 
@@ -552,9 +553,9 @@ results_rf
 The initial results look promising with mtry = `r results_rf$bestTune$mtry` producing the best initial result.  Now for application to the test set.
 
 ```{r rf_test, echo=-3}
-preds_rf = predict(results_rf, wine_test[,-10])
-confusionMatrix(preds_rf, wine_test[,10], positive='Good')
-conf_rf = confusionMatrix(preds_rf, wine_test[,10], positive='Good')
+preds_rf = predict(results_rf, wine_test)
+confusionMatrix(preds_rf, good_observed, positive='Good')
+conf_rf = confusionMatrix(preds_rf, good_observed, positive='Good')
 ```
 
 
@@ -654,9 +655,9 @@ results_svm
 
 
 ```{r svm_test, echo=-3}
-preds_svm = predict(results_svm, wine_test[,-10])
-confusionMatrix(preds_svm, wine_test[,10], positive='Good')
-conf_svm = confusionMatrix(preds_svm, wine_test[,10], positive='Good') #create an object to use in Sexpr
+preds_svm = predict(results_svm, wine_test)
+confusionMatrix(preds_svm, good_observed, positive='Good')
+conf_svm = confusionMatrix(preds_svm, good_observed, positive='Good') #create an object to use in Sexpr
 ```
 
 
