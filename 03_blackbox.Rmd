@@ -371,7 +371,7 @@ g = varImp(results_knn)$importance %>%
   select(Good) %>% 
   mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Good)])) %>% 
   ggplot() +
-  geom_point(aes(x=Variable, y=Good, size=Good), color='#ff5503', show.legend=F) +
+  geom_point(aes(x=Variable, y=Good, size=Good), color='#ff5500', show.legend=F) +
   labs(x='', y='Importance') +
   theme(axis.text.x=element_text(angle=-45, hjust=0)) +
   theme_trueMinimal() +                       # since gg will not respect transparent background
@@ -479,15 +479,15 @@ node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
 
 node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
 X1 [width=.5] X2 [width=.5]; 
-Negative1 [label="Negative" shape=circle color="#ff5503" width=.5]; 
-Negative2 [label="Negative" shape=circle color="#ff5503" width=.5]; 
-Positive [ shape=circle color="#03b3ff" width=.5];
+Negative1 [label="Negative" shape=circle color="#ff5500" width=.5]; 
+Negative2 [label="Negative" shape=circle color="#ff5500" width=.5]; 
+Positive [ shape=circle color="#00aaff" width=.5];
 
 edge [color=gray50 arrowhead=dot]
-X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
+X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
 X1 -> X2 [label = " > 5.75", fontcolor="gray50" fontsize="7.5%"];
-X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
-X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
+X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
 
 }')
 ```
@@ -504,18 +504,18 @@ node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
 alcohol1 [label="alcohol" width=.5];
 alcohol2 [label="alcohol" width=.5];
 va [label="volatile.acidity" width=.5]; 
-Bad1  [label="Bad" shape=circle color="#ff5503" width=.5]; 
-Good1 [label="Good" shape=circle color="#03b3ff" width=.5];
-Good2 [label="Good" shape=circle color="#03b3ff" width=.5];
-Good3 [label="Good" shape=circle color="#03b3ff" width=.5];
+Bad1  [label="Bad" shape=circle color="#ff5500" width=.5]; 
+Good1 [label="Good" shape=circle color="#00aaff" width=.5];
+Good2 [label="Good" shape=circle color="#00aaff" width=.5];
+Good3 [label="Good" shape=circle color="#00aaff" width=.5];
 
 edge [color=gray50 arrowhead=dot]
-alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
 alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize="7.5%"];
-alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
-alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize="7.5%" color="#ff5503"];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
 va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize="7.5%"];
-va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize="7.5%" color="#03b3ff"];
+va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
 
 }')
 ```
@@ -605,7 +605,7 @@ d = data.frame(x,y,z,lab)
 
 gsvm = ggplot(aes(x,y), data=d) + 
   geom_point(aes(color=lab), size=3, pch=19) + 
-  scale_color_manual(values=c("#FF5500", "#03b3ff")) +
+  scale_color_manual(values=c("#FF5500", "#00aaff")) +
   lazerhawk::theme_trueMinimal() +                       # since gg will not respect transparent background
   theme(
     legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
@@ -617,7 +617,7 @@ gsvm = ggplot(aes(x,y), data=d) +
   )
 
 
-# plot_ly(d, x = ~x, y = ~z, z = ~y, color = ~lab, colors = c("#FF5500", "#03b3ff")) %>%
+# plot_ly(d, x = ~x, y = ~z, z = ~y, color = ~lab, colors = c("#FF5500", "#00aaff")) %>%
 #   add_markers(marker=list(opacity=.75)) %>% 
 #   lazerhawk::theme_plotly() %>% 
 #   layout(paper_bgcolor='#fffff8',

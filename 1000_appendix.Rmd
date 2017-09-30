@@ -44,7 +44,7 @@ rbf2_samp = rbf2 %>%
 
 g1 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
-  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf1_samp) +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf1_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Variance') + 
   lazerhawk::theme_trueMinimal() +
@@ -58,8 +58,8 @@ g1 = ggplot(data=data.frame(basedat)) +
   )
 
 g2 = ggplot(data=data.frame(basedat)) +
-  geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
-  geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf1))) +
+  geom_line(aes(x=x, y=ytrue), color='#00aaff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf1))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Bias') + 
   lazerhawk::theme_trueMinimal() +
@@ -74,7 +74,7 @@ g2 = ggplot(data=data.frame(basedat)) +
 
 g3 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
-  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5503', alpha=.25, data=rbf2_samp) +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf2_samp) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Variance') + 
   lazerhawk::theme_trueMinimal() +
@@ -88,8 +88,8 @@ g3 = ggplot(data=data.frame(basedat)) +
   )
 
 g4 = ggplot(data=data.frame(basedat)) +
-  geom_line(aes(x=x, y=ytrue), color='#03b3ff') +
-  geom_line(aes(x=x, y=yhat), color='#ff5503', data.frame(yhat=rowMeans(rbf2))) +
+  geom_line(aes(x=x, y=ytrue), color='#00aaff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf2))) +
   ylim(c(-1.5, 1.5)) +
   labs(y='', title='Low Bias') + 
   lazerhawk::theme_trueMinimal() +
@@ -192,5 +192,9 @@ What I can't recommend is a traditional statistics package like SPSS, SAS, or St
 <span class="emph">unsupervised</span>: no dependent variable; think clustering, PCA etc.
 
 <span class="emph">weights</span>:  coefficients, parameters
+
+
+# References
+
 
 [^rfaster]: Actually for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.

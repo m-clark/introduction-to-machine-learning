@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Machine Learning</title>
+  <meta name="description" content="An introduction to machine learning for applied researchers.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Machine Learning" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://m-clark.github.io/docs/" />
+  <meta property="og:image" content="https://m-clark.github.io/docs/img/nineteeneightyR.png" />
+  <meta property="og:description" content="An introduction to machine learning for applied researchers." />
+  <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Machine Learning" />
+  
+  <meta name="twitter:description" content="An introduction to machine learning for applied researchers." />
+  <meta name="twitter:image" content="https://m-clark.github.io/docs/img/nineteeneightyR.png" />
+
+
+
+<meta name="date" content="2017-09-30">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+
+<link rel="next" href="preface.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css\book.css" type="text/css" />
+<link rel="stylesheet" href="css\standard_html.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://m-clark.github.io/"><span style="font-size:125%; font-variant:small-caps; font-style:italic; color:#990024; font-family:Roboto">Machine Learning</span></a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#loss-functions"><i class="fa fa-check"></i>Loss Functions</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#continuous-outcomes"><i class="fa fa-check"></i>Continuous Outcomes</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#categorical-outcomes"><i class="fa fa-check"></i>Categorical Outcomes</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#regularization"><i class="fa fa-check"></i>Regularization</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#r-example-1"><i class="fa fa-check"></i>R Example</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-tradeoff"><i class="fa fa-check"></i>Bias-Variance Tradeoff</a><ul>
+<li><a href="concepts.html#bias-variance">Bias <em>&amp;</em> Variance</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#the-tradeoff"><i class="fa fa-check"></i>The Tradeoff</a></li>
+<li><a href="concepts.html#diagnosing-bias-variance-issues-possible-solutions">Diagnosing Bias-Variance Issues <em>&amp;</em> Possible Solutions</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-summary"><i class="fa fa-check"></i>Bias-Variance Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#cross-validation"><i class="fa fa-check"></i>Cross-Validation</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#adding-another-validation-set"><i class="fa fa-check"></i>Adding Another Validation Set</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#k-fold-cross-validation"><i class="fa fa-check"></i>K-fold Cross-Validation</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bootstrap"><i class="fa fa-check"></i>Bootstrap</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li><a href="opening-the-black-box.html#feature-selection-the-data-partition">Feature Selection <em>&amp;</em> The Data Partition</a></li>
+<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li><a href="opening-the-black-box.html#strengths-weaknesses">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li><a href="opening-the-black-box.html#strengths-weaknesses-1">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li><a href="opening-the-black-box.html#trees-forests">Trees <em>&amp;</em> Forests</a><ul>
+<li><a href="opening-the-black-box.html#strengths-weaknesses-2">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li><a href="opening-the-black-box.html#strengths-weaknesses-3">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+</ul></li>
+<li><a href="wrap-up.html#feature-selection-importance">Feature Selection <em>&amp;</em> Importance</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural language processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#bias-variance-demo"><i class="fa fa-check"></i>Bias Variance Demo</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#programming-languages"><i class="fa fa-check"></i>Programming Languages</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#r"><i class="fa fa-check"></i>R</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#python"><i class="fa fa-check"></i>Python</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#other"><i class="fa fa-check"></i>Other</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#brief-glossary-of-common-terms"><i class="fa fa-check"></i>Brief Glossary of Common Terms</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://m-clark.github.io/"><img src="img/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
+<li><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="img/ccbysa_test.png" /></a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></h1>
+<h3 class="subtitle"><em><span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:&#39;Open Sans&#39;">An Introduction</span></em></h3>
+<h4 class="author"><em><p><span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:&#39;Open Sans&#39;">Michael Clark</span> <br> <span style="font-size:75%"><a href="https://m-clark.github.io" class="uri">https://m-clark.github.io</a></span><br><br> <img src="img/CSCAR_logos/signature-acronym.png" style="width:30%; padding:10px 0;" alt="University of Michigan: CSCAR"> <br> <img src="img/ARC_logos/ARC-acronym-signature.png" style="width:21%; padding:10px 0;" alt="University of Michigan: Advanced Research Computing"></p></em></h4>
+<h4 class="date"><em><span style="font-style:normal;font-family:&#39;Open Sans&#39;">2017-09-30</span></em></h4>
+</div>
+<div id="section" class="section level1">
+<h1></h1>
+<p><img src="img/nineteeneightyR.png" style="display: block; margin: auto;" /></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="preface.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["twitter", "facebook", "google", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"download": null,
+"toc": {
+"collapse": "section",
+"depth": 2,
+"scroll_highlight": true
+},
+"highlight": "pygments",
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
