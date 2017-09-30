@@ -1,6 +1,6 @@
 # Opening the Black Box
 
-<span class="newthought">It's now time to see some of this in action</span>. In the following we will try a variety of techniques to get a better feel for the sorts of tools that are available.
+<span class="newthought">It's now time to see some machine learning in action</span>. In what follows, a variety of techniques will be used on the same problem to provide a better feel for the sorts of tools that are available.
 
 ## Process Overview
 
@@ -14,14 +14,14 @@ As with any typical statistical project, probably most of the time will be spent
 
 #### Define Data and Data Partitions
 
-As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a 'best' model being that which satisfies some criterion.  With final model and parameters chosen, generalization error will be assessed with the the performance of the final model on the test data.
+As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a 'best' model being that which satisfies some criterion.  With final model and parameters chosen, generalization error will be assessed with the performance of the final model on the test data.
 
-In addition, when data is too large to fit in memory, it will need to be partitioned regardless of the modeling scenario. Spark, Hadoop and other frameworks allow for analysis of data that is potentially distributed across several machines or cores within a machine.
+In addition, when data is too large to fit in memory, it will possibly need to be partitioned regardless of the modeling scenario. Spark, Hadoop and other frameworks allow for analysis of data that is potentially distributed across several machines or cores within a machine.
 
 
 #### Feature Scaling
 
-Even with standard regression modeling, centering continuous variables (subtracting the mean) is a good idea so that intercepts and zero points in general are meaningful. Standardizing variables so that they have similar variances or ranges will help some procedures find their maximums/minimums faster.  Another common transformation is *min-max* normalization[^minmax], which will transfer a scale to a new one of some chosen minimum and maximum.  Note that whatever approach is done, it must be done *after* any explicit separation of data.  So if you have separate training and test sets, they should be scaled separately. Of course, with enough data and appropriate partitioning, it shouldn't matter.
+Even with standard regression modeling, centering continuous variables (subtracting the mean) is a good idea so that intercepts and zero points are meaningful. Standardizing variables so that they have similar variances or ranges will help some procedures find their maximums/minimums faster.  Another common transformation is *min-max* normalization[^minmax], which will transfer a scale to a new one of some chosen minimum and maximum.  Note that whatever approach is done, it must be done *after* any explicit separation of data.  So if you have separate training and test sets, they should be scaled separately. Of course, with enough data and appropriate partitioning, it shouldn't matter.
 
 
 #### Feature Engineering
@@ -35,12 +35,12 @@ One can implement a variety of such approaches in ML to create additional potent
 
 While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised algorithmic approaches that will use the information in the data to produce some 'optimal' discretization.
 
-It's generally not a good idea to force things in data analysis, and given that a lot of data situations will be highly mixed, it seems easier to simply apply some scaling to preserve the inherent relationships in the data.  Again though, if one has only a relative few continuous, variables or a context in which it makes sense to, it's probably better to leave continuous variables as such.
+It's generally not a good idea to force things in data analysis, and given that a lot of data situations will contain mixed data types, it seems easier to simply apply some scaling to preserve the inherent relationships in the data.  Again though, if one has only a relative few continuous variables, or a context in which it makes sense to, it's probably better to leave continuous variables as such.
 
 
 ### Model Selection
 
-With data prepared and ready to analyze, one can use a validation process to come up with a viable model.  Use an optimization procedure or a simple grid search over a set of specific values to examine models at different tuning parameters. Perhaps make a finer search once an initial range of good performing values is found, though one should not split hairs over arbitrarily close performance.  Select a 'best' model given some criterion such as overall accuracy, or if concerned about over fitting, select the simplest model within one standard error of the accuracy of the best, or perhaps the simplest within X% of the best model.  For highly skewed classes, one might need to use a different measure of performance besides accuracy.  If one has a great many predictor variables, one may use the model selection process to select features that are 'most important'.
+With data prepared and ready to analyze, one can use a validation process to come up with a viable model.  Use an optimization procedure or a simple grid search over a set of specific values to examine models at different tuning parameters. Perhaps make a finer search once an initial range of good performing values is found, though one should not split hairs over arbitrarily close performance.  Select a 'best' model given some criterion such as overall accuracy, or if concerned about over fitting, select the simplest model within one standard error of the accuracy of the best, or perhaps the simplest within X% of the best model.  For highly skewed classes, one might need to use a different measure of performance besides accuracy, as simply guessing the most common category could lead to very high accuracy.  If one has a great many predictor variables, one may use the model selection process to select features that are 'most important'.
 
 
 ### Model Assessment
@@ -117,41 +117,51 @@ tex2markdown <- function(texstring) {
 | Predicted = 0  | C | D |
 </div>
 
+```{r confmat_values, echo=FALSE}
+A = 41
+B = 21
+C = 16
+D = 13
+# truepos_total = A + C
+# pospred_total = A + B
+# trueneg_total = B + D
+# negpred_total = C + D
+Total = A + B + C + D
+```
+
 
 <span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.
 
-<span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about `r round((41+13)/91,2)*100`%.
+<span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about `r round((A+D)/Total,2)*100`%.
 
 <span class="emph">Error Rate</span>: 1 - Accuracy.
 
-<span class="emph">Sensitivity</span>: is the proportion of correctly predicted positives to all true positive events: A/(A+C).  In the above example this would be 41/57, about `r round(41/57,2)*100`%. High sensitivity would suggest a low type II error rate (see below), or high statistical power. Also known as *true positive rate*.
+<span class="emph">Sensitivity</span>: is the proportion of correctly predicted positives to all true positive events: A/(A+C).  In the above example this would be 41/57, about `r round(A/(A+C),2)*100`%. High sensitivity would suggest a low type II error rate (see below), or high statistical power. Also known as *true positive rate*.
 
-<span class="emph">Specificity</span>: is the proportion of correctly predicted negatives to all true negative events: D/(B+D).  In the above example this would be 13/34, about `r round(13/34,2)*100`%. High specificity would suggest a low type I error rate (see below). Also known as *true negative rate*.
+<span class="emph">Specificity</span>: is the proportion of correctly predicted negatives to all true negative events: D/(B+D).  In the above example this would be 13/34, about `r round(D/(B+D),2)*100`%. High specificity would suggest a low type I error rate (see below). Also known as *true negative rate*.
 
-<span class="emph">Positive Predictive Value</span> (PPV): proportion of true positives of those that are predicted positives: A/A+B. In the above example this would be 41/62, about `r round(41/62,2)*100`%.
+<span class="emph">Positive Predictive Value</span> (PPV): proportion of true positives of those that are predicted positives: A/(A+B). In the above example this would be 41/62, about `r round(A/(A+B),2)*100`%.
 
-<span class="emph">Negative Predictive Value</span> (NPV): proportion of true negatives of those that are predicted negative: D/C+D. In the above example this would be 13/29, about `r round(13/29,2)*100`%.
+<span class="emph">Negative Predictive Value</span> (NPV): proportion of true negatives of those that are predicted negative: D/(C+D). In the above example this would be 13/29, about `r round(D/(C+D),2)*100`%.
 
 <span class="emph">Precision</span>:  See PPV.
 
 <span class="emph">Recall</span>: See sensitivity.
 
-<span class="emph">Lift</span>: Ratio of positive predictions given actual positives to the proportion of positive predictions out of the total: (A/(A+C))/((A+B)/Total). In the above example this would be (41/(41+16))/((41+21)/(91)), or `r round((41/(41+16))/((41+21)/(91)),2)`.
+<span class="emph">Lift</span>: Ratio of positive predictions given actual positives to the proportion of positive predictions out of the total: (A/(A+C))/((A+B)/Total). In the above example this would be (41/(41+16))/((41+21)/(91)), or `r round((A/(A+C))/((A+B)/Total),2)`.
 
 <span class="emph">F Score</span> (F1 score): Harmonic mean of precision and recall: 2\*(Precision\*Recall)/(Precision+Recall). In the above example this would be 2\*(.66\*.72)/(.66+.72), about `r round(2*(.66*.72)/(.66+.72),2)`.
 
-<span class="emph">Type I Error Rate</span> (false positive rate): proportion of true negatives that are incorrectly predicted positive: B/B+D. In the above example this would be 21/34, about `r round(21/34,2)*100`%.  Also known as *alpha*.
+<span class="emph">Type I Error Rate</span> (false positive rate): proportion of true negatives that are incorrectly predicted positive: B/(B+D). In the above example this would be 21/34, about `r round(B/(B+D),2)*100`%.  Also known as *alpha*.
 
-<span class="emph">Type II Error Rate</span> (false negative rate): proportion of true positives that are incorrectly predicted negative: C/C+A. In the above example this would be 16/57, about `r round(16/57,2)*100`%. Also known as *beta*.
+<span class="emph">Type II Error Rate</span> (false negative rate): proportion of true positives that are incorrectly predicted negative: C/(C+A). In the above example this would be 16/57, about `r round(C/(C+A),2)*100`%. Also known as *beta*.
 
-<span class="emph">False Discovery Rate</span>: proportion of false positives among all positive predictions: B/A+B. In the above example this would be 21/62, about `r round(21/62,2)*100`%.  Often used in multiple comparison testing in the context of ANOVA.
+<span class="emph">False Discovery Rate</span>: proportion of false positives among all positive predictions: B/(A+B). In the above example this would be 21/62, about `r round(B/(A+B),2)*100`%.  Often used in multiple comparison testing in the context of ANOVA.
 
-<span class="emph">Phi coefficient</span>: A measure of association: (A\*D - B\*C)/(sqrt((A+C)\*(D+B)\*(A+B)\*(D+C))).  In the above example this would be `r psych::phi(matrix(c(41,16,21,13),2))`.
-
-
-Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.\sidenote{Table based on table 5.3 in \citet{murphy_machine_2012}}:
+<span class="emph">Phi coefficient</span>: A measure of association: (A\*D - B\*C)/(sqrt((A+C)\*(D+B)\*(A+B)\*(D+C))).  In the above example this would be `r psych::phi(matrix(c(A,C,B,D),2))`.
 
 
+Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.:
 
 
 ```{r confusionMatrix2, echo=F, cache=F, results='asis', eval=T}
@@ -211,9 +221,9 @@ There are many other measures such as area under a Receiver Operating Curve (<sp
 
 ## The Dataset
 
-We will use the wine data set from the UCI Machine Learning data repository.  The goal is to predict wine quality, of which there are 7 values (integers 3-9).  We will turn this into a binary classification task to predict whether a wine is 'good' or not, which is arbitrarily chosen as 6 or higher.  After getting the hang of things one might redo the analysis as a multiclass problem or even toy with regression approaches, just note there are very few 3s or 9s so you really only have 5 values to work with.  The original data along with detailed description can be found [here](http://archive.ics.uci.edu/ml/datasets/Wine+Quality), but aside from quality it contains predictors such as residual sugar, alcohol content, acidity and other characteristics of the wine[^wineraters].
+We will use the wine data set from the UCI Machine Learning data repository.  The goal is to predict wine quality, of which there are 7 values (integers 3-9).  We will turn this into a binary classification task to predict whether a wine is 'good' or not, which is arbitrarily chosen as 6 or higher.  After getting the hang of things, you might redo the analysis as a multiclass problem or even toy with regression approaches, just note there are very few 3s or 9s so you really only have 5 values to work with.  The original data along with detailed description can be found [here](http://archive.ics.uci.edu/ml/datasets/Wine+Quality), but aside from quality it contains predictors such as residual sugar, alcohol content, acidity and other characteristics of the wine[^wineraters].
 
-The original data is separated into white and red data sets. I have combined them and created additional variables: `color` and its binary version `white` indicating whether it is a white wine, and `good`, indicating scores greater than or equal to 6 (denoted as 'Good', else 'Bad').  The following will show some basic numeric information about the data[^sulfur].
+The original data is separated into white and red data sets. I have combined them and created additional variables: `color` and its binary version `white` indicating whether it is a white wine, and `good`, indicating scores greater than or equal to 6 (denoted as 'Good', else 'Bad').  Feel free to inspect the data a little bit before moving on[^sulfur].
 
 ```{r dataprep, echo=FALSE}
 red = read.csv('data/winequality-red.csv', sep=';')
@@ -253,7 +263,7 @@ registerDoParallel(cl)
 model = train(y ~ ., data = training, method = 'rf')
 ```
 
-## Feature Selection *&* The Data Partition
+## Feature Selection & The Data Partition
 
 This data set is large enough to leave a holdout sample, allowing us to initially search for the best of a given modeling approach over a grid of tuning parameters specific to the technique.  To iterate previous discussion, we don't want test performance contaminated with the tuning process.  With the best model at $t$ tuning parameter(s), we will assess performance with prediction on the holdout set.
 
@@ -264,18 +274,18 @@ I also made some decisions to deal with the notable collinearity in the data, wh
 wine %>% 
   select_if(is.numeric) %>% 
   cor %>% 
-  heatR::corrheat(width='50%')
+  heatR::corrheat(width='75%', xaxis_font_size='75%')
 ```
 
 
-I ran regressions to examine the R^2^ for each predictor in a model as if it were the dependent variable predicted by the other input variables.  The highest was for density at over 96%[^vif], and further investigation suggested color and either sulfur dioxide are largely captured by the other variables already also.  These will not be considered in the following models.
+I ran regressions to examine the R^2^ for each predictor in a model as if it were the dependent variable predicted by the other input variables.  The highest was for density at over 96%[^vif], and further investigation suggested color and sulfur dioxide are largely captured by the other variables already also.  These will not be considered in the following models.
 
 
 
-<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are 6497 total observations, of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will normalize the continuous variables to the [0,1] range.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set we will go ahead and do it now.
+<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are `r nrow(wine)` total observations, of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will normalize the continuous variables to the [0,1] range.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.
 
 
-```{r partition}
+```{r partition, echo=1:8}
 library(caret)
 set.seed(1234) # so that the indices will be the same when re-run
 trainIndices = createDataPartition(wine$good, p=.8, list=F)
@@ -287,8 +297,6 @@ wine_train = wine %>%
 wine_test = wine %>% 
   select(-free.sulfur.dioxide, -density, -quality, -color, -white) %>% 
   slice(-trainIndices)
-# prep_test = preProcess(wine_test[,-10], method="range")
-# wine_test = data.frame(predict(prep_test, wine_test[,-10]), good=wine_test[ ,10])
 ```
 
 
@@ -332,7 +340,7 @@ Consider the typical distance matrix[^knn_dist] that is often used for cluster a
 
 So how many neighbors would work best? This is an example of a tuning parameter, i.e. $k$, for which we have no knowledge about its value without doing some initial digging.  As such we will select the tuning parameter as part of the validation process.
 
-The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for $k$ to try out[^knn_tune]. The workhorse package is the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
+The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
 
 
 ```{r knn_train, eval=FALSE, echo=2:7}
@@ -352,7 +360,7 @@ results_knn
 ```
 
 
-In this case it looks like choosing the nearest five neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $kappa$, which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
+In this case it looks like choosing the nearest `r results_knn$finalModel$k` neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $\kappa$ (kappa), which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
 
 ```{r knn_test, echo=-3}
 preds_knn = predict(results_knn, wine_test)
@@ -362,11 +370,12 @@ conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') #create an
 ```
 
 
-We get a lot of information here, but to focus on accuracy, we get around `r round(conf_knn$overall[1]*100, 2)`%. The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also feature combination or other avenues might help improve the results as well.
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_knn$overall[1]*100, 1)`%. The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also feature combination or other avenues might help improve the results as well.
 
 Additional information reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100.  Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).<span class="marginnote">You can quickly obtain this plot via the <span class="func">dotplot</span> function.</span>
 
 ```{r knnvarimp, echo=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
+# varImp doesn't seem to work with new version of knn
 g = varImp(results_knn)$importance %>%
   select(Good) %>% 
   mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Good)])) %>% 
@@ -388,7 +397,7 @@ g
 ```
 
 
-### Strengths *&* Weaknesses
+### Strengths & Weaknesses
 
 **Strengths**[^knn_strength]:
 
@@ -409,11 +418,11 @@ To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to 
 
 
 ## Neural Networks
-<span class="marginnote"><img src="img/nnet.png" style="display:block; margin: 0 auto;"></span>
+<img src="img/nnet.png" style="display:block; margin: 0 auto;" width=50%>
 
-<span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense they can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer.  All the layers between the input and output are usually referred to as *hidden* layers. If there were no hidden layers then it becomes the standard regression problem.  
+<span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense, neural networks can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer.  All the layers between the input and output are usually referred to as *hidden* layers. If there were no hidden layers then it becomes the standard regression problem.  
 
-One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Along with the complexity is the notion of <span class="emph">weight decay</span>, however this tied to the same concept as regularization, which we discussed in a previous section, where a penalty term would be applied to a norm of the weights.
+One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Another notion is that of <span class="emph">weight decay</span>, however this tied to the same concept as regularization, which we discussed in a previous section, where a penalty term would be applied to a norm of the weights.  Another regularization technique is <span class="emph">dropout</span>, where either observed or hidden units are randomly removed, and results averaged from the subsequent models.
 
 A comment about the following: if you are not set up for utilizing multiple processors the following will be relatively slow.  You can replace `method = 'avNNet'`, from the <span class="pack">caret</span> package, with `method = 'nnet'` from the <span class="pack">nnet</span> package, and shorten `tuneLength = 3`, which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the <span class="pack">caret</span> package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function[^nnet_function] has additional arguments, you may pass those on in the train function itself.  Here I am increasing the `maxit`, or maximum iterations, argument.
 
@@ -432,7 +441,7 @@ results_nnet
 ```
 
 
-We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization).')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount OF DATA.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30)s[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden unit.
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
 
 
 ```{r nnet_test, echo=-3}
@@ -442,9 +451,9 @@ conf_nnet = confusionMatrix(preds_nnet, good_observed, positive='Good')
 ```
 
 
-We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 2)`%), sensitivity, specificity etc.
+We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 1)`%), sensitivity, specificity etc.
 
-### Strengths *&* Weaknesses
+### Strengths & Weaknesses
 
 **Strengths**
 
@@ -460,47 +469,50 @@ We note improved prediction with the neural net model relative to the k-nearest 
 
 ### Final Thoughts
 
-As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  As such, it's good to have a basic understanding of them.  A nice visualization how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).
+As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).
 
 
-## Trees *&* Forests
+## Trees & Forests
 
-Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will search all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
+Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will start by searching all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive, and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
 
 
 Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  The following is a hypothetical tree reflecting this.
 
-```{r hypotree, echo=FALSE, cache=FALSE}
+```{r hypotree, echo=FALSE, eval=F, cache=FALSE}
+# for whatever reason, this ceases to display appropriate fontsize in github book; display png until issue is fixed.
 library(DiagrammeR)
 grViz('digraph tree {
 graph [rankdir = TD  bgcolor="#fffff8"]
 
 node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
 
-node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
+node [fontcolor=gray25 fontname=Roboto fixedsize=true fontsize=5]
 X1 [width=.5] X2 [width=.5]; 
 Negative1 [label="Negative" shape=circle color="#ff5500" width=.5]; 
 Negative2 [label="Negative" shape=circle color="#ff5500" width=.5]; 
 Positive [ shape=circle color="#00aaff" width=.5];
 
 edge [color=gray50 arrowhead=dot]
-X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
-X1 -> X2 [label = " > 5.75", fontcolor="gray50" fontsize="7.5%"];
-X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
-X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
+X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+X1 -> X2 [label = " > 5.75", fontcolor="gray50" fontsize=7.5];
+X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
 
 }')
 ```
 
+<img src="img/tree1.png" style="display:block; margin: 0 auto;">
+
 Now let's see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% in alcohol content (i.e. volatility >.25, alcohol between 9.85 and 10.63), they also get classified as good.  Any remaining observations are classified as bad wines.  In this way, the classification tree is getting at interactions among the variables involved- volatile acidity interacts with alcohol in predicting whether the wine is good or not.
 
-```{r winetree, echo=FALSE, cache=FALSE}
+```{r winetree, echo=FALSE, eval=F, cache=FALSE}
 grViz('digraph tree {
 graph [rankdir = TD bgcolor="#fffff8"]
 
 node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
 
-node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize="5%"]
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize=5]
 alcohol1 [label="alcohol" width=.5];
 alcohol2 [label="alcohol" width=.5];
 va [label="volatile.acidity" width=.5]; 
@@ -510,21 +522,23 @@ Good2 [label="Good" shape=circle color="#00aaff" width=.5];
 Good3 [label="Good" shape=circle color="#00aaff" width=.5];
 
 edge [color=gray50 arrowhead=dot]
-alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
-alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize="7.5%"];
-alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
-alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize="7.5%" color="#ff5500"];
-va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize="7.5%"];
-va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize="7.5%" color="#00aaff"];
+alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize=7.5];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize=7.5];
+va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
 
 }')
 ```
+
+<img src="img/tree2.png" style="display:block; margin: 0 auto;">
 
 Unfortunately a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
 
 Random forests are referred to as an <span class="emph">ensemble</span> method, one that is actually a combination of many models, and there are others we'll mention later.  There are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here (the argument `mtry`).  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set.
 
-There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of `mtry` predictor variables, etc.  But we are in the end just harnessing the power of many trees, any one of which would be highly interpretable.  In the following, the <span class="pack">randomForest</span> package does the work.
+There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of `mtry` predictor variables, etc.  But in the end, we are just harnessing the power of many trees, any one of which would be highly interpretable.  In the following, the <span class="pack">randomForest</span> package does the work.
 
 <!-- For all 9-1 splits of the data, -->
 <!-- Create 1000 random resamples of size $N_9$, -->
@@ -559,11 +573,11 @@ conf_rf = confusionMatrix(preds_rf, good_observed, positive='Good')
 ```
 
 
-This is our best result so far with `r round(conf_rf$overall[1]*100,2)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility.
+This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches[^rfasbaseline].
 
 Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
 
-### Strengths *&* Weaknesses
+### Strengths & Weaknesses
 
 **Strengths**
 
@@ -624,26 +638,26 @@ gsvm = ggplot(aes(x,y), data=d) +
 #          plot_bgcolor='#fffff8')
 ```
 
-<span class="marginnote">
-```{r svm2d, echo=FALSE, dev='svglite'}
-gsvm
-```
-</span>
-
-<span class="marginnote"><img src="img/svm3d.png" style="display:block; margin: 0 auto; width=50%"><br></span>
 
 <span class="emph">Support Vector Machines</span> (SVM) will be our last example, and are perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.
 
-To better understand this process, consider the example to the right of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. 
+To better understand this process, consider the following image of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. 
+
+```{r svm2d, echo=FALSE, dev='svglite', out.width=400}
+gsvm
+```
+
+
+<img src="img/svm3d.png" style="display:block; margin: 0 auto;" width=50%><br>
 
 Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes (following figures, zoom in to see the margin on the second plot).  Real data will not be so clean cut, and total separation impossible, but the idea is the same.
 
-For the following we use `method = 'svmLinear2'`, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is regularization applied to the cost function.
+For the following we use `method = 'svmLinear2'`, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is a regularization parameter applied to the cost function.
 
 
 ```{r svm_train, eval=FALSE, echo=2:4}
 set.seed(1234)
-╓results_svm = train(good~., data=wine_train, method='svmLinear2',
+results_svm = train(good~., data=wine_train, method='svmLinear2',
                     preProcess='range', trControl=cv_opts, tuneLength=5)
 results_svm
 save(results_svm, file='data/results_svm.RData')
@@ -661,9 +675,9 @@ conf_svm = confusionMatrix(preds_svm, good_observed, positive='Good') #create an
 ```
 
 
-Results for the initial support vector machine do not match the random forest for this data set, with accuracy of `r round(conf_svm$overall[1]*100,2)`%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options.
+Results for the initial support vector machine do not match the random forest for this data set, with accuracy of `r round(conf_svm$overall[1]*100,1)`%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options.
 
-### Strengths *&* Weaknesses
+### Strengths & Weaknesses
 
 **Strengths**
 
@@ -691,7 +705,7 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^ensemble]: The topic of ensembles is briefly noted later.
 
-[^aic]: In situations where it is appropriate to calculate in the first place, AIC can often compare to the bootstrap and k-fold cross-validation approaches.
+[^aic]: In situations where it is appropriate to calculate in the first place, model selection via AIC can often compare to the bootstrap and k-fold cross-validation approaches.
 
 [^confusion]: This term has always struck me as highly sub-optimal.
 
@@ -705,7 +719,7 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^knn_dist]: See the function <span class="func">dist</span> in base R, for example.
 
-[^knn_unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is not target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
+[^knn_unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is no target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
 
 [^knn_vis]: See the <span class="func">knn.ani</span> function in the <span class="pack">animation</span> package for a visual demonstration. [Link to demo](https://yihui.name/animation/example/knn-ani/).
 
@@ -715,14 +729,18 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^nnet_abs]: Neural nets, random forests, boosting, and additive models can all be put under the heading of basis function approaches.
 
-[^nnet_function]: For this example, ultimately the primary function is <span class="func">nnet</span> in the <span class="func">nnet</span> package that comes with base R.
+[^nnet_function]: For this example, ultimately the primary function is <span class="func">nnet</span> in the <span class="pack">nnet</span> package that comes with base R.
 
 [^nnet_rot]: You may find some rules of thumb from older sources, but using regularization and cross-validation is a much better way to 'guess'.
 
-[^rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better under conditions that don't exist naturally.
+[^rfasbaseline]: In my opinion, random forests should be a baseline by which to judge new techniques.  If one can't consistently do better than an a standard random forest with default settings, there isn't much to get excited about.
+
+[^rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better than a random forest under conditions that don't exist naturally.
 
 [^rf_modelindie]: Our previous assessment was model independent.
 
 [^rf_100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusions.
+
+
 
 [^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.

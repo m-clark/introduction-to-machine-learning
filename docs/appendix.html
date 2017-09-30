@@ -157,21 +157,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
-<li><a href="opening-the-black-box.html#feature-selection-the-data-partition">Feature Selection <em>&amp;</em> The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
 <li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
-<li><a href="opening-the-black-box.html#strengths-weaknesses">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
-<li><a href="opening-the-black-box.html#strengths-weaknesses-1">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li><a href="opening-the-black-box.html#trees-forests">Trees <em>&amp;</em> Forests</a><ul>
-<li><a href="opening-the-black-box.html#strengths-weaknesses-2">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
-<li><a href="opening-the-black-box.html#strengths-weaknesses-3">Strengths <em>&amp;</em> Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
@@ -340,7 +340,7 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
 </div>
 <div id="python" class="section level3">
 <h3>Python</h3>
-<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
+<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
 <p>One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with caret. It will get you very far, but for some situations, you may need more heavy duty options like <span class="pack">tensorflow</span>, <span class="pack">Theano</span>, etc.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> sklearn <span class="im">as</span> sk
 <span class="im">import</span> pandas <span class="im">as</span> pd
@@ -404,8 +404,8 @@ acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="
 </div>
 <div class="footnotes">
 <hr />
-<ol start="49">
-<li id="fn49"><p>Actually for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref49">↩</a></p></li>
+<ol start="50">
+<li id="fn50"><p>Actually for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref50">↩</a></p></li>
 </ol>
 </div>
             </section>
