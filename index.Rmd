@@ -63,7 +63,7 @@ library(broom); library(pander); library(tidyverse); library(htmltools)
 # 
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
-# knitr::include_graphics('img/ccbysa_test.png', dpi = NA)
+# knitr::include_graphics('img/ccbysa.png', dpi = NA)
 # knitr::include_graphics('img/mc.png', dpi = NA)
 ```
 
