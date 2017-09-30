@@ -1,7 +1,7 @@
 # Concepts
 
 
-<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function $f(X)$ to make predictions of y from those input variables.  We also need a function to penalize errors in prediction, i.e. a <span class="emph">loss function</span>.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function, $f(X)$, to make predictions of y from those input variables.  We also need a function to penalize errors in prediction, i.e. a <span class="emph">loss function</span>.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
 
 
 ## Loss Functions
@@ -28,7 +28,7 @@ $$L(Y, f(X)) = \sum|(y-f(X))|$$
 
 #### Negative Log-likelihood
 
-We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the negative log-likelihood pertaining to the model of interest.  If we assume a normal distribution for the response we can note the loss function as:
+We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the *negative* log-likelihood pertaining to the model of interest.  Such method seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize it's negative value.  As an example, if we assume a normal distribution for the response we can note the loss function as:
 
 
 $$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
@@ -38,12 +38,12 @@ In this case it would converge to the same answer as the squared error/least squ
 
 #### R Example
 
-The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (beta) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
+The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients ($\beta$ from before) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  In the following, the true values for the intercept and other coefficients are `(0, -.5, .5)`. We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
 
 
 ```{r squareloss}
 sqerrloss = function(beta, X, y){
-  mu = X%*%beta
+  mu = X %*% beta
   sum((y-mu)^2)
 }
 
@@ -57,7 +57,8 @@ y =  rnorm(N, X%*%beta, sd=1)
 # results
 our_func = optim(par=c(0,0,0), fn=sqerrloss, X=X, y=y, method='BFGS')
 lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
-rbind(c(our_func$par, our_func$value), c(coef(lm_result), sum(resid(lm_result)^2)))
+rbind(optim=c(our_func$par, our_func$value), 
+      lm=c(coef(lm_result), sum(resid(lm_result)^2)))
 ```
 
 While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.
@@ -98,11 +99,11 @@ A final loss function to consider, typically used with support vector machines, 
 
 $$L(Y, f(X)) = \max(1-yf, 0)$$
 
-Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.
+Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.  The following compares these (from @hastie_elements_2009).
 
-<span class="marginnote"><img src="img/lossfuncs.png" style="display:block; margin: 0 auto;"></span>
+<img src="img/lossfuncs.png" style="display:block; margin: 0 auto;" width=50%>
 
-Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly so the worse the misclassification (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  At right is a depiction of the loss as a functions above, taken from @hastie_elements_2009.
+Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  
 
 
 ## Regularization
@@ -114,7 +115,7 @@ Penalized estimation will provide estimates with some shrinkage, and we can use 
 
 $$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2}$$
 
-In words, we're finding the coefficients that minimize the sum of the squared residuals.  With the approach to regression here we just add a penalty component to the procedure as follows.
+In words, we're finding the coefficients that minimize the sum of the squared residuals.  Now we just add a penalty component to the procedure as follows.
 
 
 $$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2} + \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
@@ -124,7 +125,7 @@ In the above equation, $\lambda$ is our penalty term[^penterm] for which larger 
 
 $$l_p(\beta) = l(\beta) - \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
 
-As we are maximizing the likelihood the penalty is a subtraction, but nothing inherently different is shown.  This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.
+As we are maximizing the likelihood, the penalty is a subtraction, but nothing inherently different is shown.  If we are minimizing the negative (log) likelihood, we then add the penalty. This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.
 
 <span class="marginnote">Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.</span>It should be noted that we can go about the regularization in different ways.  For example, using the squared $L_2$ norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization), and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. 
 
@@ -148,7 +149,8 @@ sqerrloss_reg = function(beta, X, y, lambda=1){
 }
 
 lm_result = lm(y~., data.frame(X[,-1]) )
-regularized_result = optim(par=rep(0, ncol(X)), fn=sqerrloss_reg, X=X, y=y, method='BFGS')
+regularized_result = optim(par=rep(0, ncol(X)), fn=sqerrloss_reg, 
+                           X=X, y=y, method='BFGS')
 ```
 <br>
 
@@ -176,7 +178,7 @@ crossprod(y_test - X_test%*%regularized_result$par)
 
 From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad.  On the test data however, the squared error loss is lower.
 
-In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact biased, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
+In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact *biased*, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
 
 
 
@@ -186,32 +188,32 @@ In most of science, we are concerned with reducing uncertainty in our knowledge 
 
 Unfortunately, such an approach in which we only fit models to one data set does not give a very good sense of <span class="emph">generalization</span> performance, i.e. the performance we would see with new data.  While typically not reported, most researchers, if they are spending appropriate time with the data, are actually testing a great many models, among which the 'best' is then provided in detail in the end report.  Without some generalization performance check however, such performance is overstated when it comes to new data.
 
-In the following consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the data in some random fashion into a <span class='emph'>training set</span> , for initial model fit, and a<span class="emph">test set</span>, which is a separate and independent data set, to measure generalization performance[^tuning].  We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data.  So in addition to the previously noted goal of finding the 'best' model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).
+In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class='emph'>training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance[^tuning].  We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data.  So in addition to the previously noted goal of finding the 'best' model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).
 
-### Bias *&* Variance
+### Bias & Variance
 
-<span class="marginnote">Much of the following is essentially a paraphrase of parts of @hastie_elements_2009 (chapters 2 and 7).</span>We start with a true data generating process for some target $y$, expressed as a function of features $X$. We can specify the true model as 
+We start[^biasvarref] with a true data generating process for some target $y$, expressed as a function of features $X$. We can specify the true model as 
 
 $$y = f(X) + \epsilon$$
 
-where $f(x)$ is the expected value of $y$ given $X$, i.e. $f(x) = E(y|X)$, and the expected value of the error 0, $E(\epsilon)=0$, with some variance, $\textrm{Var}(\epsilon) = \sigma^2_\epsilon$.  In other words, we are talking about the standard regression model we all know and love.  Now we can conceptually think of the *expected prediction error* at a specific input $X = x_0$ as: 
+where $f(x)$ is the expected value of $y$ given $X$, i.e. $f(x) = E(y|X)$, and the expected value of the error 0, $E(\epsilon)=0$, with some variance, $\textrm{Var}(\epsilon) = \sigma^2_\epsilon$.  In other words, we are talking about the standard regression model we all know and love.  Now we can conceptually think of the *expected prediction error* at a specific input $X = x_*$ as: 
 
 
-$$\text{Error}_{x_0} = \text{Irreducible Error} + \text{Bias}^2 + \text{Variance}$$
+$$\text{Error}_{x_*} = \text{Irreducible Error} + \text{Bias}^2 + \text{Variance}$$
 
 
-To better understand this, think of training models over and over, each time with new training data, but testing each model at input $x_0$. The $\text{Error}_{x_0}$ is the average, or expected value of the prediction error in this scenario, or $E[(y - \hat f(x))^2|X=x_0]$, with $\hat f$ our current estimate of the true underlying data generating function $f$. In other words, we have three components to our general notion of prediction error: 
+To better understand this, think of training models over and over, each time with new training data, but testing each model at input $x_*$. The $\text{Error}_{x_*}$ is the average, or expected value of the prediction error in this scenario, or $E[(y - \hat f(x))^2|X=x_*]$, with $\hat f$ our current estimate of the true underlying data generating function $f$. We can note three components to this general notion of prediction error: 
 
 **Irreducible error**: The variance of the (new test) target ($\sigma^2_\epsilon$). This is unavoidable, since our $y$ is measured with error.
 
-**$\textrm{Bias}^2$**: the amount the *average* of our estimate varies from the true (but unknown) value ($E(\hat f) - f$). This is typically the result of trying to model the complexity of nature with something much simpler that the human brain can understand. While the simpler might make us feel good, it may not work very well.
+**$\textrm{Bias}^2$**: the amount the *average* of our estimate varies from the true (but unknown) value ($E(\hat f) - f$). This is often the result of trying to model the complexity of nature with something much simpler that the human brain can understand. While the simpler might make us feel good, it may not work very well.
 
 **Variance**: the amount by which our prediction would change if we had estimated it using a different training data set ($Var(\hat f)$). Even with unbiased estimates, we could still see a high mean squared error due to high variance.
 
-Slightly more formally, we can present this as follows, with $h_0$ our estimated (hypothesized) value at $x_0$:
+Slightly more formally, we can present this as follows, with $h_*$ our estimated (hypothesized) value at $x_*$:
 
 
-$$\text{Error}_{x_0} = Var(\epsilon) + (\text{E}[h_0] - f(x_0))^2 + Var(h_0)$$
+$$\text{Error}_{x_*} = \text{Var}(\epsilon) + (\text{E}[h_*] - f(x_*))^2 + \text{Var}(h_*)$$
 
 The latter two components make up the mean squared error in our previous demonstration.  While they are under our control, they compete with one another such that oftentimes we improve one at the detriment of the other. In other words, *bias and variance are not independent*.
 
@@ -221,23 +223,29 @@ The latter two components make up the mean squared error in our previous demonst
 
 Outlining a general procedure, we start by noting the prediction error on a training data set with multiple models of varying complexity (e.g. increasing the number of predictor variables, adding polynomial terms, including interactions), and then assess the performance of the chosen models in terms of prediction error on the test set.  We then perform the same activity for a total of 100 simulated data sets, for each level of complexity.
 
-<span class="marginnote"><img src="img/biasvar2.svg" style="display:block; margin: 0 auto;" width=100%></span>The results from this process might look like the image to the right taken from @hastie_elements_2009.  With regard to the training data, we have $\mathrm{error}_{\mathrm{train}}$ for one hundred training sets for each level of model complexity.  The bold blue line notes this average error over the 100 sets by model complexity, and we can see that more complex models fit the data better.  The bold red line the average test error ($\mathrm{error}_{\mathrm{test}}$) across the 100 test data sets, and it tells a different story.
+The results from this process might look like the following, taken from @hastie_elements_2009.  With regard to the training data, we have $\mathrm{error}_{\mathrm{train}}$ for one hundred training sets for each level of model complexity.  The bold blue line notes this average error over the 100 sets by model complexity, and we can see that more complex models fit the data better.  The bold red line is the average test error ($\mathrm{error}_{\mathrm{test}}$) across the 100 test data sets, and it tells a different story. When models get too complex, the test error starts to *increase*.
+
+<img src="img/biasvar2.svg" style="display:block; margin: 0 auto;" width=50%>
 
 Ideally we'd like to see low bias and (relatively) low  variance, but things are not so easy. One thing we can see clearly is that $\mathrm{error}_{\mathrm{train}}$ is not a good estimate of $\mathrm{error}_{\mathrm{test}}$, which is now our focus in terms of performance. If we think of the training error as what we would see in typical research where one does everything with a single data set, we are using the same data set to fit the model and assess error.  As the model is adapted to that data set specifically, it will be overly optimistic in the estimate of the error, that optimism being the difference between the error rate we see based on the training data versus the average of what we would get with many test data sets.  We can think of this as a problem of overfitting to the training data.  Models that do not incorporate any regularization or validation process of any kind are likely overfit to the data presented.
 
 Generally speaking, the more complex the model, the lower the bias, but the higher the variance, as depicted in the graphic.  Specifically however, the situation is more nuanced, where the type of problem (classification with 0-1 loss vs. continuous response with squared error loss[^biasvardimen]) and technique (a standard linear model vs. regularized fit) will exhibit different bias-variance relationships.
 
 
-<span class="marginnote"><img src="img/biasvartarget.svg" style="display:block; margin: 0 auto;"> <br> Figure adapted from @domingos_few_2012.</span>
+
 
 ### Diagnosing Bias-Variance Issues *&* Possible Solutions
 
-Let's assume a regularized linear model with a standard data split into training and test sets.  We will describe different scenarios with possible solutions.
+The following can serve as a visual summary of the concepts just outlined (figure adapted from @domingos_few_2012).
+
+<img src="img/biasvartarget.svg" style="display:block; margin: 0 auto;" width=50%> <br> 
+
+Now let's assume a regularized linear model with a standard data split into training and test sets.  We will describe different scenarios with possible solutions.
 
 
 #### Worst Case Scenario
 
-Starting with the worst case scenario, poor models may exhibit high bias and high variance.  One thing that will not help this situation (perhaps contrary to intuition) is adding more data.  You can't make a silk purse out of a sow's ear ([*usually*](https://libraries.mit.edu/archives/exhibits/purse/)), and adding more data just gives you a more accurate picture of how awful your model is. One might need to rework the model, e.g. adding new predictors or creating them via interaction terms, polynomials, or other smooth functions as in additive models, or simply collecting better and/or more relevant data.<span class="marginnote"><img class='imgbigger' src="img/biasvar_gp.svg" style="display:block; margin: 0 auto;"> <br> Figure inspired by @murphy_machine_2012 (figure 6.5) showing the bias-variance tradeoff.  Sample (left) and average (right) fits of linear regression using a Gaussian radial basis function expansion. The green line represents the true relationship. The top row shows low variance between one fit and the next (left) but notable bias (right) in that the average fit is off.  Compare to the less regularized (high variance, low bias) situation of the bottom row.  See the <span class="pack">kernlab</span> package for the fitting function used, and the [appendix][Appendix] for the code used to produce the graph.</span>
+Starting with the worst case scenario, poor models may exhibit high bias and high variance.  One thing that will not help this situation (perhaps contrary to intuition) is adding more data.  You can't make a silk purse out of a sow's ear ([*usually*](https://libraries.mit.edu/archives/exhibits/purse/)), and adding more data just gives you a more accurate picture of how awful your model is. One might need to rework the model, e.g. adding new predictors or creating them via interaction terms, polynomials, or other smooth functions as in additive models, or simply collecting better and/or more relevant data.<span class="marginnote"></span>
 
 
 #### High Variance
@@ -247,6 +255,16 @@ When variance is a problem, our training error is low while test error is relati
 #### High Bias
 
 With bias issues, our training error is high and test error is not too different from training error (underfitting problem).  Adding new predictors/features, e.g. interaction terms, polynomials etc., can help here.  Additionally reducing the penalty parameter $\lambda$ would also work with even less effort, though generally it should be estimated rather than explicitly set.
+
+
+Here is another visualization to drive the point home.
+
+<img class='imgbigger' src="img/biasvar_gp.svg" style="display:block; margin: 0 auto;" width=50%> 
+
+<br> 
+
+The figure is inspired by @murphy_machine_2012 (figure 6.5) showing the bias-variance tradeoff.  Sample (left) and average (right) fits of linear regression using a Gaussian radial basis function expansion. The blue line represents the true x-y relationship. The top row shows low variance between one fit and the next (left) but notable bias (right) in that the average fit is off.  Compare to the less regularized (high variance, low bias) situation of the bottom row.  See the <span class="pack">kernlab</span> package for the fitting function used, and the [appendix][Appendix] for the code used to produce the graph.
+
 
 
 ### Bias-Variance Summary
@@ -259,18 +277,22 @@ It is very easy to describe ***science*** without ever talking about statistical
 
 ## Cross-Validation
 
-As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data.  The simplest validation approach would be to split the data available into a training and test set as discussed previously.  We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. <span class="marginnote"><img src="img/learningcurve.svg" style="display:block; margin: 0 auto;"></span> A hypothetical learning curve display the results of such a process is shown to the right. While fairly simple, other approaches are more commonly used and result in better estimates of performance[^validation].
+As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data.  The simplest validation approach would be to split the data available into a training and test set as discussed previously.  We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. The following displays a hypothetical learning curve from the results of such a process.  While the approach is fairly simple, other approaches are more commonly used and result in better estimates of predictive performance[^validation].
 
+<img src="img/learningcurve.svg" style="display:block; margin: 0 auto;" width=50%>
 
 ### Adding Another Validation Set
 
-One technique that might be utilized for larger data sets, is to split the data into training, validation and final test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of tuning parameters.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at before hand (e.g. our $\lambda$ shrinkage parameter in regularized regression).  We select models/tuning parameters that minimize the validation set error, and once the model is chosen examine test set error performance.  In this way performance assessment is still independent of the model development process.
+One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of tuning parameters.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at before hand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
 
-<span class="marginnote"><img src="img/kfold.svg" style="display:block; margin: 0 auto;" width=200%> <br>  An illustration of 3-fold classification.</span>
+
 
 ### K-fold Cross-Validation
 
 In many cases we don't have enough data for such a split, and the split percentages are arbitrary anyway, with results that would be specific to the split chosen.  Instead we can take a typical data set and randomly split it into $\kappa=10$ equal-sized (or close to it) parts.  Next, we take the first nine partitions, combine them, and use them as the training set.  With chosen model from the training data, make predictions on the held out partition.  Now we do it again, but this time use the 9^th^ partition as the holdout set. Repeat the process until each of the initial 10 partitions of data have been used as the test set.  Average the error across all procedures for our estimate of prediction error.  With enough data, this (and the following methods) could be used as the validation procedure before eventual performance assessment on an independent test set with the final chosen model.
+
+<img src="img/kfold.svg" style="display:block; margin: 0 auto;" width=50%> <br>  
+<p style="text-align:center">An illustration of 3-fold classification.</p>
 
 #### Leave-one-out Cross-Validation
 
@@ -315,6 +337,8 @@ Along with the above there are variations such as repeated cross validation, the
 [^bigdata]: I should note that I do not make any particular claim about the quality of such analysis.  In many situations the cost of data collection is very high, and for all the current enamorment with 'big' data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations).  In these situations getting new data for which one might make predictions is extremely difficult.
 
 [^tuning]: In typical situations there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The $\lambda$ penalty parameter in regularized regression is one example of such a <span class='emph'>tuning parameter</span>. In the best case scenario, we would also have a <span class='emph'>validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen.  However, methods are available to us in which we can approximate the validation step in other ways.
+
+[^biasvarref]: Much of the following is essentially a paraphrase of parts of @hastie_elements_2009 (chapters 2 and 7).
 
 [^biasvardimen]: See Friedman (1996) *On Bias, Variance, 0/1 Loss and the Curse of Dimensionality* for the unusual situations that can arise in dealing with classification error with regard to bias and variance.
 
