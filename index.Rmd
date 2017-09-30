@@ -63,7 +63,12 @@ library(broom); library(pander); library(tidyverse); library(htmltools)
 # 
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
-# knitr::include_graphics('img/ccbysa.png', dpi = NA)
-# knitr::include_graphics('img/mc.png', dpi = NA)
+```
+
+
+```{r ccimg, fig.align='center',  out.width=0, fig.show='hide', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
+# otherwise will not include in menu
+knitr::include_graphics('img/ccbysa.png', dpi = NA)
+knitr::include_graphics('img/mc.png', dpi = NA)
 ```
 
