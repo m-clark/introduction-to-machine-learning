@@ -8,7 +8,6 @@ As for prerequisite knowledge, I will assume a basic familiarity with regression
 
 The latest version of this document is dated `r Sys.Date()`.  It was originally written in March 2013, when there much more need for it in academia.  That need still exists, as most applied disciplines still do not teach such techniques as a core part of their training.  However, the amount of tools and information, within the realm of R especially, has exploded, so you'll have plenty to keep you occupied.
 
-<span class="marginnote">test</span>
 
 Color coding in text:
 
