@@ -43,7 +43,7 @@ url: 'https\://m-clark.github.io/docs/'  # evidently the \: is required or you'l
 github-repo:  m-clark/introduction-to-machine-learning/
 nocite: | 
   @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
-  @fahrmeir2013regression
+  @fahrmeir2013regression @efron2016computer
 
 ---
 

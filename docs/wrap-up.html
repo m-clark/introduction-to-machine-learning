@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2017-09-30">
+<meta name="date" content="2017-10-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -187,7 +187,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
 </ul></li>
-<li><a href="wrap-up.html#feature-selection-importance">Feature Selection <em>&amp;</em> Importance</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural language processing/Text Analysis</a></li>
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
@@ -240,9 +241,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="latent-variable-models" class="section level3">
 <h3>Latent Variable Models</h3>
-<div style="width:25%; margin: 0 12.5%; bgcolor=&#39;transparent&#39;">
-<div id="htmlwidget-dc7620ae0529e527423e" style="width:100%;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-dc7620ae0529e527423e">{"x":{"diagram":"\ndigraph DAG2 {\n # Intialization of graph attributes\n graph [overlap = false rankdir=TB bgcolor=transparent]\n \n # Initialization of node attributes\n node [shape = circle,\n fontname = Helvetica,\n color = gray80,\n type = box,\n fixedsize = true]\n \n # Node statements\n node [width=.75, height=.75, shape=circle, color=gray80];\n LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1<\/sub>>];\n LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2<\/sub>>];\n \n node [width=1, shape=square, color=gray50, fontcolor=gray25]\n subgraph {\n    rank=same;\n    X1 [width=.5 height=.5 label=<X<sub>1<\/sub>>]; \n    X2 [width=.5 height=.5 label=<X<sub>2<\/sub>>]; \n    X3 [width=.5 height=.5 label=<X<sub>3<\/sub>>]; \n    X4 [width=.5 height=.5 label=<X<sub>4<\/sub>>]; \n    X5 [width=.5 height=.5 label=<X<sub>5<\/sub>>]; \n    X6 [width=.5 height=.5 label=<X<sub>6<\/sub>>]; \n }\n # Initialization of edge attributes\n edge [color = gray50, rel = yields minlen=2]\n \n # Edge statements\n LV1 -> {X1 X2 X3 X4};\n LV2 -> {X3 X4} [style=dashed] ;\n LV2 -> {X5 X6};\n}\n ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div style="width:50%; margin: 0 25%; bgcolor=&#39;transparent&#39;">
+<div id="htmlwidget-c802c7baa17b2802737e" style="width:100%;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c802c7baa17b2802737e">{"x":{"diagram":"\ndigraph DAG2 {\n # Intialization of graph attributes\n graph [overlap = false rankdir=TB bgcolor=transparent]\n \n # Initialization of node attributes\n node [shape = circle,\n fontname = Helvetica,\n color = gray80,\n type = box,\n fixedsize = true]\n \n # Node statements\n node [width=.75, height=.75, shape=circle, color=gray80];\n LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1<\/sub>>];\n LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2<\/sub>>];\n \n node [width=1, shape=square, color=gray50, fontcolor=gray25]\n\n # oddly ordered to deal with random reordering by Diagrammer\n subgraph {\n    rank=same;\n    X2 [width=.5 height=.5 label=<X<sub>2<\/sub>>]; \n    X1 [width=.5 height=.5 label=<X<sub>1<\/sub>>]; \n    X4 [width=.5 height=.5 label=<X<sub>4<\/sub>>]; \n    X3 [width=.5 height=.5 label=<X<sub>3<\/sub>>]; \n    X5 [width=.5 height=.5 label=<X<sub>5<\/sub>>]; \n    X6 [width=.5 height=.5 label=<X<sub>6<\/sub>>]; \n }\n # Initialization of edge attributes\n edge [color = gray50, rel = yields minlen=2]\n \n # Edge statements\n LV1 -> {X1 X2 X3 X4};\n LV2 -> {X3 X4} [style=dashed] ;\n LV2 -> {X5 X6};\n}\n ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <!-- <span class="marginnote"><img src="img/lvmodel.png" style="display:block; margin: 0 auto;"></span> -->
 <p>Sometimes the desire is to reduce the dimensionality of the inputs to a more manageable set of information. In this manner we are thinking that much of the data can be seen as having only a few sources of variability, often called latent variables or factors. Again, this takes familiar forms such as principal components and (“exploratory”) factor analysis, but would also include independence components analysis and partial least squares techniques. Note also that these can be part of a supervised technique (e.g. principal components regression) or the main focus of analysis (as with latent variable models in structural equation modeling).</p>
@@ -250,8 +251,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="graphical-structure" class="section level3">
 <h3>Graphical Structure</h3>
 <!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
-<p><span class="marginnote"> <img src="introduction-to-machine-learning_files/figure-html/unnamed-chunk-2-1.svg" width="672"  style="display: block; margin: auto;" /> An example network graph of U.S. senators in 2006. Node size is based on the <em>betweeness</em> centrality measure, edge size the percent agreement (graph filtered to edges &gt;= 65%). Color is based on the clustering discovered within the graph <a href="http://support.google.com/fusiontables/answer/2566732?hl=en&amp;ref_topic=2572801">(link to data)</a>. </span></p>
-<p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain similarities among observations and examine visually the structure of those data points, where observations are placed closer together that are more similar in nature. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the correlations of inputs.</p>
+<p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes. One can examine <a href="">my document</a> that covers more of these and latent variable approaches.</p>
+<img src="introduction-to-machine-learning_files/figure-html/unnamed-chunk-2-1.svg" width="400" style="display: block; margin: auto;" />
+<p style="font-size: 8pt">
+An example network graph of U.S. senators in 2006. Node size is based on the <em>betweeness</em> centrality measure, edge size the percent agreement (graph filtered to edges &gt;= 65%). Color is based on the clustering discovered within the graph <a href="http://support.google.com/fusiontables/answer/2566732?hl=en&amp;ref_topic=2572801">(link to data)</a>.
+</p>
 </div>
 <div id="imputation" class="section level3">
 <h3>Imputation</h3>
@@ -292,7 +296,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>}</p>
 <p>Return <span class="math inline">\(\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]\)</span></p>
-<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.</p>
+<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a>.</p>
 </div>
 <div id="stacking" class="section level3">
 <h3>Stacking</h3>
@@ -301,8 +305,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response. With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data). In this manner the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models. Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.</p>
 </div>
 </div>
+<div id="deep-learning" class="section level2">
+<h2>Deep Learning</h2>
+<p><span class="emph">Deep learning</span> is all the rage these days. The techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a>. Python appears to have the latest implementation tools, and through modules such as <span class="pack">tensorflow</span>, <span class="pack">theano</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though tools like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Because of the difficulty with such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
+<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>.</p>
+</div>
 <div id="feature-selection-importance" class="section level2">
-<h2>Feature Selection <em>&amp;</em> Importance</h2>
+<h2>Feature Selection &amp; Importance</h2>
 <p>We hit on this topic some before, but much like there are a variety of ways to gauge performance, there are different approaches to select features and/or determine their importance. Invariably feature selection takes place from the outset when we choose what data to collect in the first place. Hopefully guided by theory, in other cases it may be restricted by user input, privacy issues, time constraints and so forth. But once we obtain the initial data set however, we may still want to trim the models under consideration.</p>
 <p>In standard approaches we might have in the past used forward or other selection procedure, or perhaps some more explicit model comparison approach. Concerning the content here, take for instance the lasso regularization procedure we spoke of earlier. ‘Less important’ variables may be shrunk entirely to zero, and thus feature selection is an inherent part of the process, and is useful in the face of many, many predictors, sometimes outnumbering our sample points. As another example, consider any particular approach where the importance metric might be something like the drop in accuracy when the variable is excluded.</p>
 <p>Variable importance was given almost full weight in the discussion of typical applied research in the past, based on statistical significance results from a one-shot analysis, and virtually ignorant of prediction on new data. We still have the ability to focus on feature performance with ML techniques, while shifting more of the focus toward prediction at the same time. For the uninitiated, it might require new ways of thinking about how one measures importance though.</p>
@@ -317,7 +328,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="more-stuff" class="section level2">
 <h2>More Stuff</h2>
-<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a>, deep learning<a href="#fn46" class="footnoteRef" id="fnref46"><sup>46</sup></a>, semi-supervised learning<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>, online learning<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>, and many more.</p>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn46" class="footnoteRef" id="fnref46"><sup>46</sup></a>, semi-supervised learning<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>, online learning<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>, and many more.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -328,23 +339,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <blockquote>
 <p><em>Machine learning <strong>is not</strong> magic!</em></p>
 </blockquote>
-<p>ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you’re using it have long since past. Like any statistical technique, the reason to use ML is that is well-suited to the research or other problem at hand.</p>
+<p>ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you’re using it have long since past. Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.</p>
 </div>
 <div id="some-guidelines" class="section level3">
 <h3>Some Guidelines</h3>
 <p>Here are some thoughts to keep in mind, though these may be applicable to applied statistical practice generally.</p>
-<p>More data beats a cleverer algorithm, but a lot of data is not enough by itself <span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>.</p>
-<p>Avoid overfitting.</p>
-<p>Let the data speak for itself.</p>
-<p>“Nothing is more practical than a good theory.”<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a></p>
-<p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes <span class="math inline">\(\rightarrow\)</span> logistic regression <span class="math inline">\(\rightarrow\)</span> knn <span class="math inline">\(\rightarrow\)</span> svm.</p>
-<p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p>
-<p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p>
-<p>Learn multiple models, selecting the best or possibly combining them.</p>
+<ul>
+<li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
+<li><p>Avoid overfitting.</p></li>
+<li><p>Let the data speak for itself.</p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a></p></li>
+<li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes <span class="math inline">\(\rightarrow\)</span> logistic regression <span class="math inline">\(\rightarrow\)</span> knn <span class="math inline">\(\rightarrow\)</span> svm.</p></li>
+<li><p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
+<li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
+<li><p>Learn multiple models, selecting the best or possibly combining them.</p></li>
+</ul>
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
-<p>It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The field of statistics has rapidly evolved over the past couple decades. The tools available are myriad, and expanding all the time. Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!</p>
+<p>It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades. The tools available from them are myriad, and expanding all the time. Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!</p>
 
 </div>
 </div>
@@ -358,8 +371,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="footnotes">
 <hr />
 <ol start="45">
-<li id="fn45"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref45">↩</a></p></li>
-<li id="fn46"><p>This includes learning at different levels of representation, e.g. from an image regarding a scene to the concepts used to describe it.<a href="wrap-up.html#fnref46">↩</a></p></li>
+<li id="fn45"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref45">↩</a></p></li>
+<li id="fn46"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref46">↩</a></p></li>
 <li id="fn47"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref47">↩</a></p></li>
 <li id="fn48"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref48">↩</a></p></li>
 <li id="fn49"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref49">↩</a></p></li>

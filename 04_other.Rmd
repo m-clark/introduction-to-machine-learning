@@ -14,9 +14,9 @@ Many of the techniques used in unsupervised are commonly taught in various appli
 
 ### Latent Variable Models
 
-```{r lvmodel, echo=FALSE, eval=T, dev='svg', background='#FFFFDD'}
+```{r lvmodel, echo=FALSE, eval=T, dev='svg', background='#FFFFF8'}
 library(DiagrammeR)
-tags$div(style="width:25%; margin: 0 12.5%; bgcolor='transparent'",
+tags$div(style="width:50%; margin: 0 25%; bgcolor='transparent'",
 DiagrammeR("
 digraph DAG2 {
  # Intialization of graph attributes
@@ -35,12 +35,14 @@ digraph DAG2 {
  LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2</sub>>];
  
  node [width=1, shape=square, color=gray50, fontcolor=gray25]
+
+ # oddly ordered to deal with random reordering by Diagrammer
  subgraph {
     rank=same;
-    X1 [width=.5 height=.5 label=<X<sub>1</sub>>]; 
     X2 [width=.5 height=.5 label=<X<sub>2</sub>>]; 
-    X3 [width=.5 height=.5 label=<X<sub>3</sub>>]; 
+    X1 [width=.5 height=.5 label=<X<sub>1</sub>>]; 
     X4 [width=.5 height=.5 label=<X<sub>4</sub>>]; 
+    X3 [width=.5 height=.5 label=<X<sub>3</sub>>]; 
     X5 [width=.5 height=.5 label=<X<sub>5</sub>>]; 
     X6 [width=.5 height=.5 label=<X<sub>6</sub>>]; 
  }
@@ -110,16 +112,17 @@ ggsenate = ggplot(gnet, aes(x = x[,1], y = y[,1], xend = xend[,1], yend = yend[,
 
 
 <!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
-<span class="marginnote">
-```{r echo=FALSE, dev='svglite'}
+
+Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes.  One can examine [my document]() that covers more of these and latent variable approaches.
+
+
+
+```{r echo=FALSE, dev='svglite', out.width=400}
 ggsenate
 ```
+<p style="font-size: 8pt">
 An example network graph of U.S. senators in 2006. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph [(link to data)](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801).
-</span>
-
-
-
-Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain similarities among observations and examine visually the structure of those data points, where observations are placed closer together that are more similar in nature. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the correlations of inputs.
+</p>
 
 
 ### Imputation
@@ -177,7 +180,31 @@ for $m=1:M$ {
 Return $\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]$
 
 
-Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.
+Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.  A very popular implementation is [XGBoost](https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html).
+
+
+```{r xgboost, echo=FALSE, eval=FALSE}
+modelLookup("xgbLinear")
+modelLookup("xgbTree")
+
+xgb_opts = expand.grid(eta=c(.3,.4),
+                       max_depth=c(9, 12),
+                       colsample_bytree=c(.6,.8),
+                       subsample=c(.5,.75,1),
+                       nrounds=1000,
+                       min_child_weight=1,
+                       gamma=0)
+
+set.seed(1234)
+results_xgb = train(good~., data=wine_train, method='xgbTree',
+                   preProcess='range', trControl=cv_opts, 
+                   tuneGrid=xgb_opts)
+results_xgb
+save(results_xgb, file='data/results_xgb.RData')
+preds_gb = predict(results_xgb, wine_test)
+confusionMatrix(preds_gb, good_observed, positive='Good')
+```
+
 
 ### Stacking
 
@@ -188,7 +215,18 @@ The issue then is how we might combine them.  We really don't have to get too fa
 Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response.  With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data).  In this manner the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models.  Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.
 
 
-## Feature Selection *&* Importance
+## Deep Learning
+
+<span class="emph">Deep learning</span> is all the rage these days. The techniques are largely focused on AI applications, but are not restricted to those.  They've been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks.  
+
+Such models require massive amounts of data, a lot of tuning, and generally serious hardware[^dl]. Python appears to have the latest implementation tools, and through modules such as <span class="pack">tensorflow</span>, <span class="pack">theano</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though tools like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.
+
+Because of the difficulty with such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
+
+You can start your journey into this sort of stuff at http://deeplearning.net/.
+
+
+## Feature Selection & Importance
 
 We hit on this topic some before, but much like there are a variety of ways to gauge performance, there are different approaches to select features and/or determine their importance. Invariably feature selection takes place from the outset when we choose what data to collect in the first place.  Hopefully guided by theory, in other cases it may be restricted by user input, privacy issues, time constraints and so forth.  But once we obtain the initial data set however, we may still want to trim the models under consideration.
 
@@ -208,18 +246,14 @@ It should be noted that the approaches outlined in this document are couched in 
 
 
 
+
+
 ## More Stuff
 
-Aside from what has already been noted, there still exists a great many applications for ML such as data set shift[^datasetshift], deep learning[^deep], semi-supervised learning[^semi], online learning[^online], and many more.  
+Aside from what has already been noted, there still exists a great many applications for ML such as data set shift[^datasetshift], semi-supervised learning[^semi], online learning[^online], and many more.  
 
 
-[^datasetshift]: Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.
 
-[^deep]: This includes learning at different levels of representation, e.g. from an image regarding a scene to the concepts used to describe it.
-
-[^semi]: Learning with both labeled and unlabeled data.
-
-[^online]: Learning from a continuous stream of data.
 
 ## Summary
 
@@ -231,33 +265,41 @@ In general, without context, no algorithm can be said to be any better than anot
 
 > *Machine learning **is not** magic!*
 
-ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since past.  Like any statistical technique, the reason to use ML is that is well-suited to the research or other problem at hand.
+ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since past.  Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.
 
 
 ### Some Guidelines
 
 Here are some thoughts to keep in mind, though these may be applicable to applied statistical practice generally.
 
-More data beats a cleverer algorithm, but a lot of data is not enough by itself @domingos_few_2012. 
+- More data beats a cleverer algorithm, but a lot of data is not enough by itself (@domingos_few_2012). 
 
-Avoid overfitting.
+- Avoid overfitting.
 
-Let the data speak for itself. 
+- Let the data speak for itself. 
 
-"Nothing is more practical than a good theory."[^lewin]
+- "Nothing is more practical than a good theory."[^lewin]
 
-While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes $\rightarrow$ logistic regression $\rightarrow$ knn $\rightarrow$ svm.
+- While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes $\rightarrow$ logistic regression $\rightarrow$ knn $\rightarrow$ svm.
 
-Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal.  Some programs can even make this explicit.
+- Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal.  Some programs can even make this explicit.
 
-Keep the tuning parameter/feature selection process separate from the final test process for assessing error.
+- Keep the tuning parameter/feature selection process separate from the final test process for assessing error.
 
-Learn multiple models, selecting the best or possibly combining them.
+- Learn multiple models, selecting the best or possibly combining them.
 
 
 ### Conclusion
 
-It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The field of statistics has rapidly evolved over the past couple decades.  The tools available are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
+It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades.  The tools available from them are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
 
 
 [^lewin]: Kurt Lewin, and iterated by V. Vapnik for the machine learning context.
+
+[^dl]: You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.
+
+[^datasetshift]: Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.
+
+[^semi]: Learning with both labeled and unlabeled data.
+
+[^online]: Learning from a continuous stream of data.
