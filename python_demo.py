@@ -42,3 +42,22 @@ cm_prob
 acc = sk.metrics.accuracy_score(y_test, rf_predict)
 acc = pd.DataFrame(np.array([acc]), columns=['Accuracy'])
 acc
+
+
+import tensorflow.contrib.learn as skflow
+from sklearn import metrics
+
+y = wine['good'] == 'Good'
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=8675309)
+
+
+feats = skflow.infer_real_valued_columns_from_input(X_train)
+
+classifier_tf = skflow.DNNClassifier(feature_columns=feats, 
+                                     hidden_units=[50, 50, 50, 40, 30, 20, 10], 
+                                     dropout=.2,
+                                     n_classes=2)
+classifier_tf.fit(X_train, y_train, steps=10000)
+predictions = list(classifier_tf.predict(X_test, as_iterable=True))
+score = metrics.accuracy_score(y_test, predictions)
+print("Accuracy: %f" % score)
