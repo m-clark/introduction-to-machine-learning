@@ -61,7 +61,6 @@ To demonstrate other sources of classification information, we will use the foll
 
 
 ```{r confusionMatrix, echo=F}
-
 tex2markdown <- function(texstring) {
   writeLines(text = texstring,
              con = myfile <- tempfile(fileext = ".tex"))
@@ -242,14 +241,14 @@ DT::datatable(wine, options=list(dom='ftp', scrollX=T), width='50%')
 
 ## R Implementation
 
-I will use the <span class="pack">caret</span> package in R.  It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be.  However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information.  Check out the [caret home page](https://topepo.github.io/caret/index.html) for more detail. The methods selected here were chosen for breadth of approach, to give a good sense of the variety of techniques available.
+I will use the <span class="pack">caret</span> package in R.  It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be.  However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information.  Check out the [caret home page](https://topepo.github.io/caret/index.html) for more detail. The methods selected here were chosen for breadth of approach, to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are: 
 
-<span class="marginnote">In what follows, the associated packages and functions used are: <br>
-<span class="pack">caret</span>: <span class="func">knn</span> <br>
-<span class="pack">caret</span>: <span class="func">avNNet</span> <br>
-<span class="pack">randomForest</span>: <span class="func">randomForest</span> <br>
-<span class="pack">e1071</span>: <span class="func">svm</span>
-</span>
+- <span class="pack">glmnet</span>: <span class="func">glmnet</span>
+- <span class="pack">class</span>: <span class="func">knn</span>
+- <span class="pack">caret</span>: <span class="func">avNNet</span>
+- <span class="pack">randomForest</span>: <span class="func">randomForest</span>
+- <span class="pack">e1071</span>: <span class="func">svm</span>
+
 
 In addition to <span class="pack">caret</span>, it's a good idea to use your computer's resources as much as possible, or some of these procedures may take a notably long time, and more so with the more data you have.  The <span class="pack">caret</span> package will do this behind the scenes, but you first need to set things up. Say, for example, you have a quad core processor, meaning your processor has four cores essentially acting as independent CPUs. You can set up R for parallel processing, then run <span class="pack">caret</span> functions as you normally would.  The following code demonstrates how, but see [this](https://topepo.github.io/caret/parallel-processing.html) for details.
 
@@ -332,15 +331,105 @@ wine_trainplot %>%
 For the training set, it looks like alcohol content[^drunkratings] and volatile acidity separate most with regard to the 'good' class. While this might give us some food for thought, note that the figure does not give insight into interaction effects, which methods such as trees will get at.
 
 
+## Regularized regression
+
+We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we're used to, while incorporating concepts and techniques from the machine learning world.  
+
+In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus we'll have a penalty based on both absolute and squared values of the coefficients. In this case if we set the parameter to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have a another parameter, `lambda`, that would be the same as in the previous notation, i.e. the amount to penalize.
+
+So what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging.  As such we will select their values as part of the validation process. 
+
+The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for `alpha` and `lambda`.
+
+```{r regreg_train, eval=FALSE, echo=2:10}
+set.seed(1234)
+cv_opts = trainControl(method='cv', number=10)
+regreg_opts = expand.grid(.alpha = seq(.1, 1, length = 5),
+                          .lambda = seq(.1, .5, length = 5))
+results_regreg <- train(good~., 
+                        data=wine_train,
+                        method = "glmnet", 
+                        trControl = cv_opts,
+                        preProc = c("center", "scale"),
+                        tuneGrid = regreg_opts)
+save(results_regreg, file='data/results_regreg.RData')
+```
+```{r regreg_train_results, echo=FALSE}
+load('data/results_regreg.RData')
+results_regreg
+```
+
+The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in a models that do not do any better than chance.  
+
+With the tuning parameters in place, now let's see the results on the test set.  The <span class="func">predict</span> function here will automatically use the best $\alpha$ and $\lambda$ from the previous process.
+
+```{r regreg_test, echo=-4}
+preds_regreg = predict(results_regreg, wine_test)
+good_observed = wine_test$good
+confusionMatrix(preds_regreg, good_observed, positive='Good')
+conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good') 
+```
+
+
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also feature combination or other avenues might help improve the results as well.
+
+Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  
+
+
+<!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
+
+<!-- Probably best to leave out. -->
+
+
+```{r regregvarimp, echo=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
+# varImp doesn't seem to work with new version of knn
+g = varImp(results_regreg)$importance %>%
+  select(Overall) %>% 
+  mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Overall)])) %>% 
+  ggplot() +
+  geom_point(aes(x=Variable, y=Overall, size=Overall), color='#ff5500', show.legend=F) +
+  labs(x='', y='Importance') +
+  theme(axis.text.x=element_text(angle=-45, hjust=0)) +
+  theme_trueMinimal() +                       # since gg will not respect transparent background
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+# plotly::ggplotly()  # tufte + plotly still means no latex
+g
+```
+
+### Strengths & Weaknesses
+
+**Strengths**
+
+- Intuitive approach.  In the end, it's still just a standard regression model you're already familiar with.
+- Widely used for many problems.  Would be fine to use in any setting you would use standard/logistic regression.
+
+#### Weaknesses
+
+- Does not automatically seek out interactions and non-linearity, and as such will generally not be as predictive as other techniques.
+- Variables have to be scaled or results will just be reflective of data types.
+- May have issues with correlated predictors
+
+
+### Final Thoughts
+
+Incorporating regularization would be fine as your default method, and something to strongly consider.  Furthermore, these approaches will have better prediction on new data than their standard complements.  As such they are a nice balance between staying interpretable while enhancing predictive capability. However, in general they are not going to be as strong of a method as others in the ML universe, and possibly not even competitive without a lot of feature engineering.  If prediction is all you care about for a particular modeling setting, you'll want to try something else.
+
+
+
 ## $k$-nearest Neighbors
 
 Consider the typical distance matrix[^knn_dist] that is often used for cluster analysis of observations[^knn_unsupervised]. If we choose something like *Euclidean distance* as a metric, each point in the matrix gives the value of how far an observation is from some other, given their respective values on a set of variables.
 
 <span class="emph">K-nearest neighbors</span> approaches exploit this information for predictive purposes.  Let us take a classification example, and $k = 5$ neighbors.  For a given observation $x_i$, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables.  The class that is predicted is whatever class the majority of the neighbors are labeled as[^knn_vis].  For continuous outcomes we might take the mean of those neighbors as the prediction.
 
-So how many neighbors would work best? This is an example of a tuning parameter, i.e. $k$, for which we have no knowledge about its value without doing some initial digging.  As such we will select the tuning parameter as part of the validation process.
-
-The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
+In this scenario, the number of neighbors $k$ will be the tuning parameter, and so we will have a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
 
 
 ```{r knn_train, eval=FALSE, echo=2:7}
@@ -360,21 +449,18 @@ results_knn
 ```
 
 
-In this case it looks like choosing the nearest `r results_knn$finalModel$k` neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Additional information regards the variability in the estimate of accuracy, as well as $\kappa$ (kappa), which can be seen as a measure of agreement between predictions and true values. Now that $k$ is chosen, let's see how well the model performs on the test set.
+In this case it looks like choosing the nearest `r results_knn$finalModel$k` neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Now that $k$ is chosen, let's see how well the model performs on the test set.
 
 ```{r knn_test, echo=-3}
 preds_knn = predict(results_knn, wine_test)
-good_observed = wine_test %>% pull(good)
 confusionMatrix(preds_knn, good_observed, positive='Good')
 conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') #create an object to use in Sexpr
 ```
 
 
-We get a lot of information here, but to focus on accuracy, we get around `r round(conf_knn$overall[1]*100, 1)`%. The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also feature combination or other avenues might help improve the results as well.
 
-Additional information reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100.  Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).<span class="marginnote">You can quickly obtain this plot via the <span class="func">dotplot</span> function.</span>
 
-```{r knnvarimp, echo=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
+```{r knnvarimp, echo=FALSE, eval=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
 # varImp doesn't seem to work with new version of knn
 g = varImp(results_knn)$importance %>%
   select(Good) %>% 
@@ -399,7 +485,7 @@ g
 
 ### Strengths & Weaknesses
 
-**Strengths**[^knn_strength]:
+**Strengths**[^knn_strength]
 
 - Intuitive approach.
 - Robust to outliers on the predictors.
@@ -465,11 +551,11 @@ We note improved prediction with the neural net model relative to the k-nearest 
 
 - Susceptible to irrelevant features.
 - Not robust to outliers.
-- Big data with complex models.
+- For traditional implementations, big data with complex models.
 
 ### Final Thoughts
 
-As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).
+As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).  I talk a little about [deep learning][deep learning] in the next section, and there is some demo code in the [appendix][python].
 
 
 ## Trees & Forests
@@ -650,7 +736,7 @@ gsvm
 
 <img src="img/svm3d.png" style="display:block; margin: 0 auto;" width=50%><br>
 
-Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes (following figures, zoom in to see the margin on the second plot).  Real data will not be so clean cut, and total separation impossible, but the idea is the same.
+Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes.  Real data will not be so clean cut, and total separation impossible, but the idea is the same.
 
 For the following we use `method = 'svmLinear2'`, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is a regularization parameter applied to the cost function.
 
@@ -717,6 +803,8 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^drunkratings]: That alcohol content is a positive predictor of 'quality' is also seen with data I've scraped from BeerAdvocate.  As such, if you are looking for a good drink via ratings, maybe temper the ratings a bit if the alcohol content is high.
 
+[^dotplot]: You can quickly obtain this plot via the <span class="func">dotplot</span> function.
+
 [^knn_dist]: See the function <span class="func">dist</span> in base R, for example.
 
 [^knn_unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is no target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
@@ -725,7 +813,7 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^knn_tune]: Note also you can just specify a tuning length instead.  See the help file for the <span class="func">train</span> function.
 
-[^knn_strength]: See table 10.1 in @hastie_elements_2009 for a more comprehensive list for this and the other methods discussed in this section.
+[^knn_strength]: See table 10.1 in @hastie_elements_2009 for a more comprehensive list for this and other methods discussed in this section.
 
 [^nnet_abs]: Neural nets, random forests, boosting, and additive models can all be put under the heading of basis function approaches.
 

@@ -113,7 +113,7 @@ ggsenate = ggplot(gnet, aes(x = x[,1], y = y[,1], xend = xend[,1], yend = yend[,
 
 <!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
 
-Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes.  One can examine [my document]() that covers more of these and latent variable approaches.
+Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes.  One can examine [my document](https://m-clark.github.io/sem) that covers more of these and latent variable approaches.
 
 
 
@@ -127,9 +127,8 @@ An example network graph of U.S. senators in 2006. Node size is based on the *be
 
 ### Imputation
 
-We can also use ML techniques when we are missing data, as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation. 
+We can also use ML techniques when we are missing data, as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation[^matcomp]. 
 
-<span class="marginnote">Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span>
 Beyond this we can infer values that are otherwise unavailable in a different sense.  Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in.  In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question.  Such <span class="emph">recommender systems</span> are widely used these days.
 
 
@@ -184,6 +183,7 @@ Boosting can be applied to a variety of tasks and loss functions, and in general
 
 
 ```{r xgboost, echo=FALSE, eval=FALSE}
+# library(xgboost)  This will take awhile even with maxed out cpu
 modelLookup("xgbLinear")
 modelLookup("xgbTree")
 
@@ -217,13 +217,13 @@ Another approach would use the predictions on the test set to create a data set 
 
 ## Deep Learning
 
-<span class="emph">Deep learning</span> is all the rage these days. The techniques are largely focused on AI applications, but are not restricted to those.  They've been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks.  
+<span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those.  They've been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks.  Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.
 
-Such models require massive amounts of data, a lot of tuning, and generally serious hardware[^dl]. Python appears to have the latest implementation tools, and through modules such as <span class="pack">tensorflow</span>, <span class="pack">theano</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though tools like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.
+Such models require massive amounts of data, a lot of tuning, and generally serious hardware[^dl]. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.
 
-Because of the difficulty with such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
+Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on other data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
 
-You can start your journey into this sort of stuff at http://deeplearning.net/.
+You can start your journey into this sort of stuff at http://deeplearning.net/, and I have a minimal demo in the [appendix][Deep learning example].
 
 
 ## Feature Selection & Importance
@@ -280,7 +280,7 @@ Here are some thoughts to keep in mind, though these may be applicable to applie
 
 - "Nothing is more practical than a good theory."[^lewin]
 
-- While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes $\rightarrow$ logistic regression $\rightarrow$ knn $\rightarrow$ svm.
+- While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression $\rightarrow$ random forest $\rightarrow$ your-fancy-technique.  Don't get too excited if you aren't doing significantly better than a random forest with default settings.
 
 - Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal.  Some programs can even make this explicit.
 
@@ -291,10 +291,12 @@ Here are some thoughts to keep in mind, though these may be applicable to applie
 
 ### Conclusion
 
-It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades.  The tools available from them are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
+It is hoped that this document sheds some light on a few areas that might otherwise be unfamiliar to some in more applied disciplines. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades.  The tools available from them are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
 
 
 [^lewin]: Kurt Lewin, and iterated by V. Vapnik for the machine learning context.
+
+[^matcomp]: Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.
 
 [^dl]: You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.
 

@@ -84,7 +84,7 @@ In the above, $I$ is the indicator function, and so we are simply summing miscla
 
 $$L(Y, f(X)) = \sum log(1 + e^{-2yf})$$
 
-The above is in deviance form<span class="marginnote">Deviance can conceptually be thought of as the GLM version of residual variance.</span>, but is equivalent to binomial log likelihood if $y$ is on the 0-1 scale.
+The above is in deviance form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance.  This loss is equivalent to binomial log likelihood if $y$ is on the 0-1 scale.
 
 #### Exponential
 
@@ -127,7 +127,7 @@ $$l_p(\beta) = l(\beta) - \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j
 
 As we are maximizing the likelihood, the penalty is a subtraction, but nothing inherently different is shown.  If we are minimizing the negative (log) likelihood, we then add the penalty. This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.
 
-<span class="marginnote">Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.</span>It should be noted that we can go about the regularization in different ways.  For example, using the squared $L_2$ norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization), and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. 
+It should be noted that we can go about the regularization in different ways.  For example, using the squared $L_2$ norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization)[^lassobayes], and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. We'll see an example of this later.
 
 
 
@@ -149,8 +149,11 @@ sqerrloss_reg = function(beta, X, y, lambda=1){
 }
 
 lm_result = lm(y~., data.frame(X[,-1]) )
-regularized_result = optim(par=rep(0, ncol(X)), fn=sqerrloss_reg, 
-                           X=X, y=y, method='BFGS')
+regularized_result = optim(par=rep(0, ncol(X)), 
+                           fn=sqerrloss_reg, 
+                           X=X, 
+                           y=y, 
+                           method='BFGS')
 ```
 <br>
 
@@ -245,7 +248,7 @@ Now let's assume a regularized linear model with a standard data split into trai
 
 #### Worst Case Scenario
 
-Starting with the worst case scenario, poor models may exhibit high bias and high variance.  One thing that will not help this situation (perhaps contrary to intuition) is adding more data.  You can't make a silk purse out of a sow's ear ([*usually*](https://libraries.mit.edu/archives/exhibits/purse/)), and adding more data just gives you a more accurate picture of how awful your model is. One might need to rework the model, e.g. adding new predictors or creating them via interaction terms, polynomials, or other smooth functions as in additive models, or simply collecting better and/or more relevant data.<span class="marginnote"></span>
+Starting with the worst case scenario, poor models may exhibit high bias and high variance.  One thing that will not help this situation (perhaps contrary to intuition) is adding more data.  You can't make a silk purse out of a sow's ear ([*usually*](https://libraries.mit.edu/archives/exhibits/purse/)), and adding more data just gives you a more accurate picture of how awful your model is. One might need to rework the model, e.g. adding new predictors or creating them via interaction terms, polynomials, or other smooth functions as in additive models, or simply collecting better and/or more relevant data.
 
 
 #### High Variance
@@ -263,15 +266,15 @@ Here is another visualization to drive the point home.
 
 <br> 
 
-The figure is inspired by @murphy_machine_2012 (figure 6.5) showing the bias-variance tradeoff.  Sample (left) and average (right) fits of linear regression using a Gaussian radial basis function expansion. The blue line represents the true x-y relationship. The top row shows low variance between one fit and the next (left) but notable bias (right) in that the average fit is off.  Compare to the less regularized (high variance, low bias) situation of the bottom row.  See the <span class="pack">kernlab</span> package for the fitting function used, and the [appendix][Appendix] for the code used to produce the graph.
+The figure is inspired by @murphy_machine_2012 (figure 6.5) showing the bias-variance trade-off.  Sample (left) and average (right) fits of linear regression using a Gaussian radial basis function expansion. The blue line represents the true x-y relationship. The top row shows low variance between one fit and the next (left) but notable bias (right) in that the average fit is off.  Compare to the less regularized (high variance, low bias) situation of the bottom row.  See the <span class="pack">kernlab</span> package for the fitting function used, and the [appendix][Appendix] for the code used to produce the graph.
 
 
 
 ### Bias-Variance Summary
 
-One of key ideas any applied researcher can take from machine learning concerns the bias-variance tradeoff and issues of overfitting in particular.  Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication.  Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing.  Furthermore very complex models are often fit to small data sets, compounding the problem.
+One of key ideas any applied researcher can take from machine learning concerns the bias-variance trade-off and issues of overfitting in particular.  Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication.  Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing.  Furthermore very complex models are often fit to small data sets, compounding the problem.
 
-It is very easy to describe ***science*** without ever talking about statistical significance.  It is impossible to talk about science without talking about prediction.  The bias-variance tradeoff is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications. 
+It is very easy to describe ***science*** without ever talking about statistical significance.  It is impossible to talk about science without talking about prediction.  The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications. 
 
 
 
@@ -283,7 +286,7 @@ As noted in the previous section, in machine learning approaches we are particul
 
 ### Adding Another Validation Set
 
-One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of tuning parameters.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at before hand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
+One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of <span class="emph">tuning parameters</span>.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at before hand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
 
 
 
@@ -333,6 +336,8 @@ Along with the above there are variations such as repeated cross validation, the
 [^lasso]: See Tibshirani (1996) Regression shrinkage and selection via the lasso.
 
 [^lambda]: As noted previously, in practice $\lambda$ would be estimated via some validation procedure.
+
+[^lassobayes]: Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.
 
 [^bigdata]: I should note that I do not make any particular claim about the quality of such analysis.  In many situations the cost of data collection is very high, and for all the current enamorment with 'big' data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations).  In these situations getting new data for which one might make predictions is extremely difficult.
 

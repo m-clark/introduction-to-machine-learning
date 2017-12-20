@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2017-11-19">
+<meta name="date" content="2017-12-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,8 +99,8 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="css\book.css" type="text/css" />
-<link rel="stylesheet" href="css\standard_html.css" type="text/css" />
+<link rel="stylesheet" href="css/book.css" type="text/css" />
+<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
 </head>
 
 <body>
@@ -158,21 +158,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
-<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized regression</a><ul>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
 <li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
@@ -251,7 +255,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="graphical-structure" class="section level3">
 <h3>Graphical Structure</h3>
 <!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
-<p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes. One can examine <a href="">my document</a> that covers more of these and latent variable approaches.</p>
+<p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes. One can examine <a href="https://m-clark.github.io/sem">my document</a> that covers more of these and latent variable approaches.</p>
 <img src="introduction-to-machine-learning_files/figure-html/unnamed-chunk-2-1.svg" width="400" style="display: block; margin: auto;" />
 <p style="font-size: 8pt">
 An example network graph of U.S. senators in 2006. Node size is based on the <em>betweeness</em> centrality measure, edge size the percent agreement (graph filtered to edges &gt;= 65%). Color is based on the clustering discovered within the graph <a href="http://support.google.com/fusiontables/answer/2566732?hl=en&amp;ref_topic=2572801">(link to data)</a>.
@@ -259,8 +263,8 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="imputation" class="section level3">
 <h3>Imputation</h3>
-<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation.</p>
-<p><span class="marginnote">Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>. </span> Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
+<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>.</p>
+<p>Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
 </div>
 </div>
 <div id="ensembles" class="section level2">
@@ -307,10 +311,10 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="deep-learning" class="section level2">
 <h2>Deep Learning</h2>
-<p><span class="emph">Deep learning</span> is all the rage these days. The techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks.</p>
-<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a>. Python appears to have the latest implementation tools, and through modules such as <span class="pack">tensorflow</span>, <span class="pack">theano</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though tools like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
-<p>Because of the difficulty with such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
-<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>.</p>
+<p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
+<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimal demo in the <a href="appendix.html#deep-learning-example">appendix</a>.</p>
 </div>
 <div id="feature-selection-importance" class="section level2">
 <h2>Feature Selection &amp; Importance</h2>
@@ -328,7 +332,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="more-stuff" class="section level2">
 <h2>More Stuff</h2>
-<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn46" class="footnoteRef" id="fnref46"><sup>46</sup></a>, semi-supervised learning<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>, online learning<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>, and many more.</p>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>, semi-supervised learning<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>, online learning<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, and many more.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -348,8 +352,8 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
 <li><p>Avoid overfitting.</p></li>
 <li><p>Let the data speak for itself.</p></li>
-<li><p>“Nothing is more practical than a good theory.”<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a></p></li>
-<li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, naive Bayes <span class="math inline">\(\rightarrow\)</span> logistic regression <span class="math inline">\(\rightarrow\)</span> knn <span class="math inline">\(\rightarrow\)</span> svm.</p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a></p></li>
+<li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression <span class="math inline">\(\rightarrow\)</span> random forest <span class="math inline">\(\rightarrow\)</span> your-fancy-technique. Don’t get too excited if you aren’t doing significantly better than a random forest with default settings.</p></li>
 <li><p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
 <li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
 <li><p>Learn multiple models, selecting the best or possibly combining them.</p></li>
@@ -357,7 +361,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
-<p>It is hoped that this document sheds some light on some areas that might otherwise be unfamiliar to some applied researchers. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades. The tools available from them are myriad, and expanding all the time. Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!</p>
+<p>It is hoped that this document sheds some light on a few areas that might otherwise be unfamiliar to some in more applied disciplines. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades. The tools available from them are myriad, and expanding all the time. Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!</p>
 
 </div>
 </div>
@@ -370,12 +374,13 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div class="footnotes">
 <hr />
-<ol start="45">
-<li id="fn45"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref45">↩</a></p></li>
-<li id="fn46"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref46">↩</a></p></li>
-<li id="fn47"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref47">↩</a></p></li>
-<li id="fn48"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref48">↩</a></p></li>
-<li id="fn49"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref49">↩</a></p></li>
+<ol start="47">
+<li id="fn47"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref47">↩</a></p></li>
+<li id="fn48"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref48">↩</a></p></li>
+<li id="fn49"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref49">↩</a></p></li>
+<li id="fn50"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref50">↩</a></p></li>
+<li id="fn51"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref51">↩</a></p></li>
+<li id="fn52"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref52">↩</a></p></li>
 </ol>
 </div>
             </section>

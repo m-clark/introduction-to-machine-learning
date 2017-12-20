@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from os import chdir
 
 # import data
-chdir('D:\Documents\Stats\Repositories\Docs\introduction-to-machine-learning')
+chdir('Documents/Stats/Repositories/Docs/introduction-to-machine-learning')
 wine = pd.read_csv('data/wine.csv')
 
 

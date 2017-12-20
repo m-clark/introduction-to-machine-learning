@@ -20,7 +20,7 @@ While the two approaches are not exclusive, I present two extreme (though thankf
 - *Kept statisticians from using more suitable algorithmic models.*
 - *Prevented statisticians from working on exciting new problems.*
 <br>
-$\sim$ Leo Brieman, 2001
+$\sim$ Leo Breiman, 2001
 
 
 Respective departments of computer science, statistics, and related, now overlap more than ever, as more relaxed views prevail today. However, there are potential drawbacks to placing too much emphasis on either approach historically associated with them.  Models that 'just work' have the potential to be dangerous if they are little understood.  Situations for which much time is spent sorting out details for an ill-fitting model suffers the converse problem- some (though often perhaps very little actually) understanding with little pragmatism.  While this document will focus on more algorithmic approaches, guidance will be provided with an eye toward their use in situations where the typical data modeling approach would be applied, thereby hopefully shedding some light on a path toward obtaining the best of both worlds.
@@ -31,7 +31,7 @@ For those used to statistical concepts such as dependent variables, clustering, 
 
 ## Supervised vs. Unsupervised
 
-At least one distinction should be made from the outset, <span class="emph">supervised</span> vs. <span class="emph">unsupervised</span> learning.  Supervised learning is the typical regression or classification situation where we are trying to predict some target variable of interest, possibly several. Unsupervised learning seeks patterns within the data without regard to any specific target variable, and would include things like cluster analysis, principal components analysis etc. They can also be used in conjunction. The focus of this document will be almost entirely on supervised learning, though we will discuss some forms of unsupervised learning by the end.
+At least one distinction should be made from the outset, <span class="emph">supervised</span> vs. <span class="emph">unsupervised</span> learning.  Supervised learning is the typical regression or classification situation where we are trying to predict some target variable of interest, possibly several. Unsupervised learning seeks patterns within the data without regard to any specific target variable, and would include things like cluster analysis, principal components analysis, etc. They can also be used in conjunction. The focus of this document will be almost entirely on supervised learning, though we will discuss some forms of unsupervised learning by the end.
 
 
 ## Tools you already have
