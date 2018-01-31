@@ -113,6 +113,59 @@ grid.arrange(g1, g2, g3, g4, ncol=2)
 
 Demonstrations for this document were done with R, and specifically the <span class="pack">caret</span> package. I would highly recommend using it for your own needs, as it makes a lot the ML process simpler, while providing access to whatever technique you want to use, even while it comes with the ability to use hundreds of approaches out of the box.  
 
+#### Deep learning example
+
+The following is a deep learning example using the data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  
+
+This is a <span class="emph">sequential neural net</span> with three layers.  I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting[^onepointo].  Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>.  This R implementation also provides some nice visualizations to keep your interest while it runs. 
+
+This is just a starting point, so don't expect any better performance than those shown previously, but it'll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.
+
+```{r rdl, eval=FALSE}
+library(keras)
+
+X_train = model.matrix(lm(good ~ . -1, data=wine_train)) %>% scale()
+y_train = as.numeric(wine_train$good) - 1
+X_test = model.matrix(lm(good ~ . -1, data=wine_test)) %>% scale()
+y_test = as.numeric(wine_test$good) - 1
+
+model = keras_model_sequential() 
+
+model %>%
+  layer_dense(units = 256, activation = 'relu', input_shape = c(ncol(X_train))) %>%
+  # layer_dropout(rate = 0.4) %>%
+  layer_dense(units = 128, activation = 'relu') %>%
+  # layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 64, activation = 'relu') %>%
+  # layer_dropout(rate = 0.2) %>%
+  layer_dense(units = 1, activation = 'sigmoid')
+
+summary(model)
+
+model %>% compile(
+  optimizer = optimizer_rmsprop(),
+  loss = "binary_crossentropy",
+  metrics = "accuracy"
+)
+
+history = model %>% 
+  fit(X_train, 
+      y_train, 
+      epochs = 1000, 
+      validation_split = 0.1,
+      verbose = 1,
+      view_metrics = 1)
+
+plot(history)
+
+# model %>% evaluate(X_test, y_test)
+
+ypred = model %>% predict_classes(X_test)
+caret::confusionMatrix(y_test, ypred, positive='1')
+```
+
+
+
 ### Python
 
 If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website.  That said, R probably isn't even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible[^rfaster].  As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.
@@ -220,3 +273,5 @@ What I can't recommend is a traditional statistics package like SPSS, SAS, or St
 [^rfaster]: Actually for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.
 
 [^dnn]: Just for giggles I let that particular one go for 100000 steps and it finally started to get into > 81% on the test set. 
+
+[^onepointo]: You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.
