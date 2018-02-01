@@ -1,47 +1,47 @@
 # Appendix
-
-
+ 
+ 
 ## Bias Variance Demo
-
+ 
 ```{r biasvar_demo, eval=FALSE}
 set.seed(123)
 x = runif(1000)
 ytrue = sin(3*pi*x)
 basedat = cbind(x,ytrue)[order(x),]
-
+ 
 gendatfunc = function(noise=.5, n=1000){
   x = runif(n)
   y = sin(3*pi*x) + rnorm(n, sd=noise) # truth
   d = cbind(x, y)
   d
 }
-
+ 
 gendat = replicate(100, gendatfunc(n=100))
 str(gendat)
-
+ 
 library(kernlab)
-
+ 
 rbf1 = apply(gendat, 3, 
              function(d) predict(gausspr(y~x, data=data.frame(d), kpar=list(sigma=.5)), 
                                  newdata = data.frame(x), type='response'))
 rbf2 = apply(gendat, 3, 
              function(d) predict(gausspr(y~x, data=data.frame(d)), 
                                  newdata = data.frame(x), type='response') )
-
+ 
 library(ggplot2); library(tidyverse); library(gridExtra)
-
+ 
 rbf1_samp = rbf1 %>% 
   data.frame %>% 
   cbind(x, .) %>%
   slice(sample(1:100, 25)) %>% 
   gather(key=sample, value=yhat, -x)
-
+ 
 rbf2_samp = rbf2 %>% 
   data.frame %>% 
   cbind(x, .) %>%
   slice(sample(1:100, 25)) %>% 
   gather(key=sample, value=yhat, -x)
-
+ 
 g1 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf1_samp) +
@@ -56,7 +56,7 @@ g1 = ggplot(data=data.frame(basedat)) +
     strip.background = ggplot2::element_blank(),
     plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
   )
-
+ 
 g2 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=ytrue), color='#00aaff') +
   geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf1))) +
@@ -71,11 +71,11 @@ g2 = ggplot(data=data.frame(basedat)) +
     strip.background = ggplot2::element_blank(),
     plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
   )
-
+ 
 g3 = ggplot(data=data.frame(basedat)) +
   geom_blank() +
   geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf2_samp) +
-  ylim(c(-1.5, 1.5)) +
+    ylim(c(-1.5, 1.5)) +
   labs(y='', title='High Variance') + 
   lazerhawk::theme_trueMinimal() +
     theme(
@@ -86,7 +86,7 @@ g3 = ggplot(data=data.frame(basedat)) +
     strip.background = ggplot2::element_blank(),
     plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
   )
-
+ 
 g4 = ggplot(data=data.frame(basedat)) +
   geom_line(aes(x=x, y=ytrue), color='#00aaff') +
   geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf2))) +
@@ -101,21 +101,21 @@ g4 = ggplot(data=data.frame(basedat)) +
     strip.background = ggplot2::element_blank(),
     plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
   )
-
+ 
 grid.arrange(g1, g2, g3, g4, ncol=2)
 ```
-
-
-
+ 
+ 
+ 
 ## Programming Languages
-
+ 
 ### R
 
 Demonstrations for this document were done with R, and specifically the <span class="pack">caret</span> package. I would highly recommend using it for your own needs, as it makes a lot the ML process simpler, while providing access to whatever technique you want to use, even while it comes with the ability to use hundreds of approaches out of the box.  
 
 #### Deep learning example
 
-The following is a deep learning example using the data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  
+The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  
 
 This is a <span class="emph">sequential neural net</span> with three layers.  I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting[^onepointo].  Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>.  This R implementation also provides some nice visualizations to keep your interest while it runs. 
 
@@ -132,18 +132,20 @@ y_test = as.numeric(wine_test$good) - 1
 model = keras_model_sequential() 
 
 model %>%
-  layer_dense(units = 256, activation = 'relu', input_shape = c(ncol(X_train))) %>%
-  # layer_dropout(rate = 0.4) %>%
+  layer_dense(units = 512, activation = 'relu', input_shape = c(ncol(X_train))) %>%
+  layer_dropout(rate = 0.5) %>% 
+  layer_dense(units = 256, activation = 'relu') %>%
+  layer_dropout(rate = 0.4) %>% 
   layer_dense(units = 128, activation = 'relu') %>%
-  # layer_dropout(rate = 0.3) %>%
+  layer_dropout(rate = 0.3) %>%
   layer_dense(units = 64, activation = 'relu') %>%
-  # layer_dropout(rate = 0.2) %>%
+  layer_dropout(rate = 0.2) %>%
   layer_dense(units = 1, activation = 'sigmoid')
 
 summary(model)
 
 model %>% compile(
-  optimizer = optimizer_rmsprop(),
+  optimizer = 'nadam',
   loss = "binary_crossentropy",
   metrics = "accuracy"
 )
@@ -151,7 +153,7 @@ model %>% compile(
 history = model %>% 
   fit(X_train, 
       y_train, 
-      epochs = 1000, 
+      epochs = 10000, 
       validation_split = 0.1,
       verbose = 1,
       view_metrics = 1)
@@ -161,7 +163,7 @@ plot(history)
 # model %>% evaluate(X_test, y_test)
 
 ypred = model %>% predict_classes(X_test)
-caret::confusionMatrix(y_test, ypred, positive='1')
+caret::confusionMatrix(ypred, y_test, positive='1')
 ```
 
 
@@ -211,7 +213,7 @@ print(acc)
 
 #### Deep learning example
 
-Here is a bit of code to get you started with a sci-kit approach to deep learning. This is a 'deep neural net' with seven layers.  I also add some 'dropout', which, given the material presented, you can think of as a means of regularization.  This isn't too viable a model as far as settings go, and won't do any better than those shown previously[^dnn], but it'll run fine on your machine so you can at least play with it.
+Here is a bit of code to get you started with a sci-kit approach to deep learning. This is a 'deep neural net' with seven layers.  I also add some 'dropout'.  This isn't too viable a model as far as settings go, and won't do any better than those shown previously[^dnn], but it'll run fine on your machine so you can at least play with it.
 
 ```{python dl, eval=F}
 import tensorflow.contrib.learn as skflow
