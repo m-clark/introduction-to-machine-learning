@@ -115,7 +115,7 @@ Demonstrations for this document were done with R, and specifically the <span cl
 
 #### Deep learning example
 
-The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  
+The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  For more on using TensorFlow with R, check out [RStudio's documentation](https://tensorflow.rstudio.com/).
 
 This is a <span class="emph">sequential neural net</span> with three layers.  I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting[^onepointo].  Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>.  This R implementation also provides some nice visualizations to keep your interest while it runs. 
 
@@ -132,8 +132,6 @@ y_test = as.numeric(wine_test$good) - 1
 model = keras_model_sequential() 
 
 model %>%
-  layer_dense(units = 512, activation = 'relu', input_shape = c(ncol(X_train))) %>%
-  layer_dropout(rate = 0.5) %>% 
   layer_dense(units = 256, activation = 'relu') %>%
   layer_dropout(rate = 0.4) %>% 
   layer_dense(units = 128, activation = 'relu') %>%
@@ -165,6 +163,7 @@ plot(history)
 ypred = model %>% predict_classes(X_test)
 caret::confusionMatrix(ypred, y_test, positive='1')
 ```
+
 
 
 

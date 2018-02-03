@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-02-01">
+<meta name="date" content="2018-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -344,7 +344,7 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
 <p>Demonstrations for this document were done with R, and specifically the <span class="pack">caret</span> package. I would highly recommend using it for your own needs, as it makes a lot the ML process simpler, while providing access to whatever technique you want to use, even while it comes with the ability to use hundreds of approaches out of the box.</p>
 <div id="deep-learning-example" class="section level4">
 <h4>Deep learning example</h4>
-<p>The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>. The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.</p>
+<p>The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>. The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>. For more on using TensorFlow with R, check out <a href="https://tensorflow.rstudio.com/">RStudio’s documentation</a>.</p>
 <p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn53" class="footnoteRef" id="fnref53"><sup>53</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
 <p>This is just a starting point, so don’t expect any better performance than those shown previously, but it’ll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
@@ -357,8 +357,6 @@ y_test =<span class="st"> </span><span class="kw">as.numeric</span>(wine_test<sp
 model =<span class="st"> </span><span class="kw">keras_model_sequential</span>() 
 
 model <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">512</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>, <span class="dt">input_shape =</span> <span class="kw">c</span>(<span class="kw">ncol</span>(X_train))) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">256</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">128</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>) <span class="op">%&gt;%</span>

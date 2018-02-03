@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-02-01">
+<meta name="date" content="2018-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -424,7 +424,7 @@ wine_trainplot =<span class="st"> </span><span class="kw">select</span>(wine_tra
 <p>We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we’re used to, while incorporating concepts and techniques from the machine learning world.</p>
 <p>In this example, we’ll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches. Thus we’ll have a penalty based on both absolute and squared values of the coefficients. In this case if we set the parameter to 1, we have your standard lasso penalty, and 0 would be the ridge penalty. We have a another parameter, <code>lambda</code>, that would be the same as in the previous notation, i.e. the amount to penalize.</p>
 <p>So what should <code>alpha</code> and <code>lambda</code> be set to? They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging. As such we will select their values as part of the validation process.</p>
-<p>The <span class="pack">caret</span> package provides several techniques for validation such as <span class="math inline">\(k\)</span>-fold, bootstrap, leave-one-out and others. We will use 10-fold cross validation. We will also set up a set of values for <code>alpha</code> and <code>lambda</code>.</p>
+<p>The <span class="pack">caret</span> package provides several techniques for validation such as <span class="math inline">\(k\)</span>-fold, bootstrap, leave-one-out and others. We will use 10-fold cross validation. We will also set up a range of values for <code>alpha</code> and <code>lambda</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cv_opts =<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&#39;cv&#39;</span>, <span class="dt">number=</span><span class="dv">10</span>)
 regreg_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">.alpha =</span> <span class="kw">seq</span>(.<span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length =</span> <span class="dv">5</span>),
                           <span class="dt">.lambda =</span> <span class="kw">seq</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, <span class="dt">length =</span> <span class="dv">5</span>))
@@ -505,18 +505,20 @@ Prediction Bad Good
                                           
        &#39;Positive&#39; Class : Good            
                                           </code></pre>
-<p>We get a lot of information here, but to focus on accuracy, we get around 72.6%. Note that this is performance on the <em>test set</em>, i.e. data that wasn’t used to train the model. The lower bound (and p-value) suggests we are statistically predicting better than the <em>No Information Rate</em> (i.e., just guessing the more prevalent ‘Bad’ category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine. Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help. Also feature combination or other avenues might help improve the results as well.</p>
+<p>We get a lot of information here, but to focus on accuracy, we get around 72.6%. Note that this is performance on the <em>test set</em>, i.e. data that wasn’t used to train the model. The lower bound (and p-value) suggests we are statistically predicting better than the <em>No Information Rate</em> (i.e., just guessing the more prevalent ‘Bad’ category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine. Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help. Also, feature combination or other avenues might help improve the results as well.</p>
 <p>Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100<a href="#fn33" class="footnoteRef" id="fnref33"><sup>33</sup></a>.</p>
 <!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
 <!-- Probably best to leave out. -->
 <p><img src="introduction-to-machine-learning_files/figure-html/regregvarimp-1.svg" width="576" style="display: block; margin: auto;" /></p>
 <div id="strengths-weaknesses" class="section level3">
 <h3>Strengths &amp; Weaknesses</h3>
-<p><strong>Strengths</strong></p>
+<div id="strengths" class="section level4">
+<h4>Strengths</h4>
 <ul>
 <li>Intuitive approach. In the end, it’s still just a standard regression model you’re already familiar with.</li>
 <li>Widely used for many problems. Would be fine to use in any setting you would use standard/logistic regression.</li>
 </ul>
+</div>
 <div id="weaknesses" class="section level4">
 <h4>Weaknesses</h4>
 <ul>

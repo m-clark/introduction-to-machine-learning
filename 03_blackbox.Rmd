@@ -339,7 +339,7 @@ In this example, we'll use the <span class="pack">glmnet</span> package, which w
 
 So what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging.  As such we will select their values as part of the validation process. 
 
-The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a set of values for `alpha` and `lambda`.
+The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.
 
 ```{r regreg_train, eval=FALSE, echo=2:10}
 set.seed(1234)
@@ -371,7 +371,7 @@ conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good')
 ```
 
 
-We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also feature combination or other avenues might help improve the results as well.
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
 
 Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  
 
@@ -405,7 +405,7 @@ g
 
 ### Strengths & Weaknesses
 
-**Strengths**
+#### Strengths
 
 - Intuitive approach.  In the end, it's still just a standard regression model you're already familiar with.
 - Widely used for many problems.  Would be fine to use in any setting you would use standard/logistic regression.

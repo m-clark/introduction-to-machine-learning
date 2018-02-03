@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-02-01">
+<meta name="date" content="2018-02-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -300,7 +300,26 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </ul>
 <p>}</p>
 <p>Return <span class="math inline">\(\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]\)</span></p>
-<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a>.</p>
+<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a>. The following shows an implementation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xgboost)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbLinear&quot;</span>)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbTree&quot;</span>)
+
+xgb_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">eta=</span><span class="kw">c</span>(.<span class="dv">3</span>,.<span class="dv">4</span>),
+                       <span class="dt">max_depth=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">12</span>),
+                       <span class="dt">colsample_bytree=</span><span class="kw">c</span>(.<span class="dv">6</span>,.<span class="dv">8</span>),
+                       <span class="dt">subsample=</span><span class="kw">c</span>(.<span class="dv">5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),
+                       <span class="dt">nrounds=</span><span class="dv">1000</span>,
+                       <span class="dt">min_child_weight=</span><span class="dv">1</span>,
+                       <span class="dt">gamma=</span><span class="dv">0</span>)
+
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+results_xgb =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;xgbTree&#39;</span>,
+                   <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts, 
+                   <span class="dt">tuneGrid=</span>xgb_opts)
+results_xgb
+preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, wine_test)
+<span class="kw">confusionMatrix</span>(preds_gb, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 </div>
 <div id="stacking" class="section level3">
 <h3>Stacking</h3>
@@ -314,7 +333,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
 <p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
 <p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
-<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimal demo in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
+<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimals demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
 </div>
 <div id="feature-selection-importance" class="section level2">
 <h2>Feature Selection &amp; Importance</h2>
