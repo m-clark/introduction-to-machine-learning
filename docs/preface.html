@@ -46,7 +46,7 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-0.9/htmlwidgets.js"></script>
 <script src="libs/datatables-binding-0.2/datatables.js"></script>
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
@@ -62,69 +62,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="css/book.css" type="text/css" />
@@ -263,8 +235,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="preface" class="section level1">
 <h1>Preface</h1>
-<p><span class="newthought">The purpose of this document is to provide a conceptual introduction</span> to statistical or machine learning (ML) techniques for those that would not normally be exposed to such approaches during their typical required statistical training. <span class="emph">Machine learning</span><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> can be described as a form of statistics, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in the social sciences and other disciplines. The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.</p>
-<p>If one surveys the number of techniques available in ML without any context, it will surely be overwhelming in terms of the sheer number of approaches, as well as the various tweaks and variations of them. However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional ones as well. While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and kept at the conceptual level as much as possible. However, some applied examples of more common techniques will be provided in detail.</p>
+<p><span class="newthought">The purpose of this document is to provide a conceptual introduction</span> to statistical or machine learning (ML) techniques for those that would not normally be exposed to such approaches during their typical required statistical training. <span class="emph">Machine learning</span><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> can be described as a form of statistics, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in the social sciences and other disciplines. The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.</p>
+<p>If one surveys the number of techniques available in ML without any context, it will surely be overwhelming in terms of the sheer number of approaches, as well as the various tweaks and variations of them. However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional ones as well. While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> and kept at the conceptual level as much as possible. However, some applied examples of more common techniques will be provided in detail.</p>
 <p>As for prerequisite knowledge, I will assume a basic familiarity with regression analyses typically presented to those in applied disciplines. Regarding programming, none is really required to follow most of the content here, but some knowledge of R would be helpful if one wants do the examples. Note that I won’t do much explaining of the code, as I will be more concerned with getting to a result than clearly detailing the path to it. Armed with even introductory knowledge, if there are parts of R code that are unclear, there are many resources to investigate and discover the details on one’s own, which results in more learning anyway.</p>
 <p>The latest version of this document is dated 2018-03-04. It was originally written in March 2013, when there was much more need for it in academia, at least outside of CS and Engineering departments. For all the buzz of machine learning, deep learning, AI, etc., that need still exists, as most applied disciplines still do not teach such techniques as a core part of their training. However, the amount of tools and information, within the realm of R especially, has exploded, so you’ll have plenty to keep you occupied. Indeed, I’m not sure how much of the specific techniques and tools demonstrated in this document will be viable in another five years, so be prepared to keep up.</p>
 <p>Color coding in text:</p>
@@ -280,8 +252,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>Also referred to as applied statistical learning, statistical engineering, data science or data mining in various academic, professional, and other contexts (correctly or not).<a href="preface.html#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Indeed, there is evidence that with large enough samples many techniques converge to similar performance.<a href="preface.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Also referred to as applied statistical learning, statistical engineering, data science or data mining in various academic, professional, and other contexts (correctly or not).<a href="preface.html#fnref1">↩</a></p></li>
+<li id="fn2"><p>Indeed, there is evidence that with large enough samples many techniques converge to similar performance.<a href="preface.html#fnref2">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -337,7 +309,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

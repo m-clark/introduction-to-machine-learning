@@ -46,7 +46,7 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-0.9/htmlwidgets.js"></script>
 <script src="libs/datatables-binding-0.2/datatables.js"></script>
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
@@ -62,69 +62,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="css/book.css" type="text/css" />
@@ -274,8 +246,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="latent-variable-models" class="section level3">
 <h3>Latent Variable Models</h3>
 <div style="width:50%; margin: 0 25%; bgcolor=&#39;transparent&#39;">
-<div id="htmlwidget-a713f8ebde6cc74c4aff" style="width:100%;height:100%;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a713f8ebde6cc74c4aff">{"x":{"diagram":"\ndigraph DAG2 {\n # Intialization of graph attributes\n graph [overlap = false rankdir=TB bgcolor=transparent]\n \n # Initialization of node attributes\n node [shape = circle,\n fontname = Helvetica,\n color = gray80,\n type = box,\n fixedsize = true]\n \n # Node statements\n node [width=.75, height=.75, shape=circle, color=gray80];\n LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1<\/sub>>];\n LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2<\/sub>>];\n \n node [width=1, shape=square, color=gray50, fontcolor=gray25]\n\n # oddly ordered to deal with random reordering by Diagrammer\n subgraph {\n    rank=same;\n    X2 [width=.5 height=.5 label=<X<sub>2<\/sub>>]; \n    X1 [width=.5 height=.5 label=<X<sub>1<\/sub>>]; \n    X4 [width=.5 height=.5 label=<X<sub>4<\/sub>>]; \n    X3 [width=.5 height=.5 label=<X<sub>3<\/sub>>]; \n    X5 [width=.5 height=.5 label=<X<sub>5<\/sub>>]; \n    X6 [width=.5 height=.5 label=<X<sub>6<\/sub>>]; \n }\n # Initialization of edge attributes\n edge [color = gray50, rel = yields minlen=2]\n \n # Edge statements\n LV1 -> {X1 X2 X3 X4};\n LV2 -> {X3 X4} [style=dashed] ;\n LV2 -> {X5 X6};\n}\n ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c802c7baa17b2802737e" style="width:100%;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c802c7baa17b2802737e">{"x":{"diagram":"\ndigraph DAG2 {\n # Intialization of graph attributes\n graph [overlap = false rankdir=TB bgcolor=transparent]\n \n # Initialization of node attributes\n node [shape = circle,\n fontname = Helvetica,\n color = gray80,\n type = box,\n fixedsize = true]\n \n # Node statements\n node [width=.75, height=.75, shape=circle, color=gray80];\n LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1<\/sub>>];\n LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2<\/sub>>];\n \n node [width=1, shape=square, color=gray50, fontcolor=gray25]\n\n # oddly ordered to deal with random reordering by Diagrammer\n subgraph {\n    rank=same;\n    X2 [width=.5 height=.5 label=<X<sub>2<\/sub>>]; \n    X1 [width=.5 height=.5 label=<X<sub>1<\/sub>>]; \n    X4 [width=.5 height=.5 label=<X<sub>4<\/sub>>]; \n    X3 [width=.5 height=.5 label=<X<sub>3<\/sub>>]; \n    X5 [width=.5 height=.5 label=<X<sub>5<\/sub>>]; \n    X6 [width=.5 height=.5 label=<X<sub>6<\/sub>>]; \n }\n # Initialization of edge attributes\n edge [color = gray50, rel = yields minlen=2]\n \n # Edge statements\n LV1 -> {X1 X2 X3 X4};\n LV2 -> {X3 X4} [style=dashed] ;\n LV2 -> {X5 X6};\n}\n ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <!-- <span class="marginnote"><img src="img/lvmodel.png" style="display:block; margin: 0 auto;"></span> -->
 <p>Sometimes the desire is to reduce the dimensionality of the inputs to a more manageable set of information. In this manner we are thinking that much of the data can be seen as having only a few sources of variability, often called latent variables or factors. Again, this takes familiar forms such as principal components and (“exploratory”) factor analysis, but would also include independence components analysis and partial least squares techniques. Note also that these can be part of a supervised technique (e.g. principal components regression) or the main focus of analysis (as with latent variable models in structural equation modeling).</p>
@@ -284,14 +256,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Graphical Structure</h3>
 <!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
 <p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes. One can examine <a href="https://m-clark.github.io/sem">my document</a> that covers more of these and latent variable approaches.</p>
-<img src="introduction-to-machine-learning_files/figure-html4/unnamed-chunk-2-1.svg" width="400" style="display: block; margin: auto;" />
+<img src="introduction-to-machine-learning_files/figure-html/unnamed-chunk-2-1.svg" width="400" style="display: block; margin: auto;" />
 <p style="font-size: 8pt">
 An example network graph of U.S. senators in 2006. Node size is based on the <em>betweeness</em> centrality measure, edge size the percent agreement (graph filtered to edges &gt;= 65%). Color is based on the clustering discovered within the graph <a href="http://support.google.com/fusiontables/answer/2566732?hl=en&amp;ref_topic=2572801">(link to data)</a>.
 </p>
 </div>
 <div id="imputation" class="section level3">
 <h3>Imputation</h3>
-<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn47" class="footnote-ref" id="fnref47"><sup>47</sup></a>.</p>
+<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>.</p>
 <p>Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
 </div>
 </div>
@@ -329,25 +301,25 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <p>}</p>
 <p>Return <span class="math inline">\(\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]\)</span></p>
 <p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a>. The following shows an implementation.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">library</span>(xgboost)</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">modelLookup</span>(<span class="st">&quot;xgbLinear&quot;</span>)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="kw">modelLookup</span>(<span class="st">&quot;xgbTree&quot;</span>)</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb32-5" data-line-number="5">xgb_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">eta=</span><span class="kw">c</span>(.<span class="dv">3</span>,.<span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb32-6" data-line-number="6">                       <span class="dt">max_depth=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">12</span>),</a>
-<a class="sourceLine" id="cb32-7" data-line-number="7">                       <span class="dt">colsample_bytree=</span><span class="kw">c</span>(.<span class="dv">6</span>,.<span class="dv">8</span>),</a>
-<a class="sourceLine" id="cb32-8" data-line-number="8">                       <span class="dt">subsample=</span><span class="kw">c</span>(.<span class="dv">5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb32-9" data-line-number="9">                       <span class="dt">nrounds=</span><span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb32-10" data-line-number="10">                       <span class="dt">min_child_weight=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb32-11" data-line-number="11">                       <span class="dt">gamma=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb32-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb32-13" data-line-number="13"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb32-14" data-line-number="14">results_xgb =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;xgbTree&#39;</span>,</a>
-<a class="sourceLine" id="cb32-15" data-line-number="15">                   <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts, </a>
-<a class="sourceLine" id="cb32-16" data-line-number="16">                   <span class="dt">tuneGrid=</span>xgb_opts)</a>
-<a class="sourceLine" id="cb32-17" data-line-number="17">results_xgb</a>
-<a class="sourceLine" id="cb32-18" data-line-number="18">preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, wine_test)</a>
-<a class="sourceLine" id="cb32-19" data-line-number="19"><span class="kw">confusionMatrix</span>(preds_gb, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xgboost)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbLinear&quot;</span>)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbTree&quot;</span>)
+
+xgb_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">eta=</span><span class="kw">c</span>(.<span class="dv">3</span>,.<span class="dv">4</span>),
+                       <span class="dt">max_depth=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">12</span>),
+                       <span class="dt">colsample_bytree=</span><span class="kw">c</span>(.<span class="dv">6</span>,.<span class="dv">8</span>),
+                       <span class="dt">subsample=</span><span class="kw">c</span>(.<span class="dv">5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),
+                       <span class="dt">nrounds=</span><span class="dv">1000</span>,
+                       <span class="dt">min_child_weight=</span><span class="dv">1</span>,
+                       <span class="dt">gamma=</span><span class="dv">0</span>)
+
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+results_xgb =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;xgbTree&#39;</span>,
+                   <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts, 
+                   <span class="dt">tuneGrid=</span>xgb_opts)
+results_xgb
+preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, wine_test)
+<span class="kw">confusionMatrix</span>(preds_gb, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 </div>
 <div id="stacking" class="section level3">
 <h3>Stacking</h3>
@@ -359,7 +331,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <div id="deep-learning" class="section level2">
 <h2>Deep Learning</h2>
 <p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
-<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn48" class="footnote-ref" id="fnref48"><sup>48</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
 <p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
 <p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimals demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
 </div>
@@ -379,7 +351,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="more-stuff" class="section level2">
 <h2>More Stuff</h2>
-<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a>, semi-supervised learning<a href="#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>, online learning<a href="#fn51" class="footnote-ref" id="fnref51"><sup>51</sup></a>, and many more.</p>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>, semi-supervised learning<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>, online learning<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, and many more.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -399,7 +371,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
 <li><p>Avoid overfitting.</p></li>
 <li><p>Let the data speak for itself.</p></li>
-<li><p>“Nothing is more practical than a good theory.”<a href="#fn52" class="footnote-ref" id="fnref52"><sup>52</sup></a></p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a></p></li>
 <li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression <span class="math inline">\(\rightarrow\)</span> random forest <span class="math inline">\(\rightarrow\)</span> your-fancy-technique. Don’t get too excited if you aren’t doing significantly better than a random forest with default settings.</p></li>
 <li><p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
 <li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
@@ -422,12 +394,12 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 <div class="footnotes">
 <hr />
 <ol start="47">
-<li id="fn47"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref47" class="footnote-back">↩</a></p></li>
-<li id="fn48"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref48" class="footnote-back">↩</a></p></li>
-<li id="fn49"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref49" class="footnote-back">↩</a></p></li>
-<li id="fn50"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref50" class="footnote-back">↩</a></p></li>
-<li id="fn51"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref51" class="footnote-back">↩</a></p></li>
-<li id="fn52"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref52" class="footnote-back">↩</a></p></li>
+<li id="fn47"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref47">↩</a></p></li>
+<li id="fn48"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref48">↩</a></p></li>
+<li id="fn49"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref49">↩</a></p></li>
+<li id="fn50"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref50">↩</a></p></li>
+<li id="fn51"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref51">↩</a></p></li>
+<li id="fn52"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref52">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -483,7 +455,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
