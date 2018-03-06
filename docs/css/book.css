@@ -128,7 +128,31 @@ i {
     position: relative;
 }
 .book .book-summary ul.summary li a:hover, .book .book-summary ul.summary li.active>a {
-  color: #990024;  /*#6197D5*/
+   color: #fffff8;  /*#6197D5*/
+   background-color:  #990024;
+}
+
+
+/* so that before and after aren't treated the same as the toc, because why would they? */
+.book .book-summary ul.summary li.before a {
+  color: #990024;
+  text-decoration: none;
+  font-size: 125%;
+  font-variant: small-caps;
+  font-family: 'Helvetica Neue', 'Open Sans', Roboto, sans-serif;
+  font-weight: 800;
+}
+
+
+.book .book-summary ul.summary li.before a:hover,
+.book .book-summary ul.summary li.before li.active>a {
+  color: #fffff8;  /*#6197D5*/
+  background-color: #990024;
+  text-decoration: none;
+}
+
+.book .book-summary ul.summary li.after a, .book .book-summary ul.summary li.after a:hover {
+  background-color: transparent;
 }
 
 
