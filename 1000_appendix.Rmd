@@ -132,7 +132,7 @@ y_test = as.numeric(wine_test$good) - 1
 model = keras_model_sequential() 
 
 model %>%
-  layer_dense(units = 256, activation = 'relu') %>%
+  layer_dense(units = 256, activation = 'relu', input_shape = c(9)) %>%
   layer_dropout(rate = 0.4) %>% 
   layer_dense(units = 128, activation = 'relu') %>%
   layer_dropout(rate = 0.3) %>%
