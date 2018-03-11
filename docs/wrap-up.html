@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-03-10">
+<meta name="date" content="2018-03-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -238,10 +238,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><span class="newthought">In this section, I note some other techniques</span> one may come across, and others that will provide additional insight into machine learning applications.</p>
 <div id="unsupervised-learning" class="section level2">
 <h2>Unsupervised Learning</h2>
-<p><span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to. In this situation we are more interested in the discovery of structure within the data.</p>
+<p><span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to. In this situation, we are more interested in the discovery of structure within the data.</p>
 <div id="clustering" class="section level3">
 <h3>Clustering</h3>
-<p>Many of the techniques used in unsupervised are commonly taught in various applied disciplines as various forms of “cluster” analysis. The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure. Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).</p>
+<p>Many of the techniques used in unsupervised learning are commonly taught in various disciplines as simply “cluster” analysis. The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure. Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).</p>
 </div>
 <div id="latent-variable-models" class="section level3">
 <h3>Latent Variable Models</h3>
@@ -263,7 +263,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="imputation" class="section level3">
 <h3>Imputation</h3>
-<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a>.</p>
+<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>.</p>
 <p>Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
 </div>
 </div>
@@ -325,15 +325,15 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 <h3>Stacking</h3>
 <p><span class="emph">Stacking</span> is a method that can generalize beyond a single fitting technique, though it can be applied in a fashion similar to boosting for a single technique. Here we will use it broadly to mean any method to combine models of different forms. Consider the four approaches we demonstrated earlier: k-nearest neighbors, neural net, random forest, and the support vector machine. We saw that they do not have the same predictive accuracy, though they weren’t bad in general. Perhaps by combining their respective efforts, we could get even better prediction than using any particular one.</p>
 <p>The issue then is how we might combine them. We really don’t have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes. Another approach would be to use a weighted vote, where the votes are weighted by the accuracy of their respective models.</p>
-<p>Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response. With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data). In this manner the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models. Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.</p>
+<p>Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response. With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data). In this manner, the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models. Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.</p>
 </div>
 </div>
 <div id="deep-learning" class="section level2">
 <h2>Deep Learning</h2>
 <p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
-<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
 <p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
-<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimals demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
+<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimal demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
 </div>
 <div id="feature-selection-importance" class="section level2">
 <h2>Feature Selection &amp; Importance</h2>
@@ -343,7 +343,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 </div>
 <div id="natural-language-processingtext-analysis" class="section level2">
 <h2>Natural language processing/Text Analysis</h2>
-<p>In some situations the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined). In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state. The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model. In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.</p>
+<p>In some situations, the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined). In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state. The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model. In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.</p>
 </div>
 <div id="bayesian-approaches" class="section level2">
 <h2>Bayesian Approaches</h2>
@@ -351,7 +351,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 </div>
 <div id="more-stuff" class="section level2">
 <h2>More Stuff</h2>
-<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>, semi-supervised learning<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>, online learning<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, and many more.</p>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>, semi-supervised learning<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, online learning<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a>, and many more.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -362,7 +362,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 <blockquote>
 <p><em>Machine learning <strong>is not</strong> magic!</em></p>
 </blockquote>
-<p>ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you’re using it have long since past. Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.</p>
+<p>ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you’re using it have long since passed. Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.</p>
 </div>
 <div id="some-guidelines" class="section level3">
 <h3>Some Guidelines</h3>
@@ -371,7 +371,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 <li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
 <li><p>Avoid overfitting.</p></li>
 <li><p>Let the data speak for itself.</p></li>
-<li><p>“Nothing is more practical than a good theory.”<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a></p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn53" class="footnoteRef" id="fnref53"><sup>53</sup></a></p></li>
 <li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression <span class="math inline">\(\rightarrow\)</span> random forest <span class="math inline">\(\rightarrow\)</span> your-fancy-technique. Don’t get too excited if you aren’t doing significantly better than a random forest with default settings.</p></li>
 <li><p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
 <li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
@@ -393,13 +393,13 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 </div>
 <div class="footnotes">
 <hr />
-<ol start="47">
-<li id="fn47"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref47">↩</a></p></li>
-<li id="fn48"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref48">↩</a></p></li>
-<li id="fn49"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref49">↩</a></p></li>
-<li id="fn50"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref50">↩</a></p></li>
-<li id="fn51"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref51">↩</a></p></li>
-<li id="fn52"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref52">↩</a></p></li>
+<ol start="48">
+<li id="fn48"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref48">↩</a></p></li>
+<li id="fn49"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref49">↩</a></p></li>
+<li id="fn50"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref50">↩</a></p></li>
+<li id="fn51"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref51">↩</a></p></li>
+<li id="fn52"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref52">↩</a></p></li>
+<li id="fn53"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref53">↩</a></p></li>
 </ol>
 </div>
             </section>

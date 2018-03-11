@@ -28,12 +28,12 @@ Even with standard regression modeling, centering continuous variables (subtract
 
 If we're lucky we'll have ideas on potential combinations or other transformations of the predictors we have available.  For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant.  Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process[^pcr].
 
-One can implement a variety of such approaches in ML to create additional potentially relevant features, as well, even automatically. As a reminder though, a key concern is overfitting, and doing broad construction of this sort with no contextual guidance would potentially be prone to such a pitfall.  In other cases it may simply be not worth the time expense.
+One can implement a variety of such approaches in ML to create additional potentially relevant features, as well, even automatically. As a reminder though, a key concern is overfitting, and doing broad construction of this sort with no contextual guidance would potentially be prone to such a pitfall.  In other cases, it may simply be not worth the time expense.
 
 
 #### Discretization
 
-While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised algorithmic approaches that will use the information in the data to produce some 'optimal' discretization.
+While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised algorithmic approaches that will use the information in the data to produce some 'optimal' discretization.
 
 It's generally not a good idea to force things in data analysis, and given that a lot of data situations will contain mixed data types, it seems easier to simply apply some scaling to preserve the inherent relationships in the data.  Again though, if one has only a relative few continuous variables, or a context in which it makes sense to, it's probably better to leave continuous variables as such.
 
@@ -49,11 +49,11 @@ With tuning parameters/features chosen, we then examine performance on the indep
 
 #### Regression
 
-In typical model comparison within the standard linear model framework, there are a number of ways in which we might assess performance across competing models.  For standard OLS regression we might examine adjusted-$R^2$ or a statistical test with nested models, or with the generalized linear models we might pick a model with the lowest AIC[^aic].  As we have already discussed, in the machine learning context we are interested in models that reduce e.g. squared error loss (regression) or misclassification error (classification).  However in dealing with many models some differences in performance may be arbitrary.
+In typical model comparison within the standard linear model framework, there are a number of ways in which we might assess performance across competing models.  For standard OLS regression we might examine adjusted-$R^2$ or a statistical test with nested models, or with the generalized linear models we might pick a model with the lowest AIC[^aic].  As we have already discussed, in the machine learning context we are interested in models that reduce e.g. squared error loss (regression) or misclassification error (classification).  However, in dealing with many models some differences in performance may be arbitrary.
 
 #### Beyond Classification Accuracy: Other Measures of Performance
 
-In typical classification situations we are interested in overall accuracy.  However there are situations, not uncommon, in which simple accuracy isn't a good measure of performance.  As an example, consider the prediction of the occurrence of a rare disease. Guessing a non-event every time might result in 99.9% accuracy, but that isn't how we would prefer to go about assessing some classifier's performance.
+In typical classification situations we are interested in overall accuracy.  There are situations however, not uncommon, in which simple accuracy isn't a good measure of performance.  As an example, consider the prediction of the occurrence of a rare disease. Guessing a non-event every time might result in 99.9% accuracy, but that isn't how we would prefer to go about assessing some classifier's performance.
 To demonstrate other sources of classification information, we will use the following 2x2 table that shows values of some binary outcome (0 = non-event, 1 = event occurs) to the predictions made by some model for that response (arbitrary model).  Both a table of actual values, often called a <span class="emph">confusion matrix</span>[^confusion], and an abstract version are provided.
 
 
@@ -335,9 +335,9 @@ For the training set, it looks like alcohol content[^drunkratings] and volatile 
 
 We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we're used to, while incorporating concepts and techniques from the machine learning world.  
 
-In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus we'll have a penalty based on both absolute and squared values of the coefficients. In this case if we set the parameter to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have a another parameter, `lambda`, that would be the same as in the previous notation, i.e. the amount to penalize.
+In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus, we'll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter `alpha` to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have another parameter, `lambda`, which controls the penalty amount.
 
-So what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging.  As such we will select their values as part of the validation process. 
+You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging.  As such we will select their values as part of the validation process. 
 
 The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.
 
@@ -359,7 +359,7 @@ load('data/results_regreg.RData')
 results_regreg
 ```
 
-The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in a models that do not do any better than chance.  
+The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in models that do not do any better than chance.  
 
 With the tuning parameters in place, now let's see the results on the test set.  The <span class="func">predict</span> function here will automatically use the best $\alpha$ and $\lambda$ from the previous process.
 
@@ -427,7 +427,7 @@ Incorporating regularization would be fine as your default method, and something
 
 Consider the typical distance matrix[^knn_dist] that is often used for cluster analysis of observations[^knn_unsupervised]. If we choose something like *Euclidean distance* as a metric, each point in the matrix gives the value of how far an observation is from some other, given their respective values on a set of variables.
 
-<span class="emph">K-nearest neighbors</span> approaches exploit this information for predictive purposes.  Let us take a classification example, and $k = 5$ neighbors.  For a given observation $x_i$, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables.  The class that is predicted is whatever class the majority of the neighbors are labeled as[^knn_vis].  For continuous outcomes we might take the mean of those neighbors as the prediction.
+<span class="emph">K-nearest neighbors</span> approaches exploit this information for predictive purposes.  Let us take a classification example, and $k = 5$ neighbors.  For a given observation $x_i$, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables.  The class that is predicted is whatever class the majority of the neighbors are labeled as[^knn_vis].  For continuous outcomes, we might take the mean of those neighbors as the prediction.
 
 In this scenario, the number of neighbors $k$ will be the tuning parameter, and so we will have a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
 
@@ -500,13 +500,13 @@ g
 
 ### Final Thoughts
 
-To be perfectly honest, k-nn approaches have mostly fallen out of favor, due to the above issues and their relatively poor predictive capability in common settings.  However, they are conceptually simple, and thus a good way to start getting used to machine learning approaches, as k-nn regression doesn't take one too far afield from what they already know (i.e. regression, distance matrix/clustering).
+To be perfectly honest, knn approaches have mostly fallen out of favor, due to the above issues and their relatively poor predictive capability in common settings.  However, they are conceptually simple, and thus a good way to start getting used to machine learning approaches, as knn regression doesn't take one too far afield from what they already know (i.e. regression, distance matrix/clustering).
 
 
 ## Neural Networks
 <img src="img/nnet.png" style="display:block; margin: 0 auto;" width=50%>
 
-<span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense, neural networks can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer.  All the layers between the input and output are usually referred to as *hidden* layers. If there were no hidden layers then it becomes the standard regression problem.  
+<span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense, neural networks can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer.  All the layers between the input and output are usually referred to as *hidden* layers. If there were a single hidden layer with a single unit and no transformation, then it becomes the standard regression problem.  
 
 One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Another notion is that of <span class="emph">weight decay</span>, however this tied to the same concept as regularization, which we discussed in a previous section, where a penalty term would be applied to a norm of the weights.  Another regularization technique is <span class="emph">dropout</span>, where either observed or hidden units are randomly removed, and results averaged from the subsequent models.
 
@@ -527,7 +527,7 @@ results_nnet
 ```
 
 
-We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
 
 
 ```{r nnet_test, echo=-3}
@@ -555,12 +555,12 @@ We note improved prediction with the neural net model relative to the k-nearest 
 
 ### Final Thoughts
 
-As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).  I talk a little about [deep learning][deep learning] in the next section, and there is some demo code in the [appendix][python].
+As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization of how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).  I talk a little about [deep learning][deep learning] in the next section, and there is some demo code in the [appendix][python].
 
 
 ## Trees & Forests
 
-Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will start by searching all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  So for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive, and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
+Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will start by searching all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  So, for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive, and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
 
 
 Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  The following is a hypothetical tree reflecting this.
@@ -620,7 +620,7 @@ va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize=7.5 color="#00aaff"]
 
 <img src="img/tree2.png" style="display:block; margin: 0 auto;">
 
-Unfortunately a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
+Unfortunately, a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold-out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
 
 Random forests are referred to as an <span class="emph">ensemble</span> method, one that is actually a combination of many models, and there are others we'll mention later.  There are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here (the argument `mtry`).  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set.
 
@@ -659,7 +659,7 @@ conf_rf = confusionMatrix(preds_rf, good_observed, positive='Good')
 ```
 
 
-This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches[^rfasbaseline].
+This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data-specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches[^rfasbaseline].
 
 Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
 
@@ -727,7 +727,7 @@ gsvm = ggplot(aes(x,y), data=d) +
 
 <span class="emph">Support Vector Machines</span> (SVM) will be our last example, and are perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.
 
-To better understand this process, consider the following image of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. 
+To better understand this process, consider the following image of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However, if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. 
 
 ```{r svm2d, echo=FALSE, dev='svglite', out.width=400}
 gsvm

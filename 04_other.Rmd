@@ -4,12 +4,12 @@
 
 ## Unsupervised Learning
 
-<span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation we are more interested in the discovery of structure within the data.
+<span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation, we are more interested in the discovery of structure within the data.
 
 
 ### Clustering
 
-Many of the techniques used in unsupervised are commonly taught in various applied disciplines as various forms of "cluster" analysis.  The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure.  Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).
+Many of the techniques used in unsupervised learning are commonly taught in various disciplines as simply "cluster" analysis.  The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure.  Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).
 
 
 ### Latent Variable Models
@@ -212,7 +212,7 @@ confusionMatrix(preds_gb, good_observed, positive='Good')
 
 The issue then is how we might combine them.  We really don't have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes.  Another approach would be to use a weighted vote, where the votes are weighted by the accuracy of their respective models.  
 
-Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response.  With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data).  In this manner the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models.  Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.
+Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response.  With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data).  In this manner, the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models.  Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.
 
 
 ## Deep Learning
@@ -223,7 +223,7 @@ Such models require massive amounts of data, a lot of tuning, and generally seri
 
 Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on other data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
 
-You can start your journey into this sort of stuff at http://deeplearning.net/, and I have a minimals demos for R and Python in the [appendix][Deep learning example].
+You can start your journey into this sort of stuff at http://deeplearning.net/, and I have a minimal demos for R and Python in the [appendix][Deep learning example].
 
 
 ## Feature Selection & Importance
@@ -237,7 +237,7 @@ Variable importance was given almost full weight in the discussion of typical ap
 
 ## Natural language processing/Text Analysis
 
-In some situations the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined).  In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state.  The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model.  In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.
+In some situations, the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined).  In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state.  The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model.  In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information.
 
 
 ## Bayesian Approaches
@@ -265,7 +265,7 @@ In general, without context, no algorithm can be said to be any better than anot
 
 > *Machine learning **is not** magic!*
 
-ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since past.  Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.
+ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since passed.  Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.
 
 
 ### Some Guidelines

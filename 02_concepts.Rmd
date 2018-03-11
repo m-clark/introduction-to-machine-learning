@@ -28,7 +28,7 @@ $$L(Y, f(X)) = \sum|(y-f(X))|$$
 
 #### Negative Log-likelihood
 
-We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the *negative* log-likelihood pertaining to the model of interest.  Such method seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize it's negative value.  As an example, if we assume a normal distribution for the response we can note the loss function as:
+We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the *negative* log-likelihood pertaining to the model of interest.  Such methods seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize its negative value.  As an example, if we assume a normal distribution for the response we can note the loss function as:
 
 
 $$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
@@ -67,7 +67,7 @@ While <span class="func">lm</span> uses a different approach, they are both goin
 
 ### Categorical Outcomes
 
-Here we'll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though we'll have different options.
+Here we'll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though, we'll have different options.
 
 #### Misclassification
 
@@ -133,7 +133,7 @@ It should be noted that we can go about the regularization in different ways.  F
 
 ### R Example
 
-In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. I've also increased the number of predictors to 10.
+In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However, you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. I've also increased the number of predictors to 10.
 
 ```{r regularization}
 # data setup
@@ -189,9 +189,9 @@ In general, we can add the same sort of penalty to any number of models, such as
 
 In most of science, we are concerned with reducing uncertainty in our knowledge of some phenomenon.  The more we know about the factors involved or related to some outcome of interest, the better we can predict that outcome upon the influx of new information.  The initial step is to take the data at hand, and determine how well a model or set of models fit the data in various fashions.  In many applications however, this part is also more or less the end of the game as well[^bigdata].
 
-Unfortunately, such an approach in which we only fit models to one data set does not give a very good sense of <span class="emph">generalization</span> performance, i.e. the performance we would see with new data.  While typically not reported, most researchers, if they are spending appropriate time with the data, are actually testing a great many models, among which the 'best' is then provided in detail in the end report.  Without some generalization performance check however, such performance is overstated when it comes to new data.
+Unfortunately, such an approach, in which we only fit models to one data set, does not give a very good sense of <span class="emph">generalization</span> performance, i.e. the performance we would see with new data.  While typically not reported, most researchers, if they are spending appropriate time with the data, are actually testing a great many models, among which the 'best' is then provided in detail in the end report.  Without some generalization performance check however, such performance is overstated when it comes to new data.
 
-In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class='emph'>training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance[^tuning].  We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data.  So in addition to the previously noted goal of finding the 'best' model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).
+In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class='emph'>training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance[^tuning].  We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data.  So, in addition to the previously noted goal of finding the 'best' model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).
 
 ### Bias & Variance
 
@@ -199,7 +199,7 @@ We start[^biasvarref] with a true data generating process for some target $y$, e
 
 $$y = f(X) + \epsilon$$
 
-where $f(x)$ is the expected value of $y$ given $X$, i.e. $f(x) = E(y|X)$, and the expected value of the error 0, $E(\epsilon)=0$, with some variance, $\textrm{Var}(\epsilon) = \sigma^2_\epsilon$.  In other words, we are talking about the standard regression model we all know and love.  Now we can conceptually think of the *expected prediction error* at a specific input $X = x_*$ as: 
+where $f(x)$ is the expected value of $y$ given $X$, i.e. $f(x) = E(y|X)$. The expected value of the error, $E(\epsilon)=0$, has some variance, $\textrm{Var}(\epsilon) = \sigma^2_\epsilon$.  In other words, we are talking about the standard regression model we all know and love.  Now we can conceptually think of the *expected prediction error* at a specific input $X = x_*$ as: 
 
 
 $$\text{Error}_{x_*} = \text{Irreducible Error} + \text{Bias}^2 + \text{Variance}$$
@@ -209,7 +209,7 @@ To better understand this, think of training models over and over, each time wit
 
 **Irreducible error**: The variance of the (new test) target ($\sigma^2_\epsilon$). This is unavoidable, since our $y$ is measured with error.
 
-**$\textrm{Bias}^2$**: the amount the *average* of our estimate varies from the true (but unknown) value ($E(\hat f) - f$). This is often the result of trying to model the complexity of nature with something much simpler that the human brain can understand. While the simpler might make us feel good, it may not work very well.
+**Bias^2^**: the amount the *average* of our estimate varies from the true (but unknown) value ($E(\hat f) - f$). This is often the result of trying to model the complexity of nature with something much simpler that the human brain can understand. While the simpler might make us feel good, it may not work very well.
 
 **Variance**: the amount by which our prediction would change if we had estimated it using a different training data set ($Var(\hat f)$). Even with unbiased estimates, we could still see a high mean squared error due to high variance.
 
@@ -257,7 +257,7 @@ When variance is a problem, our training error is low while test error is relati
 
 #### High Bias
 
-With bias issues, our training error is high and test error is not too different from training error (underfitting problem).  Adding new predictors/features, e.g. interaction terms, polynomials etc., can help here.  Additionally reducing the penalty parameter $\lambda$ would also work with even less effort, though generally it should be estimated rather than explicitly set.
+With bias issues, our training error is high and test error is not too different from training error (underfitting problem).  Adding new predictors/features, e.g. interaction terms, polynomials etc., can help here.  Additionally, reducing the penalty parameter $\lambda$ would also work with even less effort, though generally it should be estimated rather than explicitly set.
 
 
 Here is another visualization to drive the point home.
@@ -272,9 +272,9 @@ The figure is inspired by @murphy_machine_2012 (figure 6.5) showing the bias-var
 
 ### Bias-Variance Summary
 
-One of key ideas any applied researcher can take from machine learning concerns the bias-variance trade-off and issues of overfitting in particular.  Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication.  Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing.  Furthermore very complex models are often fit to small data sets, compounding the problem.
+One of the key ideas any applied researcher can take from machine learning concerns the bias-variance trade-off and issues of overfitting in particular.  Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication.  Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing.  Furthermore, very complex models are often fit to small data sets, compounding the problem.
 
-It is very easy to describe ***science*** without ever talking about statistical significance.  It is impossible to talk about science without talking about prediction.  The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications. 
+It is very easy to describe ***science*** without ever talking about statistical significance.  It is impossible to talk about science without talking about prediction.  The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications[^bvclass]. 
 
 
 
@@ -286,13 +286,13 @@ As noted in the previous section, in machine learning approaches we are particul
 
 ### Adding Another Validation Set
 
-One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of <span class="emph">tuning parameters</span>.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at before hand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
+One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of <span class="emph">tuning parameters</span>.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at beforehand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
 
 
 
 ### K-fold Cross-Validation
 
-In many cases we don't have enough data for such a split, and the split percentages are arbitrary anyway, with results that would be specific to the split chosen.  Instead we can take a typical data set and randomly split it into $\kappa=10$ equal-sized (or close to it) parts.  Next, we take the first nine partitions, combine them, and use them as the training set.  With chosen model from the training data, make predictions on the held out partition.  Now we do it again, but this time use the 9^th^ partition as the holdout set. Repeat the process until each of the initial 10 partitions of data have been used as the test set.  Average the error across all procedures for our estimate of prediction error.  With enough data, this (and the following methods) could be used as the validation procedure before eventual performance assessment on an independent test set with the final chosen model.
+In many cases we don't have enough data for such a split, and the split percentages are arbitrary anyway, with results that would be specific to the split chosen.  Instead we can take a typical data set and randomly split it into $\kappa=10$ equal-sized (or close to it) parts.  Next, we take the first nine partitions, combine them, and use them as the training set.  With chosen model from the training data, make predictions on the held-out partition.  Now we do it again, but this time use the 9^th^ partition as the holdout set. Repeat the process until each of the initial 10 partitions of data have been used as the test set.  Average the error across all procedures for our estimate of prediction error.  With enough data, this (and the following methods) could be used as the validation procedure before eventual performance assessment on an independent test set with the final chosen model.
 
 <img src="img/kfold.svg" style="display:block; margin: 0 auto;" width=50%> <br>  
 <p style="text-align:center">An illustration of 3-fold classification.</p>
@@ -323,7 +323,7 @@ Along with the above there are variations such as repeated cross validation, the
 
 
 
-[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even thought it's the most widely used of all techniques.
+[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used of all techniques.
 
 [^optimfunc]: Type `?optim` at the console for more detail.
 
@@ -339,9 +339,9 @@ Along with the above there are variations such as repeated cross validation, the
 
 [^lassobayes]: Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.
 
-[^bigdata]: I should note that I do not make any particular claim about the quality of such analysis.  In many situations the cost of data collection is very high, and for all the current enamorment with 'big' data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations).  In these situations getting new data for which one might make predictions is extremely difficult.
+[^bigdata]: I should note that I do not make any particular claim about the quality of such analysis.  In many situations, the cost of data collection is very high, and for all the current enamorment with 'big' data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations).  In these situations, getting new data for which one might make predictions is extremely difficult.
 
-[^tuning]: In typical situations there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The $\lambda$ penalty parameter in regularized regression is one example of such a <span class='emph'>tuning parameter</span>. In the best case scenario, we would also have a <span class='emph'>validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen.  However, methods are available to us in which we can approximate the validation step in other ways.
+[^tuning]: In typical settings, there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The $\lambda$ penalty parameter in regularized regression is one example of such a <span class='emph'>tuning parameter</span>. In the best case scenario, we would also have a <span class='emph'>validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen.  However, methods are available to us in which we can approximate the validation step in other ways.
 
 [^biasvarref]: Much of the following is essentially a paraphrase of parts of @hastie_elements_2009 (chapters 2 and 7).
 
@@ -350,3 +350,5 @@ Along with the above there are variations such as repeated cross validation, the
 [^validation]: Along with some of the other works cited, see @harrell2015regression for a good discussion of model validation.
 
 [^gcv]: For squared-error loss situations, there is a Generalized cross-validation (GCV) that can be estimated more directly without actually going to the entire LOO procedure, and functions similarly to AIC.
+
+[^bvclass]: Note that the bias-variance tradeoff doesn't readily apply to classification problems, at least not in the same way.  To begin, the relationship is multiplicative, and depending on which side of the decision boundary one is on (correct vs. not), it might even be useful to increase the variance.  However, if one thinks in terms of predicted probabilities rather than predicted class, one can more or less keep the same mindset. 
