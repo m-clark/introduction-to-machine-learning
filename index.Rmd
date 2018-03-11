@@ -37,10 +37,10 @@ documentclass: book
 bibliography: MLtechrep.bib
 biblio-style: apalike
 link-citations: yes
-description: "An introduction to machine learning for applied researchers."
-cover-image: img/nineteeneightyR.png
+description: "This document provides an introduction to machine learning for applied researchers.  While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn."
+cover-image: 'img/nineteeneightyR.png'
 url: 'https\://m-clark.github.io/introduction-to-machine-learning/'  # evidently the \: is required or you'll get text in the title/toc area
-github-repo:  m-clark/introduction-to-machine-learning/
+github-repo:  'm-clark/introduction-to-machine-learning/'
 nocite: | 
   @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
   @fahrmeir2013regression @efron2016computer
