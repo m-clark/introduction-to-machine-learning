@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-03-11">
+<meta name="date" content="2018-03-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -46,7 +46,7 @@
 
 
 
-<script src="libs/htmlwidgets-0.9/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
 <script src="libs/datatables-binding-0.2/datatables.js"></script>
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
@@ -294,8 +294,8 @@ lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
 </div>
 <div id="binomial-log-likelihood" class="section level4">
 <h4>Binomial log-likelihood</h4>
-<p><span class="math display">\[L(Y, f(X)) = \sum log(1 + e^{-2yf})\]</span></p>
-<p>The above is in deviance form. If you’re not familiar, deviance can conceptually be thought of as the GLM version of residual variance. This loss is equivalent to binomial log likelihood if <span class="math inline">\(y\)</span> is on the 0-1 scale.</p>
+<p><span class="math display">\[L(Y, f(X)) = \sum \ln(1 + e^{-2yf})\]</span></p>
+<p>The above is in deviance form. If you’re not familiar, deviance can conceptually be thought of as the GLM version of residual variance. This loss is equivalent to binomial log likelihood when <span class="math inline">\(y\)</span> is on the 0-1 scale.</p>
 </div>
 <div id="exponential" class="section level4">
 <h4>Exponential</h4>
@@ -333,9 +333,10 @@ X =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</sp
 beta =<span class="st"> </span><span class="kw">runif</span>(<span class="kw">ncol</span>(X))
 y =<span class="st">  </span><span class="kw">rnorm</span>(N, X<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">2</span>)
 
-sqerrloss_reg =<span class="st"> </span><span class="cf">function</span>(beta, X, y, <span class="dt">lambda=</span><span class="dv">1</span>){
+sqerrloss_reg =<span class="st"> </span><span class="cf">function</span>(beta, X, y, <span class="dt">lambda=</span>.<span class="dv">5</span>){
   mu =<span class="st"> </span>X<span class="op">%*%</span>beta
-  <span class="kw">sum</span>((y<span class="op">-</span>mu)<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>lambda<span class="op">*</span><span class="kw">sum</span>(<span class="kw">abs</span>(beta[<span class="op">-</span><span class="dv">1</span>]))
+  <span class="co"># sum((y-mu)^2) + lambda*sum(abs(beta[-1])) # conceptual</span>
+  <span class="kw">sum</span>((y<span class="op">-</span>mu)<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="kw">length</span>(y)<span class="op">*</span>lambda<span class="op">*</span><span class="kw">sum</span>(<span class="kw">abs</span>(beta[<span class="op">-</span><span class="dv">1</span>])) <span class="co"># actual for lasso</span>
 }
 
 lm_result =<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~</span>., <span class="kw">data.frame</span>(X[,<span class="op">-</span><span class="dv">1</span>]) )
@@ -345,22 +346,33 @@ regularized_result =<span class="st"> </span><span class="kw">optim</span>(<span
                            <span class="dt">y=</span>y, 
                            <span class="dt">method=</span><span class="st">&#39;BFGS&#39;</span>)</code></pre></div>
 <p><br></p>
-<p><div id="htmlwidget-ac291b881a17a3904e44" style="width:35%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac291b881a17a3904e44">{"x":{"filter":"none","data":[["(Intercept)","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10","Squared Error Loss"],[0.145,-0.27,0.586,0.385,0.844,0.511,0.423,0.304,-0.076,0.547,0.625,402.205],[0.144,-0.268,0.581,0.379,0.838,0.506,0.418,0.298,-0.071,0.54,0.621,406.75]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Standard LM<\/th>\n      <th>Regularized Model<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tp","pageLength":6,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[6,10,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; if (value!==null) $(this.api().cell(row, 0).node()).css({'background-color':'#fffff8'});\nvar value=data[1]; if (value!==null) $(this.api().cell(row, 1).node()).css({'background-color':'#fffff8'});\nvar value=data[2]; if (value!==null) $(this.api().cell(row, 2).node()).css({'background-color':'#fffff8'});\nvar value=data[3]; if (value!==null) $(this.api().cell(row, 3).node()).css({'background-color':'#fffff8'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script> <br></p>
+<p><div id="htmlwidget-ac291b881a17a3904e44" style="width:50%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac291b881a17a3904e44">{"x":{"filter":"none","data":[["(Intercept)","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.145,-0.27,0.586,0.385,0.844,0.511,0.423,0.304,-0.076,0.547,0.625],[0.114,-0.001,0.01,0.001,0.335,0.003,0.003,0,-0,0.001,0.165]],"container":"<table class=\"compact|nowrap\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Standard LM<\/th>\n      <th>Regularized Model<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":11,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,11,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; if (value!==null) $(this.api().cell(row, 0).node()).css({'background-color':'#fffff8'});\nvar value=data[1]; if (value!==null) $(this.api().cell(row, 1).node()).css({'background-color':'#fffff8'});\nvar value=data[2]; if (value!==null) $(this.api().cell(row, 2).node()).css({'background-color':'#fffff8'});\nvar value=data[3]; if (value!==null) $(this.api().cell(row, 3).node()).css({'background-color':'#fffff8'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script> <br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create test data</span>
 N_test =<span class="st"> </span><span class="dv">50</span>
 X_test =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N_test), <span class="kw">rnorm</span>(N_test))
 X_test =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">matrix</span>(<span class="kw">rnorm</span>(N_test<span class="op">*</span><span class="dv">10</span>), <span class="dt">ncol=</span><span class="dv">10</span>))
 y_test =<span class="st"> </span><span class="kw">rnorm</span>(N_test, X_test<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">2</span>)
 
-<span class="co"># squared error loss</span>
-<span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span><span class="kw">predict</span>(lm_result, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(X_test[,<span class="op">-</span><span class="dv">1</span>])))  </code></pre></div>
-<pre><code>         [,1]
-[1,] 218.2474</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>X_test<span class="op">%*%</span>regularized_result<span class="op">$</span>par)</code></pre></div>
-<pre><code>         [,1]
-[1,] 216.9351</code></pre>
-<p>From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad. On the test data however, the squared error loss is lower.</p>
+<span class="co"># fits on training set</span>
+fits_lm =<span class="st"> </span><span class="kw">fitted</span>(lm_result, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(X))
+fits_reg =<span class="st"> </span>X<span class="op">%*%</span>regularized_result<span class="op">$</span>par
+
+<span class="co"># loss on training set</span>
+<span class="kw">data.frame</span>(<span class="dt">lm_train =</span> <span class="kw">crossprod</span>(y <span class="op">-</span><span class="st"> </span>fits_lm),
+           <span class="dt">regularized_train =</span> <span class="kw">crossprod</span>(y <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre></div>
+<pre><code>  lm_train regularized_train
+1 402.2046          583.3891</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fits on test set</span>
+fits_lm =<span class="st"> </span><span class="kw">predict</span>(lm_result, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(X_test))
+fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_result<span class="op">$</span>par
+
+<span class="co"># loss on test set</span>
+<span class="kw">data.frame</span>(<span class="dt">lm_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_lm),
+           <span class="dt">regularized_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre></div>
+<pre><code>   lm_test regularized_test
+1 220.7264         217.6205</code></pre>
+<p>From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero, while the residual sum of squares has increased just a tad. On the test data however, the squared error loss is lower.</p>
 <p>In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc. The primary goal again is to hopefully increase our ability to generalize the selected model to new data. Note that the estimates produced are in fact <em>biased</em>, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.</p>
 </div>
 </div>

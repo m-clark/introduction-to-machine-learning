@@ -61,8 +61,8 @@ library(broom); library(pander); library(tidyverse); library(htmltools)
 ```
 
 # 
-```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
-knitr::include_graphics('img/nineteeneightyR.png', dpi = NA)
+```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html'), out.width='35%'}
+knitr::include_graphics('img/198R.png', dpi = NA)
 ```
 
 

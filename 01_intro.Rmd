@@ -23,7 +23,7 @@ While the two approaches are not exclusive, I present two extreme (though thankf
 $\sim$ Leo Breiman, 2001
 
 
-Respective departments of computer science, statistics, and related, now overlap more than ever, as more relaxed views prevail today. However, there are potential drawbacks to placing too much emphasis on either approach historically associated with them.  Models that 'just work' have the potential to be dangerous if they are little understood.  Situations for which much time is spent sorting out details for an ill-fitting model suffers the converse problem- some (though often perhaps very little actually) understanding with little pragmatism.  While this document will focus on more algorithmic approaches, guidance will be provided with an eye toward their use in situations where the typical data modeling approach would be applied, thereby hopefully shedding some light on a path toward obtaining the best of both worlds.
+Respective departments of computer science, statistics, and related, now overlap more than ever, as more relaxed views prevail today. However, there are potential drawbacks to placing too much emphasis on either approach historically associated with them.  Models that 'just work' have the potential to be dangerous if they are little understood.  Situations for which much time is spent sorting out details for an ill-fitting model suffers the converse problem-  a variable amount of understanding coupled with little pragmatism.  While this document will focus on more algorithmic approaches, guidance will be provided with an eye toward their use in situations where the typical data modeling approach would be applied, thereby hopefully shedding some light on a path toward obtaining the best of both worlds.
 
 ## Terminology
 

@@ -82,9 +82,9 @@ In the above, $I$ is the indicator function, and so we are simply summing miscla
 #### Binomial log-likelihood
 
 
-$$L(Y, f(X)) = \sum log(1 + e^{-2yf})$$
+$$L(Y, f(X)) = \sum \ln(1 + e^{-2yf})$$
 
-The above is in deviance form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance.  This loss is equivalent to binomial log likelihood if $y$ is on the 0-1 scale.
+The above is in deviance form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance.  This loss is equivalent to binomial log likelihood when $y$ is on the 0-1 scale.
 
 #### Exponential
 
@@ -143,9 +143,10 @@ X = cbind(1, matrix(rnorm(N*10), ncol=10))
 beta = runif(ncol(X))
 y =  rnorm(N, X%*%beta, sd=2)
 
-sqerrloss_reg = function(beta, X, y, lambda=1){
+sqerrloss_reg = function(beta, X, y, lambda=.5){
   mu = X%*%beta
-  sum((y-mu)^2) + lambda*sum(abs(beta[-1]))
+  # sum((y-mu)^2) + lambda*sum(abs(beta[-1])) # conceptual
+  sum((y-mu)^2) + 2*length(y)*lambda*sum(abs(beta[-1])) # actual for lasso
 }
 
 lm_result = lm(y~., data.frame(X[,-1]) )
@@ -158,12 +159,14 @@ regularized_result = optim(par=rep(0, ncol(X)),
 <br>
 
 
-```{r regularization_show_result, echo=5}
-rbind(`Standard LM`=c(coef(lm_result), `Squared Error Loss`=sum(resid(lm_result)^2)), 
-      `Regularized Model`=c(regularized_result$par, regularized_result$value)) %>% 
+```{r regularization_show_result, echo=FALSE}
+rbind(`Standard LM`=coef(lm_result), 
+      `Regularized Model`=regularized_result$par) %>% 
   t() %>% 
   round(3) %>% 
-  datatable(options=list(dom='tp', pageLength=6, ordering=F), width='35%') %>%
+  datatable(options=list(dom='t', pageLength=11, ordering=F), 
+            width='50%',
+            class='compact|nowrap') %>%
   formatStyle(columns=0:3, backgroundColor='#fffff8')
 ```
 <br>
@@ -174,12 +177,24 @@ X_test = cbind(1, rnorm(N_test), rnorm(N_test))
 X_test = cbind(1, matrix(rnorm(N_test*10), ncol=10))
 y_test = rnorm(N_test, X_test%*%beta, sd=2)
 
-# squared error loss
-crossprod(y_test - predict(lm_result, newdata = data.frame(X_test[,-1])))  
-crossprod(y_test - X_test%*%regularized_result$par)
+# fits on training set
+fits_lm = fitted(lm_result, newdata = data.frame(X))
+fits_reg = X%*%regularized_result$par
+
+# loss on training set
+data.frame(lm_train = crossprod(y - fits_lm),
+           regularized_train = crossprod(y - fits_reg))
+
+# fits on test set
+fits_lm = predict(lm_result, newdata = data.frame(X_test))
+fits_reg = X_test%*%regularized_result$par
+
+# loss on test set
+data.frame(lm_test = crossprod(y_test - fits_lm),
+           regularized_test = crossprod(y_test - fits_reg))
 ```
 
-From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero slightly, while the residual sum of squares has increased just a tad.  On the test data however, the squared error loss is lower.
+From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero, while the residual sum of squares has increased just a tad.  On the test data however, the squared error loss is lower.
 
 In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact *biased*, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
 
