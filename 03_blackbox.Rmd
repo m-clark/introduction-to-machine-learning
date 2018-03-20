@@ -33,7 +33,7 @@ One can implement a variety of such approaches in ML to create additional potent
 
 #### Discretization
 
-While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised algorithmic approaches that will use the information in the data to produce some 'optimal' discretization.
+While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised approaches that will use the information in the data to produce some 'optimal' discretization.
 
 It's generally not a good idea to force things in data analysis, and given that a lot of data situations will contain mixed data types, it seems easier to simply apply some scaling to preserve the inherent relationships in the data.  Again though, if one has only a relative few continuous variables, or a context in which it makes sense to, it's probably better to leave continuous variables as such.
 
@@ -302,7 +302,7 @@ wine_test = wine %>%
 Let's take an initial peek at how the predictors separate on the target.  In the following I'm 'predicting' the pre-possessed data so as to get the transformed data.  Again, we'll leave the preprocessing to the training process eventually, but here it will put them on the same scale for visual display. 
 
 
-```{r featureplot, echo=2:3, eval=c(2,4)}
+```{r featureplot, echo=3:4, eval=c(2,4)}
 wine_trainplot = predict(preProcess(select(wine_train, -good), method='range'), 
                          select(wine_train, -good))
 wine_trainplot = select(wine_train, -good) %>% 
@@ -349,7 +349,7 @@ results_regreg <- train(good~.,
                         data=wine_train,
                         method = "glmnet", 
                         trControl = cv_opts,
-                        preProc = c("center", "scale"),
+                        preProcess = c("center", "scale"),
                         tuneGrid = regreg_opts)
 save(results_regreg, file='data/results_regreg.RData')
 ```
@@ -431,12 +431,14 @@ Consider the typical distance matrix[^knn_dist] that is often used for cluster a
 In this scenario, the number of neighbors $k$ will be the tuning parameter, and so we will have a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
 
 
-```{r knn_train, eval=FALSE, echo=2:7}
+```{r knn_train, eval=FALSE, echo=2:10}
 set.seed(1234)
-cv_opts = trainControl(method='cv', number=10)
 knn_opts = data.frame(k=c(seq(3, 11, 2), 25, 51, 101)) # odd to avoid ties
-results_knn = train(good~., data=wine_train, method='knn',
-                    preProcess='range', trControl=cv_opts,
+results_knn = train(good~., 
+                    data=wine_train, 
+                    method='knn',
+                    preProcess=c('center', 'scale'), 
+                    trControl=cv_opts,
                     tuneGrid = knn_opts)
 
 results_knn
@@ -512,11 +514,16 @@ One of the issues with neural nets is determining how many hidden layers and how
 A comment about the following: if you are not set up for utilizing multiple processors the following will be relatively slow.  You can replace `method = 'avNNet'`, from the <span class="pack">caret</span> package, with `method = 'nnet'` from the <span class="pack">nnet</span> package, and shorten `tuneLength = 3`, which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the <span class="pack">caret</span> package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function[^nnet_function] has additional arguments, you may pass those on in the train function itself.  Here I am increasing the `maxit`, or maximum iterations, argument.
 
 
-```{r nnet_train, echo=2:5, eval=FALSE}
+```{r nnet_train, echo=2:10, eval=FALSE}
 set.seed(1234)
-results_nnet = train(good~., data=wine_train, method='avNNet',
-                     trControl=cv_opts, preProcess='range',
-                     tuneLength=5, trace=F, maxit=1000)
+results_nnet = train(good~., 
+                     data=wine_train, 
+                     method='avNNet',
+                     trControl=cv_opts, 
+                     preProcess=c('center', 'scale'),
+                     tuneLength=5, 
+                     trace=F, 
+                     maxit=1000)
 results_nnet
 save(results_nnet, file='data/results_nnet.RData')
 ```
@@ -634,12 +641,16 @@ There's a lot going on here to be sure: there is a sampling process for cross-va
 <!-- Run the test data through the selected forest. -->
 
 
-```{r rf_train, echo=2:6, eval=FALSE}
+```{r rf_train, echo=2:10, eval=FALSE}
 set.seed(1234)
 rf_opts = data.frame(mtry=c(2:6))
-results_rf = train(good~., data=wine_train, method='rf',
-                   preProcess='range', trControl=cv_opts, 
-                   tuneGrid=rf_opts, n.tree=1000)
+results_rf = train(good~., 
+                   data=wine_train, 
+                   method='rf',
+                   preProcess=c('center', 'scale'), 
+                   trControl=cv_opts, 
+                   tuneGrid=rf_opts, 
+                   n.tree=1000)
 results_rf
 save(results_rf, file='data/results_rf.RData')
 ```
@@ -740,10 +751,14 @@ Note that there are a number of choices in regard to the kernel function that do
 For the following we use `method = 'svmLinear2'`, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is a regularization parameter applied to the cost function.
 
 
-```{r svm_train, eval=FALSE, echo=2:4}
+```{r svm_train, eval=FALSE, echo=2:8}
 set.seed(1234)
-results_svm = train(good~., data=wine_train, method='svmLinear2',
-                    preProcess='range', trControl=cv_opts, tuneLength=5)
+results_svm = train(good~., 
+                    data=wine_train, 
+                    method='svmLinear2',
+                    preProcess=c('center', 'scale'), 
+                    trControl=cv_opts, 
+                    tuneLength=5)
 results_svm
 save(results_svm, file='data/results_svm.RData')
 ```

@@ -258,7 +258,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="discretization" class="section level4">
 <h4>Discretization</h4>
-<p>While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables<a href="#fn27" class="footnoteRef" id="fnref27"><sup>27</sup></a>. However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, <em>logic regression</em> needs binary input. While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised algorithmic approaches that will use the information in the data to produce some ‘optimal’ discretization.</p>
+<p>While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables<a href="#fn27" class="footnoteRef" id="fnref27"><sup>27</sup></a>. However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, <em>logic regression</em> needs binary input. While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised approaches that will use the information in the data to produce some ‘optimal’ discretization.</p>
 <p>It’s generally not a good idea to force things in data analysis, and given that a lot of data situations will contain mixed data types, it seems easier to simply apply some scaling to preserve the inherent relationships in the data. Again though, if one has only a relative few continuous variables, or a context in which it makes sense to, it’s probably better to leave continuous variables as such.</p>
 </div>
 </div>
@@ -410,10 +410,10 @@ wine_test =<span class="st"> </span>wine <span class="op">%&gt;%</span><span cla
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>free.sulfur.dioxide, <span class="op">-</span>density, <span class="op">-</span>quality, <span class="op">-</span>color, <span class="op">-</span>white) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">slice</span>(<span class="op">-</span>trainIndices)</code></pre></div>
 <p>Let’s take an initial peek at how the predictors separate on the target. In the following I’m ‘predicting’ the pre-possessed data so as to get the transformed data. Again, we’ll leave the preprocessing to the training process eventually, but here it will put them on the same scale for visual display.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##                          select(wine_train, -good))
-wine_trainplot =<span class="st"> </span><span class="kw">select</span>(wine_train, <span class="op">-</span>good) <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wine_trainplot =<span class="st"> </span><span class="kw">select</span>(wine_train, <span class="op">-</span>good) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">preProcess</span>(<span class="dt">method=</span><span class="st">&#39;range&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">predict</span>(<span class="dt">newdata=</span> <span class="kw">select</span>(wine_train, <span class="op">-</span>good))</code></pre></div>
+<span class="st">  </span><span class="kw">predict</span>(<span class="dt">newdata=</span> <span class="kw">select</span>(wine_train, <span class="op">-</span>good))
+## featurePlot(wine_trainplot, wine_train$good, &#39;box&#39;)</code></pre></div>
 <p><img src="introduction-to-machine-learning_files/figure-html/featureplot-1.svg" width="672" style="display: block; margin: auto;" /></p>
 <p>For the training set, it looks like alcohol content<a href="#fn34" class="footnoteRef" id="fnref34"><sup>34</sup></a> and volatile acidity separate most with regard to the ‘good’ class. While this might give us some food for thought, note that the figure does not give insight into interaction effects, which methods such as trees will get at.</p>
 </div>
@@ -430,7 +430,7 @@ results_regreg &lt;-<span class="st"> </span><span class="kw">train</span>(good<
                         <span class="dt">data=</span>wine_train,
                         <span class="dt">method =</span> <span class="st">&quot;glmnet&quot;</span>, 
                         <span class="dt">trControl =</span> cv_opts,
-                        <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>),
+                        <span class="dt">preProcess =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>),
                         <span class="dt">tuneGrid =</span> regreg_opts)</code></pre></div>
 <pre><code>glmnet 
 
@@ -536,11 +536,15 @@ Prediction Bad Good
 <p>Consider the typical distance matrix<a href="#fn36" class="footnoteRef" id="fnref36"><sup>36</sup></a> that is often used for cluster analysis of observations<a href="#fn37" class="footnoteRef" id="fnref37"><sup>37</sup></a>. If we choose something like <em>Euclidean distance</em> as a metric, each point in the matrix gives the value of how far an observation is from some other, given their respective values on a set of variables.</p>
 <p><span class="emph">K-nearest neighbors</span> approaches exploit this information for predictive purposes. Let us take a classification example, and <span class="math inline">\(k = 5\)</span> neighbors. For a given observation <span class="math inline">\(x_i\)</span>, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables. The class that is predicted is whatever class the majority of the neighbors are labeled as<a href="#fn38" class="footnoteRef" id="fnref38"><sup>38</sup></a>. For continuous outcomes, we might take the mean of those neighbors as the prediction.</p>
 <p>In this scenario, the number of neighbors <span class="math inline">\(k\)</span> will be the tuning parameter, and so we will have a set of values for <span class="math inline">\(k\)</span> to try out<a href="#fn39" class="footnoteRef" id="fnref39"><sup>39</sup></a>. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables &amp; Ripley.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cv_opts =<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&#39;cv&#39;</span>, <span class="dt">number=</span><span class="dv">10</span>)
-knn_opts =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">k=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">3</span>, <span class="dv">11</span>, <span class="dv">2</span>), <span class="dv">25</span>, <span class="dv">51</span>, <span class="dv">101</span>)) <span class="co"># odd to avoid ties</span>
-results_knn =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;knn&#39;</span>,
-                    <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts,
-                    <span class="dt">tuneGrid =</span> knn_opts)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knn_opts =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">k=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">3</span>, <span class="dv">11</span>, <span class="dv">2</span>), <span class="dv">25</span>, <span class="dv">51</span>, <span class="dv">101</span>)) <span class="co"># odd to avoid ties</span>
+results_knn =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., 
+                    <span class="dt">data=</span>wine_train, 
+                    <span class="dt">method=</span><span class="st">&#39;knn&#39;</span>,
+                    <span class="dt">preProcess=</span><span class="kw">c</span>(<span class="st">&#39;center&#39;</span>, <span class="st">&#39;scale&#39;</span>), 
+                    <span class="dt">trControl=</span>cv_opts,
+                    <span class="dt">tuneGrid =</span> knn_opts)
+
+results_knn</code></pre></div>
 <pre><code>k-Nearest Neighbors 
 
 5199 samples
@@ -619,9 +623,14 @@ Prediction Bad Good
 <p><span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well. In some sense, neural networks can be thought of as nonlinear regression<a href="#fn41" class="footnoteRef" id="fnref41"><sup>41</sup></a>. Visually however, we can see them as a graphical model with layers of inputs and outputs. Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer. All the layers between the input and output are usually referred to as <em>hidden</em> layers. If there were a single hidden layer with a single unit and no transformation, then it becomes the standard regression problem.</p>
 <p>One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer. Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data. Another notion is that of <span class="emph">weight decay</span>, however this tied to the same concept as regularization, which we discussed in a previous section, where a penalty term would be applied to a norm of the weights. Another regularization technique is <span class="emph">dropout</span>, where either observed or hidden units are randomly removed, and results averaged from the subsequent models.</p>
 <p>A comment about the following: if you are not set up for utilizing multiple processors the following will be relatively slow. You can replace <code>method = 'avNNet'</code>, from the <span class="pack">caret</span> package, with <code>method = 'nnet'</code> from the <span class="pack">nnet</span> package, and shorten <code>tuneLength = 3</code>, which will be faster without much loss of accuracy. Also, the function we’re using has only one hidden layer, but the other neural net methods accessible via the <span class="pack">caret</span> package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function<a href="#fn42" class="footnoteRef" id="fnref42"><sup>42</sup></a> has additional arguments, you may pass those on in the train function itself. Here I am increasing the <code>maxit</code>, or maximum iterations, argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_nnet =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;avNNet&#39;</span>,
-                     <span class="dt">trControl=</span>cv_opts, <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>,
-                     <span class="dt">tuneLength=</span><span class="dv">5</span>, <span class="dt">trace=</span>F, <span class="dt">maxit=</span><span class="dv">1000</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_nnet =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., 
+                     <span class="dt">data=</span>wine_train, 
+                     <span class="dt">method=</span><span class="st">&#39;avNNet&#39;</span>,
+                     <span class="dt">trControl=</span>cv_opts, 
+                     <span class="dt">preProcess=</span><span class="kw">c</span>(<span class="st">&#39;center&#39;</span>, <span class="st">&#39;scale&#39;</span>),
+                     <span class="dt">tuneLength=</span><span class="dv">5</span>, 
+                     <span class="dt">trace=</span>F, 
+                     <span class="dt">maxit=</span><span class="dv">1000</span>)
 results_nnet</code></pre></div>
 <pre><code>Model Averaged Neural Network 
 
@@ -732,9 +741,13 @@ Prediction Bad Good
 <!-- Select the mtry that produces the best performance. -->
 <!-- Run the test data through the selected forest. -->
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rf_opts =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mtry=</span><span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>))
-results_rf =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;rf&#39;</span>,
-                   <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts, 
-                   <span class="dt">tuneGrid=</span>rf_opts, <span class="dt">n.tree=</span><span class="dv">1000</span>)
+results_rf =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., 
+                   <span class="dt">data=</span>wine_train, 
+                   <span class="dt">method=</span><span class="st">&#39;rf&#39;</span>,
+                   <span class="dt">preProcess=</span><span class="kw">c</span>(<span class="st">&#39;center&#39;</span>, <span class="st">&#39;scale&#39;</span>), 
+                   <span class="dt">trControl=</span>cv_opts, 
+                   <span class="dt">tuneGrid=</span>rf_opts, 
+                   <span class="dt">n.tree=</span><span class="dv">1000</span>)
 results_rf</code></pre></div>
 <pre><code>Random Forest 
 
@@ -816,8 +829,12 @@ Prediction Bad Good
 <p><img src="img/svm3d.png" style="display:block; margin: 0 auto;" width=50%><br></p>
 <p>Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes. Real data will not be so clean cut, and total separation impossible, but the idea is the same.</p>
 <p>For the following we use <code>method = 'svmLinear2'</code>, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is a regularization parameter applied to the cost function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_svm =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., <span class="dt">data=</span>wine_train, <span class="dt">method=</span><span class="st">&#39;svmLinear2&#39;</span>,
-                    <span class="dt">preProcess=</span><span class="st">&#39;range&#39;</span>, <span class="dt">trControl=</span>cv_opts, <span class="dt">tuneLength=</span><span class="dv">5</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_svm =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., 
+                    <span class="dt">data=</span>wine_train, 
+                    <span class="dt">method=</span><span class="st">&#39;svmLinear2&#39;</span>,
+                    <span class="dt">preProcess=</span><span class="kw">c</span>(<span class="st">&#39;center&#39;</span>, <span class="st">&#39;scale&#39;</span>), 
+                    <span class="dt">trControl=</span>cv_opts, 
+                    <span class="dt">tuneLength=</span><span class="dv">5</span>)
 results_svm</code></pre></div>
 <pre><code>Support Vector Machines with Linear Kernel 
 
