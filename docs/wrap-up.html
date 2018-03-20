@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-03-18">
+<meta name="date" content="2018-03-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -263,7 +263,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </div>
 <div id="imputation" class="section level3">
 <h3>Imputation</h3>
-<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a>.</p>
+<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>.</p>
 <p>Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
 </div>
 </div>
@@ -331,7 +331,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 <div id="deep-learning" class="section level2">
 <h2>Deep Learning</h2>
 <p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
-<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn49" class="footnoteRef" id="fnref49"><sup>49</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
 <p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
 <p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/" class="uri">http://deeplearning.net/</a>, and I have a minimal demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
 </div>
@@ -351,7 +351,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 </div>
 <div id="more-stuff" class="section level2">
 <h2>More Stuff</h2>
-<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a>, semi-supervised learning<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, online learning<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a>, and many more.</p>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a>, semi-supervised learning<a href="#fn52" class="footnoteRef" id="fnref52"><sup>52</sup></a>, online learning<a href="#fn53" class="footnoteRef" id="fnref53"><sup>53</sup></a>, and many more.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -371,7 +371,7 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 <li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
 <li><p>Avoid overfitting.</p></li>
 <li><p>Let the data speak for itself.</p></li>
-<li><p>“Nothing is more practical than a good theory.”<a href="#fn53" class="footnoteRef" id="fnref53"><sup>53</sup></a></p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn54" class="footnoteRef" id="fnref54"><sup>54</sup></a></p></li>
 <li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression <span class="math inline">\(\rightarrow\)</span> random forest <span class="math inline">\(\rightarrow\)</span> your-fancy-technique. Don’t get too excited if you aren’t doing significantly better than a random forest with default settings.</p></li>
 <li><p>Drawing up a visual path of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
 <li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
@@ -393,13 +393,13 @@ preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, 
 </div>
 <div class="footnotes">
 <hr />
-<ol start="48">
-<li id="fn48"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref48">↩</a></p></li>
-<li id="fn49"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref49">↩</a></p></li>
-<li id="fn50"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref50">↩</a></p></li>
-<li id="fn51"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref51">↩</a></p></li>
-<li id="fn52"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref52">↩</a></p></li>
-<li id="fn53"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref53">↩</a></p></li>
+<ol start="49">
+<li id="fn49"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="wrap-up.html#fnref49">↩</a></p></li>
+<li id="fn50"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="wrap-up.html#fnref50">↩</a></p></li>
+<li id="fn51"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="wrap-up.html#fnref51">↩</a></p></li>
+<li id="fn52"><p>Learning with both labeled and unlabeled data.<a href="wrap-up.html#fnref52">↩</a></p></li>
+<li id="fn53"><p>Learning from a continuous stream of data.<a href="wrap-up.html#fnref53">↩</a></p></li>
+<li id="fn54"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="wrap-up.html#fnref54">↩</a></p></li>
 </ol>
 </div>
             </section>

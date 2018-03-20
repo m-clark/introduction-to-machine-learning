@@ -302,7 +302,7 @@ wine_test = wine %>%
 Let's take an initial peek at how the predictors separate on the target.  In the following I'm 'predicting' the pre-possessed data so as to get the transformed data.  Again, we'll leave the preprocessing to the training process eventually, but here it will put them on the same scale for visual display. 
 
 
-```{r featureplot, echo=1:3, eval=c(1,2,4)}
+```{r featureplot, echo=2:3, eval=c(2,4)}
 wine_trainplot = predict(preProcess(select(wine_train, -good), method='range'), 
                          select(wine_train, -good))
 wine_trainplot = select(wine_train, -good) %>% 
@@ -324,7 +324,6 @@ wine_trainplot %>%
     strip.background = ggplot2::element_blank(),
     plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
   )
-  
 ```
 
 
@@ -373,7 +372,7 @@ conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good')
 
 We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
 
-Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  
+Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients.
 
 
 <!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
