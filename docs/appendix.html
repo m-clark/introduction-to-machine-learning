@@ -345,7 +345,7 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
 <div id="deep-learning-example" class="section level4">
 <h4>Deep learning example</h4>
 <p>The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>. The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>. For more on using TensorFlow with R, check out <a href="https://tensorflow.rstudio.com/">RStudio’s documentation</a>.</p>
-<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn55" class="footnoteRef" id="fnref55"><sup>55</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
+<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn56" class="footnoteRef" id="fnref56"><sup>56</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
 <p>This is just a starting point, so don’t expect any better performance than those shown previously, but it’ll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
 
@@ -391,7 +391,7 @@ caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_
 </div>
 <div id="python" class="section level3">
 <h3>Python</h3>
-<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn56" class="footnoteRef" id="fnref56"><sup>56</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
+<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn57" class="footnoteRef" id="fnref57"><sup>57</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
 <p>One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>. It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> sklearn <span class="im">as</span> sk
 <span class="im">import</span> pandas <span class="im">as</span> pd
@@ -431,7 +431,7 @@ acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="
 0  0.833077</code></pre>
 <div id="deep-learning-example-1" class="section level4">
 <h4>Deep learning example</h4>
-<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn57" class="footnoteRef" id="fnref57"><sup>57</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
+<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn58" class="footnoteRef" id="fnref58"><sup>58</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow.contrib.learn <span class="im">as</span> skflow
 <span class="im">from</span> sklearn <span class="im">import</span> metrics
 
@@ -472,10 +472,10 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 </div>
 <div class="footnotes">
 <hr />
-<ol start="55">
-<li id="fn55"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="appendix.html#fnref55">↩</a></p></li>
-<li id="fn56"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref56">↩</a></p></li>
-<li id="fn57"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="appendix.html#fnref57">↩</a></p></li>
+<ol start="56">
+<li id="fn56"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="appendix.html#fnref56">↩</a></p></li>
+<li id="fn57"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref57">↩</a></p></li>
+<li id="fn58"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="appendix.html#fnref58">↩</a></p></li>
 </ol>
 </div>
             </section>
