@@ -238,7 +238,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><span class="newthought">In this section, I note some other techniques</span> one may come across, and others that will provide additional insight into machine learning applications.</p>
 <div id="unsupervised-learning" class="section level2">
 <h2>Unsupervised Learning</h2>
-<p><span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to. In this situation, we are more interested in the discovery of structure within the data.</p>
+<p><span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to. In this situation, we are more interested in the discovery of structure within the data. For more examples, see this <a href="https://m-clark.github.io/sem/FA_notes.html">document</a>.</p>
 <div id="clustering" class="section level3">
 <h3>Clustering</h3>
 <p>Many of the techniques used in unsupervised learning are commonly taught in various disciplines as simply “cluster” analysis. The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure. Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).</p>
@@ -300,7 +300,7 @@ An example network graph of U.S. senators in 2006. Node size is based on the <em
 </ul>
 <p>}</p>
 <p>Return <span class="math inline">\(\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]\)</span></p>
-<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a>. The following shows an implementation.</p>
+<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a> and its variants. The following shows an implementation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xgboost)
 <span class="kw">modelLookup</span>(<span class="st">&quot;xgbLinear&quot;</span>)
 <span class="kw">modelLookup</span>(<span class="st">&quot;xgbTree&quot;</span>)

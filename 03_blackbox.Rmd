@@ -14,7 +14,7 @@ As with any typical statistical project, probably most of the time will be spent
 
 #### Define Data and Data Partitions
 
-As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a 'best' model being that which satisfies some criterion.  With final model and parameters chosen, generalization error will be assessed with the performance of the final model on the test data.
+As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a 'best' model being that which satisfies some criterion.  With final model and parameters chosen, generalization error will be assessed with the performance of the chosen model on the test data.
 
 In addition, when data is too large to fit in memory, it will possibly need to be partitioned regardless of the modeling scenario. Spark, Hadoop and other frameworks allow for analysis of data that is potentially distributed across several machines or cores within a machine.
 
@@ -26,7 +26,7 @@ Even with standard regression modeling, centering continuous variables (subtract
 
 #### Feature Engineering
 
-If we're lucky we'll have ideas on potential combinations or other transformations of the predictors we have available.  For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant.  Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process[^pcr].
+If we're lucky we'll have ideas on potential combinations or other transformations of the predictors we have available.  For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant.  Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process[^pcr].  However, many techniques are fine with more predictors than observations, even some still do well if many of them are irrelevant.
 
 One can implement a variety of such approaches in ML to create additional potentially relevant features, as well, even automatically. As a reminder though, a key concern is overfitting, and doing broad construction of this sort with no contextual guidance would potentially be prone to such a pitfall.  In other cases, it may simply be not worth the time expense.
 
@@ -128,6 +128,7 @@ D = 13
 Total = A + B + C + D
 ```
 
+<br>
 
 <span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.
 
@@ -241,7 +242,7 @@ DT::datatable(wine, options=list(dom='ftp', scrollX=T), width='50%')
 
 ## R Implementation
 
-I will use the <span class="pack">caret</span> package in R.  It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be.  However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information.  Check out the [caret home page](https://topepo.github.io/caret/index.html) for more detail. The methods selected here were chosen for breadth of approach, to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are: 
+I will use the <span class="pack">caret</span> package in R.  It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be.  However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information.  Check out the [caret home page](https://topepo.github.io/caret/index.html) for more detail. The methods selected here were chosen for breadth of approach, in order to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are: 
 
 - <span class="pack">glmnet</span>: <span class="func">glmnet</span>
 - <span class="pack">class</span>: <span class="func">knn</span>
@@ -276,12 +277,13 @@ wine %>%
   heatR::corrheat(width='75%', xaxis_font_size='75%')
 ```
 
+<br>
 
 I ran regressions to examine the R^2^ for each predictor in a model as if it were the dependent variable predicted by the other input variables.  The highest was for density at over 96%[^vif], and further investigation suggested color and sulfur dioxide are largely captured by the other variables already also.  These will not be considered in the following models.
 
 
 
-<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are `r nrow(wine)` total observations, of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will normalize the continuous variables to the [0,1] range.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.
+<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are `r nrow(wine)` total observations, of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will standardize the continuous variables to have a mean of zero and standard deviation of one.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.
 
 
 ```{r partition, echo=1:8}
@@ -327,7 +329,7 @@ wine_trainplot %>%
 ```
 
 
-For the training set, it looks like alcohol content[^drunkratings] and volatile acidity separate most with regard to the 'good' class. While this might give us some food for thought, note that the figure does not give insight into interaction effects, which methods such as trees will get at.
+For the training set, it looks like alcohol content[^drunkratings] and volatile acidity separate most with regard to the 'good' class. While this might give us some food for thought, note that the figure does not give insight into interaction or nonlinear effects, which some methods we use will explore.
 
 
 ## Regularized regression
@@ -336,7 +338,7 @@ We discussed regularized regression previously, and can start with such models. 
 
 In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus, we'll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter `alpha` to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have another parameter, `lambda`, which controls the penalty amount.
 
-You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging.  As such we will select their values as part of the validation process. 
+You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process. 
 
 The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.
 
@@ -353,7 +355,7 @@ results_regreg <- train(good~.,
                         tuneGrid = regreg_opts)
 save(results_regreg, file='data/results_regreg.RData')
 ```
-```{r regreg_train_results, echo=FALSE}
+```{r regreg_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_regreg.RData')
 results_regreg
 ```
@@ -372,7 +374,7 @@ conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good')
 
 We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
 
-Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients.
+Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients, which is okay since we scaled the data as part of the process.
 
 
 <!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
@@ -444,7 +446,7 @@ results_knn = train(good~.,
 results_knn
 save(results_knn, file='data/results_knn.RData')
 ```
-```{r knn_train_results, echo=FALSE}
+```{r knn_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_knn.RData')
 results_knn
 ```
@@ -527,13 +529,13 @@ results_nnet = train(good~.,
 results_nnet
 save(results_nnet, file='data/results_nnet.RData')
 ```
-```{r nnet_train_results, echo=FALSE}
+```{r nnet_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_nnet.RData')
 results_nnet
 ```
 
 
-We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization for the latter)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
 
 
 ```{r nnet_test, echo=-3}
@@ -543,7 +545,7 @@ conf_nnet = confusionMatrix(preds_nnet, good_observed, positive='Good')
 ```
 
 
-We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 1)`%), sensitivity, specificity etc.
+We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 1)`%), sensitivity, specificity etc.
 
 ### Strengths & Weaknesses
 
@@ -594,7 +596,7 @@ X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize=7.5 color="#00aaff"]
 }')
 ```
 
-<img src="img/tree1.png" style="display:block; margin: 0 auto;">
+<img src="img/tree1.png" style="display:block; margin: 0 auto;" width=35%>
 
 Now let's see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% in alcohol content (i.e. volatility >.25, alcohol between 9.85 and 10.63), they also get classified as good.  Any remaining observations are classified as bad wines.  In this way, the classification tree is getting at interactions among the variables involved- volatile acidity interacts with alcohol in predicting whether the wine is good or not.
 
@@ -654,7 +656,7 @@ results_rf = train(good~.,
 results_rf
 save(results_rf, file='data/results_rf.RData')
 ```
-```{r rf_train_results, echo=FALSE}
+```{r rf_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_rf.RData')
 results_rf
 ```
@@ -762,7 +764,7 @@ results_svm = train(good~.,
 results_svm
 save(results_svm, file='data/results_svm.RData')
 ```
-```{r svm_train_results, echo=FALSE}
+```{r svm_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_svm.RData')
 results_svm
 ```

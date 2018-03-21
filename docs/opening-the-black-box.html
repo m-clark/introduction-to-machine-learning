@@ -244,7 +244,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>As with any typical statistical project, probably most of the time will be spent preparing the data for analysis. Data is never ready to analyze right away, and careful checks must be made in order to ensure the integrity of the information. This would include correcting errors of entry, noting extreme values, possibly imputing missing data and so forth. In addition to these typical activities, we will discuss a couple more things to think about during this initial data examination when engaged in machine learning.</p>
 <div id="define-data-and-data-partitions" class="section level4">
 <h4>Define Data and Data Partitions</h4>
-<p>As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a ‘best’ model being that which satisfies some criterion. With final model and parameters chosen, generalization error will be assessed with the performance of the final model on the test data.</p>
+<p>As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a ‘best’ model being that which satisfies some criterion. With final model and parameters chosen, generalization error will be assessed with the performance of the chosen model on the test data.</p>
 <p>In addition, when data is too large to fit in memory, it will possibly need to be partitioned regardless of the modeling scenario. Spark, Hadoop and other frameworks allow for analysis of data that is potentially distributed across several machines or cores within a machine.</p>
 </div>
 <div id="feature-scaling" class="section level4">
@@ -253,7 +253,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="feature-engineering" class="section level4">
 <h4>Feature Engineering</h4>
-<p>If we’re lucky we’ll have ideas on potential combinations or other transformations of the predictors we have available. For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant. Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a>.</p>
+<p>If we’re lucky we’ll have ideas on potential combinations or other transformations of the predictors we have available. For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant. Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a>. However, many techniques are fine with more predictors than observations, even some still do well if many of them are irrelevant.</p>
 <p>One can implement a variety of such approaches in ML to create additional potentially relevant features, as well, even automatically. As a reminder though, a key concern is overfitting, and doing broad construction of this sort with no contextual guidance would potentially be prone to such a pitfall. In other cases, it may simply be not worth the time expense.</p>
 </div>
 <div id="discretization" class="section level4">
@@ -321,6 +321,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tbody>
 </table>
 </div>
+<p><br></p>
 <p><span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.</p>
 <p><span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about 59%.</p>
 <p><span class="emph">Error Rate</span>: 1 - Accuracy.</p>
@@ -374,7 +375,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="r-implementation" class="section level2">
 <h2>R Implementation</h2>
-<p>I will use the <span class="pack">caret</span> package in R. It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be. However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information. Check out the <a href="https://topepo.github.io/caret/index.html">caret home page</a> for more detail. The methods selected here were chosen for breadth of approach, to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are:</p>
+<p>I will use the <span class="pack">caret</span> package in R. It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be. However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information. Check out the <a href="https://topepo.github.io/caret/index.html">caret home page</a> for more detail. The methods selected here were chosen for breadth of approach, in order to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are:</p>
 <ul>
 <li><span class="pack">glmnet</span>: <span class="func">glmnet</span></li>
 <li><span class="pack">class</span>: <span class="func">knn</span></li>
@@ -396,8 +397,9 @@ model =<span class="st"> </span><span class="kw">train</span>(y <span class="op"
 <p>I also made some decisions to deal with the notable collinearity in the data, which can severely hamper some methods. We can look at the simple correlation matrix to start (hover for values).</p>
 <div id="htmlwidget-db78a55377f13e05f742" style="width:75%;height:480px;" class="d3heatmap html-widget"></div>
 <script type="application/json" data-for="htmlwidget-db78a55377f13e05f742">{"x":{"rows":null,"cols":null,"matrix":{"data":["1","0.7","0.472","-0.653","0.349","-0.513","-0.487","-0.391","0.033","0.119","0.187","-0.487","-0.329","0.7","1","0.721","-0.414","0.495","-0.28","-0.276","0.032","-0.266","-0.041","0.195","-0.329","-0.238","0.472","0.721","1","-0.353","0.403","-0.195","-0.188","0.026","-0.18","0.055","0.133","-0.283","-0.146","-0.653","-0.414","-0.353","1","-0.196","0.377","0.226","0.271","-0.038","-0.266","-0.378","0.219","0.261","0.349","0.495","0.403","-0.196","1","-0.129","-0.186","0.553","-0.359","-0.037","0.142","-0.112","-0.267","-0.513","-0.28","-0.195","0.377","-0.129","1","0.396","0.363","-0.257","-0.201","0.039","0.298","0.045","-0.487","-0.276","-0.188","0.226","-0.186","0.396","1","0.259","-0.003","0.038","0.056","0.3","0.192","-0.391","0.032","0.026","0.271","0.553","0.363","0.259","1","-0.687","-0.306","0.096","0.459","0.012","0.033","-0.266","-0.18","-0.038","-0.359","-0.257","-0.003","-0.687","1","0.444","-0.01","-0.095","0.121","0.119","-0.041","0.055","-0.266","-0.037","-0.201","0.038","-0.306","0.444","1","0.086","-0.077","0.02","0.187","0.195","0.133","-0.378","0.142","0.039","0.056","0.096","-0.01","0.086","1","0.324","-0.33","-0.487","-0.329","-0.283","0.219","-0.112","0.298","0.3","0.459","-0.095","-0.077","0.324","1","-0.253","-0.329","-0.238","-0.146","0.261","-0.267","0.045","0.192","0.012","0.121","0.02","-0.33","-0.253","1"],"dim":[13,13],"rows":["white","total.sulfur.dioxide","free.sulfur.dioxide","volatile.acidity","residual.sugar","chlorides","sulphates","density","alcohol","quality","citric.acid","fixed.acidity","pH"],"cols":["white","total.sulfur.dioxide","free.sulfur.dioxide","volatile.acidity","residual.sugar","chlorides","sulphates","density","alcohol","quality","citric.acid","fixed.acidity","pH"]},"image":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAACc0lEQVQokQXBS2gUBwDH4d/MtO4kWY2PDEFxidqo0dg0BjeC9eBBKyqujQUpPhAUPWQPtqWUXgqR1UsJPg4+aEDJSVKkAZ+ohbagBhR8VOuDxETdmGjMOsnuZNfMzuy/32fYjUnVJVpY3xzju7av+fu3G3xzei+GHcGoqcFrPYY74ZMrBCxp34HZFMesS7Tw7EI3F2+9xNm6mtuvslibtmCu28BE6zGif51hnukigdkUR7EFfLK+OYZfTNB/9QK0OixyyjAi88C0MAww58wnM8Whwi5C5UzMuQsxhlcskbN1NVQ5RE+Ok+/YxFnV01A1Hc8PWFPtE/Zcgt4nPEi0kfdDjHP3BnX7VZZFThnJyFPK910m370P3BF2PXbonOjC+vYAfX4ln00OUHp0C+uc/mvbuNimeUbAWdVzfs9Syls6mPXVZpbOruBzexzyWaxYHf+8NXCWr8I07AiYBpgWDVXTwR3hyIkf+SHZzvxpUawvW8gu20BYKiFEOlPANGpq8Nbux6tfi+cH7HrsEI1Y3Pg9xbptv9C/Ms60i0f5WCzRkx6ntroCxgqhgisdKj34U3KHFZz6WcG1M5Ln6kV9rezGpFLXe6VcRqU3zzXwviAGRgvShyGNekUFVzokd1jhnUty86HCrnalrvfKbkxqaMyX3vYr97Ek/k3n9PB1Tn0jeQXHv1fvu7zcfKhRr6hBd1LKZTQ05stuTOqPh8MKO1MyigcSMpviUDmT+1/spMka5FrWQYie9DgHG4RhfUr3uzK27z6E92scI+xMSbEFmHMXclO1rOo7T3bNHtKZArXVFYxkJ6maGqG86zCaHSP6013+Bx8uNVdHeHZhAAAAAElFTkSuQmCC","theme":null,"options":{"xaxis_height":80,"yaxis_width":120,"xaxis_font_size":"75%","yaxis_font_size":null,"brush_color":"#0000FF","show_grid":true,"anim_duration":500,"yclust_width":0,"xclust_height":0}},"evals":[],"jsHooks":[]}</script>
+<p><br></p>
 <p>I ran regressions to examine the R<sup>2</sup> for each predictor in a model as if it were the dependent variable predicted by the other input variables. The highest was for density at over 96%<a href="#fn33" class="footnoteRef" id="fnref33"><sup>33</sup></a>, and further investigation suggested color and sulfur dioxide are largely captured by the other variables already also. These will not be considered in the following models.</p>
-<p><span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data. There are 6497 total observations, of which I will put 80% into the training set. The function <span class="func">createDataPartition</span> will produce indices to use as the training set. In addition to this, we will normalize the continuous variables to the [0,1] range. For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.</p>
+<p><span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data. There are 6497 total observations, of which I will put 80% into the training set. The function <span class="func">createDataPartition</span> will produce indices to use as the training set. In addition to this, we will standardize the continuous variables to have a mean of zero and standard deviation of one. For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(caret)
 <span class="kw">set.seed</span>(<span class="dv">1234</span>) <span class="co"># so that the indices will be the same when re-run</span>
 trainIndices =<span class="st"> </span><span class="kw">createDataPartition</span>(wine<span class="op">$</span>good, <span class="dt">p=</span>.<span class="dv">8</span>, <span class="dt">list=</span>F)
@@ -415,13 +417,13 @@ wine_test =<span class="st"> </span>wine <span class="op">%&gt;%</span><span cla
 <span class="st">  </span><span class="kw">predict</span>(<span class="dt">newdata=</span> <span class="kw">select</span>(wine_train, <span class="op">-</span>good))
 ## featurePlot(wine_trainplot, wine_train$good, &#39;box&#39;)</code></pre></div>
 <p><img src="introduction-to-machine-learning_files/figure-html/featureplot-1.svg" width="672" style="display: block; margin: auto;" /></p>
-<p>For the training set, it looks like alcohol content<a href="#fn34" class="footnoteRef" id="fnref34"><sup>34</sup></a> and volatile acidity separate most with regard to the ‘good’ class. While this might give us some food for thought, note that the figure does not give insight into interaction effects, which methods such as trees will get at.</p>
+<p>For the training set, it looks like alcohol content<a href="#fn34" class="footnoteRef" id="fnref34"><sup>34</sup></a> and volatile acidity separate most with regard to the ‘good’ class. While this might give us some food for thought, note that the figure does not give insight into interaction or nonlinear effects, which some methods we use will explore.</p>
 </div>
 <div id="regularized-regression" class="section level2">
 <h2>Regularized regression</h2>
 <p>We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we’re used to, while incorporating concepts and techniques from the machine learning world.</p>
 <p>In this example, we’ll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches. Thus, we’ll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter <code>alpha</code> to 1, we have your standard lasso penalty, and 0 would be the ridge penalty. We have another parameter, <code>lambda</code>, which controls the penalty amount.</p>
-<p>You may be thinking- what should <code>alpha</code> and <code>lambda</code> be set to? They are examples of tuning parameters, for which we have no knowledge about its value without doing some initial digging. As such we will select their values as part of the validation process.</p>
+<p>You may be thinking- what should <code>alpha</code> and <code>lambda</code> be set to? They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging. As such we will select their values as part of the validation process.</p>
 <p>The <span class="pack">caret</span> package provides several techniques for validation such as <span class="math inline">\(k\)</span>-fold, bootstrap, leave-one-out and others. We will use 10-fold cross validation. We will also set up a range of values for <code>alpha</code> and <code>lambda</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cv_opts =<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&#39;cv&#39;</span>, <span class="dt">number=</span><span class="dv">10</span>)
 regreg_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">.alpha =</span> <span class="kw">seq</span>(.<span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length =</span> <span class="dv">5</span>),
@@ -470,7 +472,7 @@ Resampling results across tuning parameters:
   1.000  0.4     0.6330066  0.0000000000
   1.000  0.5     0.6330066  0.0000000000
 
-Accuracy was used to select the optimal model using  the largest value.
+Accuracy was used to select the optimal model using the largest value.
 The final values used for the model were alpha = 0.1 and lambda = 0.1.</code></pre>
 <p>The results suggest <span class="math inline">\(\alpha\)</span> = 0.1 and <span class="math inline">\(\lambda\)</span> = 0.1. Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means. The additional column, <span class="math inline">\(\kappa\)</span> (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement. It suggests several settings would result in models that do not do any better than chance.</p>
 <p>With the tuning parameters in place, now let’s see the results on the test set. The <span class="func">predict</span> function here will automatically use the best <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> from the previous process.</p>
@@ -504,7 +506,7 @@ Prediction Bad Good
        &#39;Positive&#39; Class : Good            
                                           </code></pre>
 <p>We get a lot of information here, but to focus on accuracy, we get around 72.6%. Note that this is performance on the <em>test set</em>, i.e. data that wasn’t used to train the model. The lower bound (and p-value) suggests we are statistically predicting better than the <em>No Information Rate</em> (i.e., just guessing the more prevalent ‘Bad’ category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine. Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help. Also, feature combination or other avenues might help improve the results as well.</p>
-<p>Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100<a href="#fn35" class="footnoteRef" id="fnref35"><sup>35</sup></a>. For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients.</p>
+<p>Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100<a href="#fn35" class="footnoteRef" id="fnref35"><sup>35</sup></a>. For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients, which is okay since we scaled the data as part of the process.</p>
 <!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
 <!-- Probably best to leave out. -->
 <p><img src="introduction-to-machine-learning_files/figure-html/regregvarimp-1.svg" width="576" style="display: block; margin: auto;" /></p>
@@ -551,24 +553,24 @@ results_knn</code></pre></div>
    9 predictor
    2 classes: &#39;Bad&#39;, &#39;Good&#39; 
 
-Pre-processing: re-scaling to [0, 1] (9) 
+Pre-processing: centered (9), scaled (9) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4679, 4679, 4680, 4679, 4679, 4679, ... 
+Summary of sample sizes: 4680, 4679, 4679, 4679, 4679, 4679, ... 
 Resampling results across tuning parameters:
 
   k    Accuracy   Kappa    
-    3  0.7520637  0.4585946
-    5  0.7464871  0.4416826
-    7  0.7501462  0.4483986
-    9  0.7461077  0.4381625
-   11  0.7474524  0.4416014
-   25  0.7482231  0.4412054
-   51  0.7434095  0.4271131
-  101  0.7422545  0.4191902
+    3  0.7536051  0.4609387
+    5  0.7443747  0.4359164
+    7  0.7505278  0.4479179
+    9  0.7487971  0.4432620
+   11  0.7551403  0.4575305
+   25  0.7528411  0.4504282
+   51  0.7493703  0.4368867
+  101  0.7445618  0.4207894
 
-Accuracy was used to select the optimal model using  the largest value.
-The final value used for the model was k = 3.</code></pre>
-<p>In this case it looks like choosing the nearest 3 neighbors (<span class="math inline">\(k=\)</span> 3) works best in terms of accuracy. Now that <span class="math inline">\(k\)</span> is chosen, let’s see how well the model performs on the test set.</p>
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was k = 11.</code></pre>
+<p>In this case it looks like choosing the nearest 11 neighbors (<span class="math inline">\(k=\)</span> 11) works best in terms of accuracy. Now that <span class="math inline">\(k\)</span> is chosen, let’s see how well the model performs on the test set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">preds_knn =<span class="st"> </span><span class="kw">predict</span>(results_knn, wine_test)
 <span class="kw">confusionMatrix</span>(preds_knn, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 <pre><code>Confusion Matrix and Statistics
@@ -638,42 +640,42 @@ results_nnet</code></pre></div>
    9 predictor
    2 classes: &#39;Bad&#39;, &#39;Good&#39; 
 
-Pre-processing: re-scaling to [0, 1] (9) 
+Pre-processing: centered (9), scaled (9) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4679, 4679, 4680, 4679, 4679, 4679, ... 
+Summary of sample sizes: 4680, 4679, 4679, 4679, 4679, 4679, ... 
 Resampling results across tuning parameters:
 
   size  decay  Accuracy   Kappa    
-  1     0e+00  0.7401362  0.4248475
-  1     1e-04  0.7403285  0.4252178
-  1     1e-03  0.7401362  0.4249818
-  1     1e-02  0.7397515  0.4241420
-  1     1e-01  0.7403285  0.4245922
-  3     0e+00  0.7522571  0.4505584
-  3     1e-04  0.7547564  0.4578420
-  3     1e-03  0.7557168  0.4587638
-  3     1e-02  0.7557190  0.4584317
-  3     1e-01  0.7530278  0.4498135
-  5     0e+00  0.7622608  0.4701828
-  5     1e-04  0.7609161  0.4723491
-  5     1e-03  0.7568729  0.4645590
-  5     1e-02  0.7580308  0.4666542
-  5     1e-01  0.7539916  0.4526833
-  7     0e+00  0.7666906  0.4797897
-  7     1e-04  0.7609139  0.4752926
-  7     1e-03  0.7591802  0.4713360
-  7     1e-02  0.7603396  0.4722025
-  7     1e-01  0.7547604  0.4546705
-  9     0e+00  0.7680297  0.4848122
-  9     1e-04  0.7678392  0.4900763
-  9     1e-03  0.7616820  0.4761124
-  9     1e-02  0.7593762  0.4709083
-  9     1e-01  0.7545696  0.4541274
+  1     0e+00  0.7418758  0.4281475
+  1     1e-04  0.7418758  0.4281475
+  1     1e-03  0.7422604  0.4291346
+  1     1e-02  0.7420674  0.4290125
+  1     1e-01  0.7409135  0.4272660
+  3     0e+00  0.7564883  0.4601712
+  3     1e-04  0.7561070  0.4607032
+  3     1e-03  0.7582201  0.4652806
+  3     1e-02  0.7564905  0.4611899
+  3     1e-01  0.7593781  0.4670304
+  5     0e+00  0.7674557  0.4825182
+  5     1e-04  0.7622590  0.4742432
+  5     1e-03  0.7634147  0.4768157
+  5     1e-02  0.7620711  0.4743422
+  5     1e-01  0.7609150  0.4715354
+  7     0e+00  0.7714979  0.4965133
+  7     1e-04  0.7688004  0.4907053
+  7     1e-03  0.7637997  0.4782126
+  7     1e-02  0.7678400  0.4885388
+  7     1e-01  0.7607183  0.4712326
+  9     0e+00  0.7620574  0.4608267
+  9     1e-04  0.7755352  0.5048095
+  9     1e-03  0.7695685  0.4919259
+  9     1e-02  0.7701484  0.4935035
+  9     1e-01  0.7632264  0.4786383
 
 Tuning parameter &#39;bag&#39; was held constant at a value of FALSE
-Accuracy was used to select the optimal model using  the largest value.
-The final values used for the model were size = 9, decay = 0 and bag = FALSE.</code></pre>
-<p>We see that the best model has 9 hidden layer nodes and a decay parameter of 0 (though one might choose the next best that actually includes regularization). Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data. In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)<a href="#fn43" class="footnoteRef" id="fnref43"><sup>43</sup></a>, but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.</p>
+Accuracy was used to select the optimal model using the largest value.
+The final values used for the model were size = 9, decay = 1e-04 and bag = FALSE.</code></pre>
+<p>We see that the best model has 9 hidden layer nodes and a decay parameter of 10^{-4}. Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data. In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)<a href="#fn43" class="footnoteRef" id="fnref43"><sup>43</sup></a>, but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">preds_nnet =<span class="st"> </span><span class="kw">predict</span>(results_nnet, wine_test)
 <span class="kw">confusionMatrix</span>(preds_nnet, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 <pre><code>Confusion Matrix and Statistics
@@ -702,7 +704,7 @@ Prediction Bad Good
                                          
        &#39;Positive&#39; Class : Good           
                                          </code></pre>
-<p>We note improved prediction with the neural net model relative to the k-nearest neighbors approach, with increases in accuracy (77.7%), sensitivity, specificity etc.</p>
+<p>We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (77.7%), sensitivity, specificity etc.</p>
 <div id="strengths-weaknesses-2" class="section level3">
 <h3>Strengths &amp; Weaknesses</h3>
 <p><strong>Strengths</strong></p>
@@ -727,7 +729,7 @@ Prediction Bad Good
 <h2>Trees &amp; Forests</h2>
 <p>Classification and regression trees provide yet another and notably different approach to prediction. Consider a single input variable and binary dependent variable. We will start by searching all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy. So, for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive, and the rest negative. This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.</p>
 <p>Now let’s add a second input, also on a 1 to 10 range. We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable. The following is a hypothetical tree reflecting this.</p>
-<p><img src="img/tree1.png" style="display:block; margin: 0 auto;"></p>
+<p><img src="img/tree1.png" style="display:block; margin: 0 auto;" width=35%></p>
 <p>Now let’s see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows. If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% in alcohol content (i.e. volatility &gt;.25, alcohol between 9.85 and 10.63), they also get classified as good. Any remaining observations are classified as bad wines. In this way, the classification tree is getting at interactions among the variables involved- volatile acidity interacts with alcohol in predicting whether the wine is good or not.</p>
 <p><img src="img/tree2.png" style="display:block; margin: 0 auto;"></p>
 <p>Unfortunately, a single tree, while highly interpretable, does poorly for predictive purposes. In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data. So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold-out set (or simply those observations which weren’t selected during the sampling process, the ‘out-of-bag’ sample), in which the new data is ‘run down the tree’ to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.</p>
@@ -755,21 +757,21 @@ results_rf</code></pre></div>
    9 predictor
    2 classes: &#39;Bad&#39;, &#39;Good&#39; 
 
-Pre-processing: re-scaling to [0, 1] (9) 
+Pre-processing: centered (9), scaled (9) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4679, 4679, 4680, 4679, 4679, 4679, ... 
+Summary of sample sizes: 4680, 4679, 4679, 4679, 4679, 4679, ... 
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-  2     0.8259240  0.6167555
-  3     0.8245760  0.6141438
-  4     0.8207302  0.6065449
-  5     0.8236137  0.6132330
-  6     0.8205360  0.6075494
+  2     0.8282380  0.6214130
+  3     0.8295838  0.6259419
+  4     0.8288116  0.6240941
+  5     0.8286237  0.6240877
+  6     0.8282376  0.6238143
 
-Accuracy was used to select the optimal model using  the largest value.
-The final value used for the model was mtry = 2.</code></pre>
-<p>The initial results look promising with mtry = 2 producing the best initial result. Now for application to the test set.</p>
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 3.</code></pre>
+<p>The initial results look promising with mtry = 3 producing the best initial result. Now for application to the test set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">preds_rf =<span class="st"> </span><span class="kw">predict</span>(results_rf, wine_test)
 <span class="kw">confusionMatrix</span>(preds_rf, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 <pre><code>Confusion Matrix and Statistics
@@ -842,20 +844,20 @@ results_svm</code></pre></div>
    9 predictor
    2 classes: &#39;Bad&#39;, &#39;Good&#39; 
 
-Pre-processing: re-scaling to [0, 1] (9) 
+Pre-processing: centered (9), scaled (9) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4679, 4679, 4680, 4679, 4679, 4679, ... 
+Summary of sample sizes: 4680, 4679, 4679, 4679, 4679, 4679, ... 
 Resampling results across tuning parameters:
 
   cost  Accuracy   Kappa    
-  0.25  0.7453285  0.4294331
-  0.50  0.7455208  0.4299328
-  1.00  0.7457131  0.4302994
-  2.00  0.7449439  0.4288262
-  4.00  0.7449439  0.4288262
+  0.25  0.7445666  0.4272628
+  0.50  0.7449513  0.4283748
+  1.00  0.7445666  0.4276426
+  2.00  0.7449513  0.4285039
+  4.00  0.7451436  0.4290000
 
-Accuracy was used to select the optimal model using  the largest value.
-The final value used for the model was cost = 1.</code></pre>
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was cost = 4.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">preds_svm =<span class="st"> </span><span class="kw">predict</span>(results_svm, wine_test)
 <span class="kw">confusionMatrix</span>(preds_svm, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre></div>
 <pre><code>Confusion Matrix and Statistics
