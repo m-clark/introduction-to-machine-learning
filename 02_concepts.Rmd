@@ -170,10 +170,12 @@ rbind(`Standard LM`=coef(lm_result),
   formatStyle(columns=0:3, backgroundColor='#fffff8')
 ```
 <br>
+
+From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero. Now we move to testing. Normally both the training and test sets will be a random split of the original set, for this demo we'll generate the test as we did with the training.
+
 ```{r regularization_testset}
 # Create test data
 N_test = 50
-X_test = cbind(1, rnorm(N_test), rnorm(N_test))
 X_test = cbind(1, matrix(rnorm(N_test*10), ncol=10))
 y_test = rnorm(N_test, X_test%*%beta, sd=2)
 
@@ -194,7 +196,8 @@ data.frame(lm_test = crossprod(y_test - fits_lm),
            regularized_test = crossprod(y_test - fits_reg))
 ```
 
-From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero, while the residual sum of squares has increased just a tad.  On the test data however, the squared error loss is lower.
+We can see that the residual sum of squares has increased just a tad for the regularized fit on the training data.  On the test data however, the squared error loss is lower.
+
 
 In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact *biased*, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
 

@@ -319,12 +319,12 @@ wine_trainplot %>%
   facet_wrap(~predictor, nrow=2) +
   theme_trueMinimal() +
   theme(
-    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
-    panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
-    strip.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+    legend.key = element_rect(fill='#fffff8', colour = NA),
+    legend.background = element_rect(fill='#fffff8', colour = NA),
+    panel.background = element_blank(),
+    panel.grid = element_blank(),
+    strip.background = element_blank(),
+    plot.background = element_rect(fill = "#fffff8", colour = NA)
   )
 ```
 

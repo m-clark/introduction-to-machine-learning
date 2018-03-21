@@ -1,0 +1,2043 @@
+---
+title: <span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span>
+subtitle: <span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">An Introduction</span>
+author:  |
+  <span style="font-size:100%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">Michael Clark</span> <br>
+  <span class="" style="font-size:75%">https://m-clark.github.io</span><br><br>
+  <img src="img/CSCAR_logos/signature-acronym.png" style="width:30%; padding:10px 0;" alt="University of Michigan: CSCAR"> <br>
+  <img src="img/ARC_logos/ARC-acronym-signature.png" style="width:21%; padding:10px 0;" alt="University of Michigan: Advanced Research Computing"> 
+
+date: <span style="font-style:normal;font-family:'Open Sans'">`r Sys.Date()`</span>
+site: bookdown::bookdown_site
+output:
+  bookdown::gitbook:
+    css: [css/book.css, css/standard_html.css]
+    highlight: pygments
+    number_sections: false
+    config:
+      toc:
+        depth: 2
+        collapse: section
+        scroll_highlight: yes
+      edit : null
+      download: null
+      search: yes
+      sharing:
+        facebook: no
+        twitter: no
+        google: no
+        weibo: no
+        instapper: no
+        vk: no
+        all: ['twitter', 'facebook', 'google', 'weibo', 'instapaper']
+always_allow_html: yes
+# font-import: https://fonts.googleapis.com/css?family=Roboto|Open+Sans
+# font-family: 'Roboto'
+documentclass: book
+bibliography: MLtechrep.bib
+biblio-style: apalike
+link-citations: yes
+description: "This document provides an introduction to machine learning for applied researchers.  While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn."
+cover-image: 'img/nineteeneightyR.png'
+url: 'https\://m-clark.github.io/introduction-to-machine-learning/'  # evidently the \: is required or you'll get text in the title/toc area
+github-repo:  'm-clark/introduction-to-machine-learning/'
+nocite: | 
+  @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
+  @fahrmeir2013regression @efron2016computer
+
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=NA, R.options=list(width=220),   # code 
+                      dev.args=list(bg = 'transparent'), dev='svg', fig.align='center',                 # viz
+                      cache.rebuild=F, cache=T)                                                         # cache
+```
+
+```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
+library(lazerhawk); library(caret); library(DT); library(tufte)
+library(broom); library(pander); library(tidyverse); library(htmltools)
+```
+
+# 
+```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html'), out.width='35%'}
+knitr::include_graphics('img/198R.png', dpi = NA)
+```
+
+
+```{r ccimg, fig.align='center',  out.width=0, fig.show='hide', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
+# otherwise will not include in menu
+knitr::include_graphics('img/ccbysa.png', dpi = NA)
+knitr::include_graphics('img/mc.png', dpi = NA)
+```
+
+
+<!--chapter:end:index.Rmd-->
+
+# Preface
+
+<span class="newthought">The purpose of this document is to provide a conceptual introduction</span> to statistical or machine learning (ML) techniques for those that would not normally be exposed to such approaches during their typical required statistical training.  <span class="emph">Machine learning</span>[^mlothername] can be described as a form of statistics, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in applied disciplines.  The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.
+
+If one surveys the number of techniques available in ML without any context, one can easily be overwhelmed in terms of the sheer number of approaches, as well as the various tweaks and variations of them.  However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional techniques as well.  While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application[^moredata] and kept at the conceptual level as much as possible.  Note that Python versions of the model examples are available [here](https://github.com/m-clark/introduction-to-machine-learning/blob/master/black_box.ipynb).  In addition, Marcio Mourao has provided [additional Python examples](https://github.com/m-clark/introduction-to-machine-learning/blob/master/marcio_workshop.ipynb). 
+
+As for prerequisite knowledge, I will assume a basic familiarity with regression analyses typically presented in applied disciplines.  Regarding programming, none is really required to follow most of the content here, but some knowledge of R would be helpful if one wants to do the examples.  Note that I won't do much explaining of the code, as I will be more concerned with getting to a result than clearly detailing the path to it.  Armed with even introductory knowledge, if there are parts of R code that are unclear, there are many resources to investigate and discover the details on one's own, which results in more learning anyway.
+
+The latest version of this document is dated `r Sys.Date()`.  It was originally written in March 2013, when there was much more need for it in academia, at least outside of CS and Engineering departments.  For all the buzz of machine learning, deep learning, AI, etc., that need still exists, as most applied disciplines still do not teach such techniques as a core part of their training (yet).  However, the number of tools and information, within the realm of R and Python especially, has exploded, so you'll have plenty to keep you occupied.  Indeed, I'm not sure how much of the specific techniques and tools demonstrated in this document will be viable in another five years, so be prepared to keep up.
+
+
+Color coding in text:
+
+- <span class="emph">emphasis</span>
+- <span class="pack">package</span>
+- <span class="func">function</span>
+- <span class="objclass">object/class</span>
+- [link]()
+
+
+
+
+
+[^mlothername]: Also referred to as applied statistical learning, statistical engineering, data science or data mining in various academic, professional, and other contexts (correctly or not).
+
+[^moredata]: Indeed, there is evidence that with large enough samples many techniques converge to similar performance.
+
+<!--chapter:end:00_preface.Rmd-->
+
+# Introduction 
+
+## Explanation & Prediction
+
+<span class="newthought">For any particular analysis conducted</span>, emphasis can be placed on understanding the underlying mechanisms which have specific theoretical underpinnings, versus a focus that dwells more on performance and, more to the point, future performance.  These are not mutually exclusive goals in the least, and probably most studies contain a little of both in some form or fashion.  I will refer to the former emphasis as that of <span class="emph">explanation</span>, and the latter that of <span class="emph">prediction</span>[^infpred].
+
+In studies with a more explanatory focus, traditional analysis concerns a single data set.  For example, one assumes a data generating distribution for the response, and one evaluates the overall fit of a single model to the data at hand, e.g. in terms of R-squared, and statistical significance for the various predictors in the model.  One assesses how well the model lines up with the theory that led to the analysis, and modifies it accordingly, if need be, for future studies to consider.  Some studies may look at predictions for specific, possibly hypothetical values of the predictors, or examine the particular nature of covariate effects.  In many cases, only a single model is considered.  In general though, little attempt is made to explicitly understand how well the model will do with future data, but we hope to have gained greater insight as to the underlying mechanisms guiding the response of interest.  Following @breiman_statistical_2001, this would be more akin to the <span class="emph">data modeling culture</span>.
+
+For studies focused on prediction, other techniques are available that are far more focused on performance, not only for the current data under examination, but for future data the selected model might be applied to.  While still possible, relative predictor importance is less of an issue, and oftentimes there may be no particular theory to drive the analysis.  There may be thousands of input variables and thousands of parameters to estimate, such that no simple summary would likely be possible anyway.  However, many of the techniques applied in such analyses are quite powerful, and steps are taken to ensure better results for new data.  Referencing Breiman again, this perspective is more of the <span class="emph">algorithmic modeling culture</span>.
+
+While the two approaches are not exclusive, I present two extreme (though thankfully dated) views of the situation[^kerby]:
+
+*To paraphrase provocatively, 'machine learning is statistics minus any checking of models and assumptions'.*
+<br> $\sim$ Brian Ripley, 2004
+
+
+*... the focus in the statistical community on data models has:*
+
+- *Led to irrelevant theory and questionable scientific conclusions.*
+- *Kept statisticians from using more suitable algorithmic models.*
+- *Prevented statisticians from working on exciting new problems.*
+<br>
+$\sim$ Leo Breiman, 2001
+
+
+Respective departments of computer science, statistics, and related fields, now overlap more than ever, as more relaxed views prevail today. However, there are potential drawbacks to placing too much emphasis on explanation or prediction.  Performant models that 'just work' have the potential to be dangerous if they are little understood.  Conversely, situations for which much time is spent sorting out details for an ill-fitting model suffers the converse problem-  a variable amount of understanding coupled with little pragmatism.  While this document will focus on more prediction-focused approaches, guidance will be provided with an eye toward their use in situations where the typical explanatory approach would be applied, thereby hopefully shedding some light on a path toward obtaining the best of both worlds.
+
+## Terminology
+
+For those used to statistical concepts such as dependent variables, clustering, and predictors, etc. you will have to get used to some differences in terminology[^tibsgloss] such as targets, unsupervised learning, and features etc.  It doesn't take too much to get acclimated, even if it is somewhat annoying when one is first starting out.  I won't be too beholden to either in this paper, and it should be clear from the context what's being referred to.  Initially I will start off mostly with non-ML terms and note in brackets an ML version to help the orientation along.
+
+## Supervised vs. Unsupervised
+
+At least one distinction should be made from the outset, <span class="emph">supervised</span> vs. <span class="emph">unsupervised</span> learning.  Supervised learning is the typical regression or classification situation where we are trying to predict some target variable of interest, possibly several. Unsupervised learning seeks patterns within the data without regard to any specific target variable, and would include things like cluster analysis, principal components analysis, etc. They can also be used in conjunction. The focus of this document will be almost entirely on supervised learning, though we will discuss some forms of unsupervised learning by the end.
+
+
+## Tools you already have
+
+One thing that is important to keep in mind as you begin is that standard techniques from traditional statistics are still available in ML, although even then we might tweak them or do more with them.  So, having a basic background in statistics is all that is required to get started with machine learning.  Again, the difference between ML and traditional statistical analysis is more of focus than method.
+
+
+
+### The Standard Linear Model
+
+All introductory statistics courses will cover linear regression in great detail, and it certainly can serve as a starting point here.  We can describe it as follows in matrix notation in terms of the underlying data generating process:
+
+$$\mu = X\beta$$
+$$y \sim N(\mu,\sigma^{2})$$
+
+Where $y$ is conditionally  a normally distributed response [<span class="emph">target</span>] with mean $\mu$ and constant variance $\sigma^{2}$.  X is a typical model matrix, i.e. a matrix of predictor variables and in which the first column is a vector of 1s for the intercept [<span class="emph">bias</span>][^bias], and $\beta$ is the vector of coefficients [<span class="emph">weights</span>] corresponding to the intercept and predictors in the model matrix.
+
+What might be given less focus in applied courses is how often standard regression won't be the best tool for the job, or even applicable in the form it is presented.  Because of this, many applied researchers are still hammering screws with it, even as the explosion of statistical techniques of the past quarter century or more has rendered obsolete many current introductory statistical texts that are written for specific disciplines.  Even so, the concepts one gains in learning the standard linear model are generalizable, and even a few modifications of it, while still maintaining the basic design, can render it still very effective in situations where it is appropriate.
+
+Typically, in fitting [<span class="emph">training</span>] a model we tend to talk about R-squared and statistical significance of the coefficients for a small number of predictors.  For our purposes, let the focus instead be on the residual sum of squares[^sos], or *error*, with an eye towards its reduction and model comparison. In ML, we will not have a situation in which we are only considering one model fit, and so must find one that reduces the sum of the squared errors but without unnecessary complexity and overfitting, concepts we'll return to later.  Furthermore, we will be much more concerned with the model fit on new data that we haven't seen yet [<span class="emph">generalization</span>].
+
+
+
+### Logistic Regression
+
+Logistic regression is often used where the response is categorical in nature, usually with binary outcome in which some event occurs or does not occur [<span class="emph">label</span>].  One could still use the standard linear model here, but you could end up with nonsensical predictions that fall outside the 0-1 range regarding the probability of the event occurring, to go along with other shortcomings.  Furthermore, it is no more effort nor is any understanding lost in using a logistic regression over the linear probability model.  It is also good to keep logistic regression in mind as we discuss other classification approaches later on.
+
+Logistic regression is also typically covered in an introduction to statistics for applied disciplines because of the pervasiveness of binary responses, or responses that have been made as such[^discretize].  Like the standard linear model, just a few modifications can enable one to use it to provide better performance, particularly with new data.  The gist is, it is not the case that we have to abandon familiar tools in the move toward a machine learning perspective.
+
+
+### Expansions of Those Tools
+
+#### Generalized Linear Models 
+
+To begin, logistic regression is a generalized linear model assuming a binomial distribution for the response and with a *logit* link function as follows:
+
+
+$$\eta = X\beta$$
+$$\eta = g(\mu)$$
+$$\mu = g(\eta)^{-1}$$
+$$y \sim \mathrm{Bin}(\mu, \mathrm{size}=1)$$
+
+This is the same presentation format as seen with the standard linear model presented before, except now we have a link function $g(.)$ and so are dealing with a transformed response.  In the case of the standard linear model, the distribution assumed is the Gaussian and the link function is the identity link, i.e. no transformation is made. The link function used will depend on the analysis performed, and while there is choice in the matter, the distributions used have a typical, or canonical link function[^poisson].
+
+Generalized linear models expand the standard linear model, which is a special case of generalized linear model, beyond the Gaussian distribution for the response, and allow for better fitting models of categorical, count, and skewed response variables.  We also have a counterpart to the residual sum of squares, though we'll now refer to it as the <span class="emph">deviance</span>.
+
+
+#### Generalized Additive Models
+
+Additive models extend the generalized linear model to incorporate nonlinear relationships of predictors to the response. We might note it as follows:
+
+
+$$\eta = X\beta + f(Z)$$
+$$\mu = g(\eta)^{-1}$$
+$$y \sim \mathrm{family}(\mu, ...)$$
+
+
+So we have the generalized linear model, but also smooth functions $f(Z)$ of one or more predictors.  More detail can be found in @wood_generalized_2006 and I provide an introduction [here](https://m-clark.github.io/generalized-additive-models/).  
+
+Things do start to get fuzzy with GAMs.  It becomes more difficult to obtain statistical inference for the smooth terms in the model, and the nonlinearity does not always lend itself to easy interpretation.  However, really this just means that we have a little more work to get the desired level of understanding.  GAMs can be seen as a segue toward more black box/algorithmic techniques.  Compared to some of those techniques in machine learning, GAMs are notably more interpretable, though GAMs are perhaps less so than GLMs.  Also, part of the estimation process includes regularization and validation in determining the nature of the smooth function, topics of which we will return later.
+
+
+
+[^tibsgloss]: See  [this](https://statweb.stanford.edu/~tibs/stat315a/glossary.pdf) for a comparison.
+
+[^kerby]: A favorite around our office is 'Machine learning is magic!' attributed to our director Kerby Shedden, in response to a client's over enthusiasm to something they did not understand well.
+
+[^bias]: Yes, you will see 'bias' refer to an intercept, and also mean something entirely different in our discussion of bias vs. variance.  Often, techniques inherently induce bias to get better prediction (see the [regularization][Regularization] section).
+
+[^sos]: $\sum(y-f(x))^{2}$ where $f(x)$ is a function of the model predictors, and in this context a linear combination of them ($X\beta$).
+
+[^discretize]: It is generally a bad idea to discretize continuous variables, especially the dependent variable. However contextual issues, e.g. disease diagnosis, might warrant it.
+
+[^poisson]: As another example, for the Poisson distribution, the typical link function would be the $log(\mu)$.
+
+[^infpred]: In other words, there are cases where we are more interested in statistical inference and hypothesis testing versus times where we are more in performance.
+
+<!--chapter:end:01_intro.Rmd-->
+
+# Concepts
+
+
+<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function, $f(X)$, to make predictions of y from those input variables.  We also need a function to penalize errors in prediction, i.e. a <span class="emph">loss function</span>.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+
+
+## Loss Functions
+
+### Continuous Outcomes
+
+#### Squared Error
+
+The classic loss function for linear models with a continuous numeric response is the squared error loss function, or the residual sum of squares.
+
+
+$$L(Y, f(X)) = \sum(y-f(X))^2$$
+
+Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  Often they are not taught that it is one of many possible approaches.  However, the average, or <span class="emph">mean squared error</span> is commonly used as a metric of performance (or it's square root).
+
+
+
+#### Absolute Error
+
+For an approach that is more robust to extreme observations, we might choose absolute rather than squared error.  In this case, predictions are a conditional median rather than a conditional mean.
+
+
+$$L(Y, f(X)) = \sum|(y-f(X))|$$
+
+#### Negative Log-likelihood
+
+We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the *negative* log-likelihood pertaining to the model of interest.  Such methods seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize its negative value.  As an example, if we assume a normal distribution for the response we can note the loss function as:
+
+
+$$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
+
+In this case it would converge to the same answer as the squared error/least squares solution.
+
+
+#### R Example
+
+The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients ($\beta$ from before) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  In the following, the true values for the intercept and other coefficients are `(0, -.5, .5)`. We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
+
+
+```{r squareloss}
+sqerrloss = function(beta, X, y){
+  mu = X %*% beta
+  sum((y-mu)^2)
+}
+
+# data setup
+set.seed(123)
+N = 100
+X = cbind(1, rnorm(N), rnorm(N))
+beta = c(0, -.5, .5)
+y =  rnorm(N, X%*%beta, sd=1)
+
+# results
+our_func = optim(par=c(0,0,0), fn=sqerrloss, X=X, y=y, method='BFGS')
+lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
+rbind(optim=c(our_func$par, our_func$value), 
+      lm=c(coef(lm_result), sum(resid(lm_result)^2)))
+```
+
+While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.
+
+
+
+### Categorical Outcomes
+
+Here we'll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though, we'll have different options.
+
+#### Misclassification
+
+Probably the most straightforward is misclassification, or 0-1 loss.  If we note $f$ as the prediction, and for convenience we assume a [-1,1] response instead of a [0,1] response:
+
+
+$$L(Y, f(X)) = \sum I(y\neq \mathrm{sign}(f))$$
+
+In the above, $I$ is the indicator function, and so we are simply summing misclassifications.
+
+
+#### Binomial log-likelihood
+
+
+$$L(Y, f(X)) = \sum \ln(1 + e^{-2yf})$$
+
+The above is in deviance form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance.  This loss is equivalent to binomial log likelihood when $y$ is on the 0-1 scale.
+
+#### Exponential
+
+Exponential loss is yet another loss function at our disposal.
+
+
+$$L(Y, f(X)) = \sum e^{-yf}$$
+
+#### Hinge Loss
+
+A final loss function to consider, typically used with support vector machines, is the hinge loss function.
+
+$$L(Y, f(X)) = \max(1-yf, 0)$$
+
+Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.  The following compares these (from @hastie_elements_2009).
+
+<img src="img/lossfuncs.png" style="display:block; margin: 0 auto;" width=50%>
+
+Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  
+
+
+## Regularization
+
+<span class="newthought">It is important to note</span> that a model fit to a single data set might do very well with the data at hand, but then suffer when predicting independent data[^biasvar].  Also, oftentimes we are interested in a 'best' subset of predictors among a great many, and in this scenario the estimated coefficients are overly optimistic.  This general issue can be improved by shrinking estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction.
+
+Penalized estimation will provide estimates with some shrinkage, and we can use it with little additional effort with our common procedures.  Concretely, let's apply this to the standard linear model, where we are finding estimates of $\beta$ that minimize the squared error loss.
+
+
+$$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2}$$
+
+In words, we're finding the coefficients that minimize the sum of the squared residuals.  Now we just add a penalty component to the procedure as follows.
+
+
+$$\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2} + \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
+
+In the above equation, $\lambda$ is our penalty term[^penterm] for which larger values will result in more shrinkage.  It's applied to the $L_1$ or Manhattan norm of the coefficients, $\beta_1,\beta_2...\beta_p$, i.e. *not including the intercept* $\beta_0$, and is the sum of their absolute values (commonly referred to as the <span class="emph">lasso</span>[^lasso]). For generalized linear and additive models, we can conceptually express a penalized likelihood as follows:
+
+
+$$l_p(\beta) = l(\beta) - \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}$$
+
+As we are maximizing the likelihood, the penalty is a subtraction, but nothing inherently different is shown.  If we are minimizing the negative (log) likelihood, we then add the penalty. This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.
+
+It should be noted that we can go about the regularization in different ways.  For example, using the squared $L_2$ norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization)[^lassobayes], and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. We'll see an example of this later.
+
+
+
+### R Example
+
+In the following example, we take a look at the lasso approach for a standard linear model.  We add the regularization component, with a fixed penalty $\lambda$ for demonstration purposes[^lambda].  However, you should insert your own values for $\lambda$ in the <span class="func">optim</span> line to see how the results are affected. I've also increased the number of predictors to 10.
+
+```{r regularization}
+# data setup
+set.seed(123)
+N = 100
+X = cbind(1, matrix(rnorm(N*10), ncol=10))
+beta = runif(ncol(X))
+y =  rnorm(N, X%*%beta, sd=2)
+
+sqerrloss_reg = function(beta, X, y, lambda=.5){
+  mu = X%*%beta
+  # sum((y-mu)^2) + lambda*sum(abs(beta[-1])) # conceptual
+  sum((y-mu)^2) + 2*length(y)*lambda*sum(abs(beta[-1])) # actual for lasso
+}
+
+lm_result = lm(y~., data.frame(X[,-1]) )
+regularized_result = optim(par=rep(0, ncol(X)), 
+                           fn=sqerrloss_reg, 
+                           X=X, 
+                           y=y, 
+                           method='BFGS')
+```
+<br>
+
+
+```{r regularization_show_result, echo=FALSE}
+rbind(`Standard LM`=coef(lm_result), 
+      `Regularized Model`=regularized_result$par) %>% 
+  t() %>% 
+  round(3) %>% 
+  datatable(options=list(dom='t', pageLength=11, ordering=F), 
+            width='50%',
+            class='compact|nowrap') %>%
+  formatStyle(columns=0:3, backgroundColor='#fffff8')
+```
+<br>
+
+From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero. Now we move to testing. Normally both the training and test sets will be a random split of the original set, for this demo we'll generate the test as we did with the training.
+
+```{r regularization_testset}
+# Create test data
+N_test = 50
+X_test = cbind(1, matrix(rnorm(N_test*10), ncol=10))
+y_test = rnorm(N_test, X_test%*%beta, sd=2)
+
+# fits on training set
+fits_lm = fitted(lm_result, newdata = data.frame(X))
+fits_reg = X%*%regularized_result$par
+
+# loss on training set
+data.frame(lm_train = crossprod(y - fits_lm),
+           regularized_train = crossprod(y - fits_reg))
+
+# fits on test set
+fits_lm = predict(lm_result, newdata = data.frame(X_test))
+fits_reg = X_test%*%regularized_result$par
+
+# loss on test set
+data.frame(lm_test = crossprod(y_test - fits_lm),
+           regularized_test = crossprod(y_test - fits_reg))
+```
+
+We can see that the residual sum of squares has increased just a tad for the regularized fit on the training data.  On the test data however, the squared error loss is lower.
+
+
+In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc.  The primary goal again is to hopefully increase our ability to generalize the selected model to new data.  Note that the estimates produced are in fact *biased*, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.
+
+
+
+## Bias-Variance Tradeoff
+
+In most of science, we are concerned with reducing uncertainty in our knowledge of some phenomenon.  The more we know about the factors involved or related to some outcome of interest, the better we can predict that outcome upon the influx of new information.  The initial step is to take the data at hand, and determine how well a model or set of models fit the data in various fashions.  In many applications however, this part is also more or less the end of the game as well[^bigdata].
+
+Unfortunately, such an approach, in which we only fit models to one data set, does not give a very good sense of <span class="emph">generalization</span> performance, i.e. the performance we would see with new data.  While typically not reported, most researchers, if they are spending appropriate time with the data, are actually testing a great many models, among which the 'best' is then provided in detail in the end report.  Without some generalization performance check however, such performance is overstated when it comes to new data.
+
+In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class='emph'>training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance[^tuning].  We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data.  So, in addition to the previously noted goal of finding the 'best' model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).
+
+### Bias & Variance
+
+We start[^biasvarref] with a true data generating process for some target $y$, expressed as a function of features $X$. We can specify the true model as 
+
+$$y = f(X) + \epsilon$$
+
+where $f(x)$ is the expected value of $y$ given $X$, i.e. $f(x) = E(y|X)$. The expected value of the error, $E(\epsilon)=0$, has some variance, $\textrm{Var}(\epsilon) = \sigma^2_\epsilon$.  In other words, we are talking about the standard regression model we all know and love.  Now we can conceptually think of the *expected prediction error* at a specific input $X = x_*$ as: 
+
+
+$$\text{Error}_{x_*} = \text{Irreducible Error} + \text{Bias}^2 + \text{Variance}$$
+
+
+To better understand this, think of training models over and over, each time with new training data, but testing each model at input $x_*$. The $\text{Error}_{x_*}$ is the average, or expected value of the prediction error in this scenario, or $E[(y - \hat f(x))^2|X=x_*]$, with $\hat f$ our current estimate of the true underlying data generating function $f$. We can note three components to this general notion of prediction error: 
+
+**Irreducible error**: The variance of the (new test) target ($\sigma^2_\epsilon$). This is unavoidable, since our $y$ is measured with error.
+
+**Bias^2^**: the amount the *average* of our estimate varies from the true (but unknown) value ($E(\hat f) - f$). This is often the result of trying to model the complexity of nature with something much simpler that the human brain can understand. While the simpler might make us feel good, it may not work very well.
+
+**Variance**: the amount by which our prediction would change if we had estimated it using a different training data set ($Var(\hat f)$). Even with unbiased estimates, we could still see a high mean squared error due to high variance.
+
+Slightly more formally, we can present this as follows, with $h_*$ our estimated (hypothesized) value at $x_*$:
+
+
+$$\text{Error}_{x_*} = \text{Var}(\epsilon) + (\text{E}[h_*] - f(x_*))^2 + \text{Var}(h_*)$$
+
+The latter two components make up the mean squared error in our previous demonstration.  While they are under our control, they compete with one another such that oftentimes we improve one at the detriment of the other. In other words, *bias and variance are not independent*.
+
+
+
+### The Tradeoff
+
+Outlining a general procedure, we start by noting the prediction error on a training data set with multiple models of varying complexity (e.g. increasing the number of predictor variables, adding polynomial terms, including interactions), and then assess the performance of the chosen models in terms of prediction error on the test set.  We then perform the same activity for a total of 100 simulated data sets, for each level of complexity.
+
+The results from this process might look like the following, taken from @hastie_elements_2009.  With regard to the training data, we have $\mathrm{error}_{\mathrm{train}}$ for one hundred training sets for each level of model complexity.  The bold blue line notes this average error over the 100 sets by model complexity, and we can see that more complex models fit the data better.  The bold red line is the average test error ($\mathrm{error}_{\mathrm{test}}$) across the 100 test data sets, and it tells a different story. When models get too complex, the test error starts to *increase*.
+
+<img src="img/biasvar2.svg" style="display:block; margin: 0 auto;" width=50%>
+
+Ideally we'd like to see low bias and (relatively) low  variance, but things are not so easy. One thing we can see clearly is that $\mathrm{error}_{\mathrm{train}}$ is not a good estimate of $\mathrm{error}_{\mathrm{test}}$, which is now our focus in terms of performance. If we think of the training error as what we would see in typical research where one does everything with a single data set, we are using the same data set to fit the model and assess error.  As the model is adapted to that data set specifically, it will be overly optimistic in the estimate of the error, that optimism being the difference between the error rate we see based on the training data versus the average of what we would get with many test data sets.  We can think of this as a problem of overfitting to the training data.  Models that do not incorporate any regularization or validation process of any kind are likely overfit to the data presented.
+
+Generally speaking, the more complex the model, the lower the bias, but the higher the variance, as depicted in the graphic.  Specifically however, the situation is more nuanced, where the type of problem (classification with 0-1 loss vs. continuous response with squared error loss[^biasvardimen]) and technique (a standard linear model vs. regularized fit) will exhibit different bias-variance relationships.
+
+
+
+
+### Diagnosing Bias-Variance Issues *&* Possible Solutions
+
+The following can serve as a visual summary of the concepts just outlined (figure adapted from @domingos_few_2012).
+
+<img src="img/biasvartarget.svg" style="display:block; margin: 0 auto;" width=50%> <br> 
+
+Now let's assume a regularized linear model with a standard data split into training and test sets.  We will describe different scenarios with possible solutions.
+
+
+#### Worst Case Scenario
+
+Starting with the worst case scenario, poor models may exhibit high bias and high variance.  One thing that will not help this situation (perhaps contrary to intuition) is adding more data.  You can't make a silk purse out of a sow's ear ([*usually*](https://libraries.mit.edu/archives/exhibits/purse/)), and adding more data just gives you a more accurate picture of how awful your model is. One might need to rework the model, e.g. adding new predictors or creating them via interaction terms, polynomials, or other smooth functions as in additive models, or simply collecting better and/or more relevant data.
+
+
+#### High Variance
+
+When variance is a problem, our training error is low while test error is relatively high (overfitting problem). Implementing more shrinkage or other penalization to model complexity may help with the issue.  In this case more data may help as well.
+
+#### High Bias
+
+With bias issues, our training error is high and test error is not too different from training error (underfitting problem).  Adding new predictors/features, e.g. interaction terms, polynomials etc., can help here.  Additionally, reducing the penalty parameter $\lambda$ would also work with even less effort, though generally it should be estimated rather than explicitly set.
+
+
+Here is another visualization to drive the point home.
+
+<img class='imgbigger' src="img/biasvar_gp.svg" style="display:block; margin: 0 auto;" width=50%> 
+
+<br> 
+
+The figure is inspired by @murphy_machine_2012 (figure 6.5) showing the bias-variance trade-off.  Sample (left) and average (right) fits of linear regression using a Gaussian radial basis function expansion. The blue line represents the true x-y relationship. The top row shows low variance between one fit and the next (left) but notable bias (right) in that the average fit is off.  Compare to the less regularized (high variance, low bias) situation of the bottom row.  See the <span class="pack">kernlab</span> package for the fitting function used, and the [appendix][Appendix] for the code used to produce the graph.
+
+
+
+### Bias-Variance Summary
+
+One of the key ideas any applied researcher can take from machine learning concerns the bias-variance trade-off and issues of overfitting in particular.  Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication.  Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing.  Furthermore, very complex models are often fit to small data sets, compounding the problem.
+
+It is very easy to describe ***science*** without ever talking about statistical significance.  It is impossible to talk about science without talking about prediction.  The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications[^bvclass]. 
+
+
+
+## Cross-Validation
+
+As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data.  The simplest validation approach would be to split the data available into a training and test set as discussed previously.  We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. The following displays a hypothetical learning curve from the results of such a process.  While the approach is fairly simple, other approaches are more commonly used and result in better estimates of predictive performance[^validation].
+
+<img src="img/learningcurve.svg" style="display:block; margin: 0 auto;" width=50%>
+
+### Adding Another Validation Set
+
+One technique that might be utilized for larger data sets, is to split the data into training, *validation*, and test sets.  For example, one might take the original data and create something like a 60-20-20% split to create the needed data sets.  The purpose of the initial validation set is to select the optimal model and determine the values of <span class="emph">tuning parameters</span>.  These are parameters which generally deal with how complex a model one will allow, but for which one would have little inkling as to what they should be set at beforehand. For example, our $\lambda$ shrinkage parameter in regularized regression would be such a parameter.  We first select models/tuning parameters that minimize the validation set error, and once the model is chosen, we then examine test set error performance.  In this way performance assessment is still independent of the model development process.
+
+
+
+### K-fold Cross-Validation
+
+In many cases we don't have enough data for such a split, and the split percentages are arbitrary anyway, with results that would be specific to the split chosen.  Instead we can take a typical data set and randomly split it into $\kappa=10$ equal-sized (or close to it) parts.  Next, we take the first nine partitions, combine them, and use them as the training set.  With chosen model from the training data, make predictions on the held-out partition.  Now we do it again, but this time use the 9^th^ partition as the holdout set. Repeat the process until each of the initial 10 partitions of data have been used as the test set.  Average the error across all procedures for our estimate of prediction error.  With enough data, this (and the following methods) could be used as the validation procedure before eventual performance assessment on an independent test set with the final chosen model.
+
+<img src="img/kfold.svg" style="display:block; margin: 0 auto;" width=50%> <br>  
+<p style="text-align:center">An illustration of 3-fold classification.</p>
+
+#### Leave-one-out Cross-Validation
+
+Leave-one-out (LOO) cross-validation is the same thing but where $\kappa=N$.  In other words, we train a model for all observations except the $\kappa^{th}$ one, assessing fit on the observation that was left out. We then cycle through until all observations have been left out once to obtain an average accuracy.  
+
+Of the two, K-fold may have relatively higher bias but less variance, while LOO would have the converse problem, as well as possible computational issues[^gcv].  K-fold's additional bias would be diminished would with increasing sample sizes, and generally 5 or 10-fold cross-validation is recommended.  However, many model selection techniques (e.g. via AIC) have a leave-one-out interpretation.
+
+
+### Bootstrap
+
+With a bootstrap approach, we draw $B$ random samples with replacement from our original data set, creating $B$ bootstrapped data sets of the same size as the original data.  We use the $B$ data sets as training sets and, using the original data as the test set, average the prediction error across the models.
+
+
+### Other Stuff
+
+Along with the above there are variations such as repeated cross validation, the '.632' bootstrap and so forth.  One would want to do a bit of investigating, but $\kappa$-fold and bootstrap approaches generally perform well.  If variable selection is part of the goal, one should be selecting subsets of predictors as part of the cross-validation process, not at some initial data step.
+
+
+
+
+
+
+
+
+
+
+
+[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used of all techniques.
+
+[^optimfunc]: Type `?optim` at the console for more detail.
+
+[^catregloss]: For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also.  We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).
+
+[^biasvar]: In terminology we will discuss further later, such models might have low bias but notable variance.
+
+[^penterm]: This can be set explicitly or also estimated via a validation approach.  As we do not know it beforehand, we can estimate it on a validation data set (not the test set) and then use the estimated value when estimating coefficients via cross-validation with the test set.  We will talk more about validation later.
+
+[^lasso]: See Tibshirani (1996) Regression shrinkage and selection via the lasso.
+
+[^lambda]: As noted previously, in practice $\lambda$ would be estimated via some validation procedure.
+
+[^lassobayes]: Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the $\beta_j$.
+
+[^bigdata]: I should note that I do not make any particular claim about the quality of such analysis.  In many situations, the cost of data collection is very high, and for all the current enamorment with 'big' data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations).  In these situations, getting new data for which one might make predictions is extremely difficult.
+
+[^tuning]: In typical settings, there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The $\lambda$ penalty parameter in regularized regression is one example of such a <span class='emph'>tuning parameter</span>. In the best case scenario, we would also have a <span class='emph'>validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen.  However, methods are available to us in which we can approximate the validation step in other ways.
+
+[^biasvarref]: Much of the following is essentially a paraphrase of parts of @hastie_elements_2009 (chapters 2 and 7).
+
+[^biasvardimen]: See Friedman (1996) *On Bias, Variance, 0/1 Loss and the Curse of Dimensionality* for the unusual situations that can arise in dealing with classification error with regard to bias and variance.
+
+[^validation]: Along with some of the other works cited, see @harrell2015regression for a good discussion of model validation.
+
+[^gcv]: For squared-error loss situations, there is a Generalized cross-validation (GCV) that can be estimated more directly without actually going to the entire LOO procedure, and functions similarly to AIC.
+
+[^bvclass]: Note that the bias-variance tradeoff doesn't readily apply to classification problems, at least not in the same way.  To begin, the relationship is multiplicative, and depending on which side of the decision boundary one is on (correct vs. not), it might even be useful to increase the variance.  However, if one thinks in terms of predicted probabilities rather than predicted class, one can more or less keep the same mindset. 
+
+<!--chapter:end:02_concepts.Rmd-->
+
+# Opening the Black Box
+
+<span class="newthought">It's now time to see some machine learning in action</span>. In what follows, a variety of techniques will be used on the same problem to provide a better feel for the sorts of tools that are available.
+
+## Process Overview
+
+Despite the facade of a polished product one finds in published research, most of the approach with the statistical analysis of data is full of data preparation, starts and stops, debugging, re-analysis, tweaking and fine-tuning etc. Statistical learning is no different in this sense.  Before we begin with explicit examples, it might be best to give a general overview of the path we'll take.
+
+
+### Data Preparation
+
+As with any typical statistical project, probably most of the time will be spent preparing the data for analysis.  Data is never ready to analyze right away, and careful checks must be made in order to ensure the integrity of the information.  This would include correcting errors of entry, noting extreme values, possibly imputing missing data and so forth.  In addition to these typical activities, we will discuss a couple more things to think about during this initial data examination when engaged in machine learning.
+
+
+#### Define Data and Data Partitions
+
+As we have noted previously, ideally we will have enough data to incorporate some validation procedure. This would be some random partition of the data such that we could safely conclude that the data in the test set comes from the same population as the training set. The validation set is used to fit the initial models at various tuning parameter settings, with a 'best' model being that which satisfies some criterion.  With final model and parameters chosen, generalization error will be assessed with the performance of the chosen model on the test data.
+
+In addition, when data is too large to fit in memory, it will possibly need to be partitioned regardless of the modeling scenario. Spark, Hadoop and other frameworks allow for analysis of data that is potentially distributed across several machines or cores within a machine.
+
+
+#### Feature Scaling
+
+Even with standard regression modeling, centering continuous variables (subtracting the mean) is a good idea so that intercepts and zero points are meaningful. Standardizing variables so that they have similar variances or ranges will help some procedures find their maximums/minimums faster.  Another common transformation is *min-max* normalization[^minmax], which will transfer a scale to a new one of some chosen minimum and maximum.  Note that whatever approach is done, it must be done *after* any explicit separation of data.  So if you have separate training and test sets, they should be scaled separately. Of course, with enough data and appropriate partitioning, it shouldn't matter.
+
+
+#### Feature Engineering
+
+If we're lucky we'll have ideas on potential combinations or other transformations of the predictors we have available.  For example, in typical social science research there are two-way interactions one is often predisposed to try, or perhaps one can sum multiple items to a single scale score that may be more relevant.  Another common technique is to use a dimension reduction scheme such as principal components, but this can (and probably should) actually be implemented as part of the ML process[^pcr].  However, many techniques are fine with more predictors than observations, even some still do well if many of them are irrelevant.
+
+One can implement a variety of such approaches in ML to create additional potentially relevant features, as well, even automatically. As a reminder though, a key concern is overfitting, and doing broad construction of this sort with no contextual guidance would potentially be prone to such a pitfall.  In other cases, it may simply be not worth the time expense.
+
+
+#### Discretization
+
+While there may be some contextual exceptions to the rule, it is generally a pretty bad idea in standard statistical modeling to discretize/categorize continuous variables[^discretize2].  However, some ML procedures will work better (or just notably faster) if dealing with discrete valued predictors rather than continuous. Others even require them; for example, *logic regression* needs binary input.  While one could pick arbitrary intervals and cut-points in an unsupervised fashion, such as picking equal range bins or equal frequency bins, there are supervised approaches that will use the information in the data to produce some 'optimal' discretization.
+
+It's generally not a good idea to force things in data analysis, and given that a lot of data situations will contain mixed data types, it seems easier to simply apply some scaling to preserve the inherent relationships in the data.  Again though, if one has only a relative few continuous variables, or a context in which it makes sense to, it's probably better to leave continuous variables as such.
+
+
+### Model Selection
+
+With data prepared and ready to analyze, one can use a validation process to come up with a viable model.  Use an optimization procedure or a simple grid search over a set of specific values to examine models at different tuning parameters. Perhaps make a finer search once an initial range of good performing values is found, though one should not split hairs over arbitrarily close performance.  Select a 'best' model given some criterion such as overall accuracy, or if concerned about over fitting, select the simplest model within one standard error of the accuracy of the best, or perhaps the simplest within X% of the best model.  For highly skewed classes, one might need to use a different measure of performance besides accuracy, as simply guessing the most common category could lead to very high accuracy.  If one has a great many predictor variables, one may use the model selection process to select features that are 'most important'.
+
+
+### Model Assessment
+
+With tuning parameters/features chosen, we then examine performance on the independent test set (or via some validation procedure). For classification problems, consider other statistics besides accuracy as measures of performance, especially if classes are unbalanced. Consider other analytical techniques that are applicable and compare performance among the different approaches.  One can even combine disparate models' predictions to possibly create an even better classifier[^ensemble].
+
+#### Regression
+
+In typical model comparison within the standard linear model framework, there are a number of ways in which we might assess performance across competing models.  For standard OLS regression we might examine adjusted-$R^2$ or a statistical test with nested models, or with the generalized linear models we might pick a model with the lowest AIC[^aic].  As we have already discussed, in the machine learning context we are interested in models that reduce e.g. squared error loss (regression) or misclassification error (classification).  However, in dealing with many models some differences in performance may be arbitrary.
+
+#### Beyond Classification Accuracy: Other Measures of Performance
+
+In typical classification situations we are interested in overall accuracy.  There are situations however, not uncommon, in which simple accuracy isn't a good measure of performance.  As an example, consider the prediction of the occurrence of a rare disease. Guessing a non-event every time might result in 99.9% accuracy, but that isn't how we would prefer to go about assessing some classifier's performance.
+To demonstrate other sources of classification information, we will use the following 2x2 table that shows values of some binary outcome (0 = non-event, 1 = event occurs) to the predictions made by some model for that response (arbitrary model).  Both a table of actual values, often called a <span class="emph">confusion matrix</span>[^confusion], and an abstract version are provided.
+
+
+<!-- between the combined failure of pander datatable and div in tufte (ignores width and other); a 3 coloumn hack gets clean tables side by side via a ghosted third column but still may screw up.  Keeping latex for now: see # see https://stackoverflow.com/questions/38386808/render-latex-tables-in-html-using-rmarkwown -->
+
+
+```{r confusionMatrix, echo=F}
+tex2markdown <- function(texstring) {
+  writeLines(text = texstring,
+             con = myfile <- tempfile(fileext = ".tex"))
+  texfile <- knitr::pandoc(input = myfile, format = "html")
+  cat(readLines(texfile), sep = "\n")
+  unlink(c(myfile, texfile))
+}
+
+# freqs = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0', 
+#                  'Predicted', '1', '41','21',
+#                  '', '0', '16','13'), 4, 4, byrow=T)
+# lets = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0', 
+#                  'Predicted', '1', 'A','B',
+#                  '', '0', 'C','D'), 4, 4, byrow=T)
+# lets = data.frame(lets)
+# colnames(lets) = c('','','','')
+# 
+# library(DT)
+# datatable(freqs,  options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# 
+# htmltools::br()
+# 
+# datatable(lets, options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+# 
+# htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+# htmltools::br();htmltools::br();htmltools::br();htmltools::br(); htmltools::br()
+
+
+```
+
+
+<div class="col2">
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | 41 | 21 |
+| Predicted = 0  | 16 | 13 |
+
+
+
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | A | B |
+| Predicted = 0  | C | D |
+</div>
+
+```{r confmat_values, echo=FALSE}
+A = 41
+B = 21
+C = 16
+D = 13
+# truepos_total = A + C
+# pospred_total = A + B
+# trueneg_total = B + D
+# negpred_total = C + D
+Total = A + B + C + D
+```
+
+<br>
+
+<span class="emph">True Positive</span>, <span class="emph">False Positive</span>, <span class="emph">True Negative</span>, <span class="emph">False Negative</span>: Above, these are A, B, D, and C respectively.
+
+<span class="emph">Accuracy</span>: Number of correct classifications out of all predictions ((A+D)/Total). In the above example this would be (41+13)/91, about `r round((A+D)/Total,2)*100`%.
+
+<span class="emph">Error Rate</span>: 1 - Accuracy.
+
+<span class="emph">Sensitivity</span>: is the proportion of correctly predicted positives to all true positive events: A/(A+C).  In the above example this would be 41/57, about `r round(A/(A+C),2)*100`%. High sensitivity would suggest a low type II error rate (see below), or high statistical power. Also known as *true positive rate*.
+
+<span class="emph">Specificity</span>: is the proportion of correctly predicted negatives to all true negative events: D/(B+D).  In the above example this would be 13/34, about `r round(D/(B+D),2)*100`%. High specificity would suggest a low type I error rate (see below). Also known as *true negative rate*.
+
+<span class="emph">Positive Predictive Value</span> (PPV): proportion of true positives of those that are predicted positives: A/(A+B). In the above example this would be 41/62, about `r round(A/(A+B),2)*100`%.
+
+<span class="emph">Negative Predictive Value</span> (NPV): proportion of true negatives of those that are predicted negative: D/(C+D). In the above example this would be 13/29, about `r round(D/(C+D),2)*100`%.
+
+<span class="emph">Precision</span>:  See PPV.
+
+<span class="emph">Recall</span>: See sensitivity.
+
+<span class="emph">Lift</span>: Ratio of positive predictions given actual positives to the proportion of positive predictions out of the total: (A/(A+C))/((A+B)/Total). In the above example this would be (41/(41+16))/((41+21)/(91)), or `r round((A/(A+C))/((A+B)/Total),2)`.
+
+<span class="emph">F Score</span> (F1 score): Harmonic mean of precision and recall: 2\*(Precision\*Recall)/(Precision+Recall). In the above example this would be 2\*(.66\*.72)/(.66+.72), about `r round(2*(.66*.72)/(.66+.72),2)`.
+
+<span class="emph">Type I Error Rate</span> (false positive rate): proportion of true negatives that are incorrectly predicted positive: B/(B+D). In the above example this would be 21/34, about `r round(B/(B+D),2)*100`%.  Also known as *alpha*.
+
+<span class="emph">Type II Error Rate</span> (false negative rate): proportion of true positives that are incorrectly predicted negative: C/(C+A). In the above example this would be 16/57, about `r round(C/(C+A),2)*100`%. Also known as *beta*.
+
+<span class="emph">False Discovery Rate</span>: proportion of false positives among all positive predictions: B/(A+B). In the above example this would be 21/62, about `r round(B/(A+B),2)*100`%.  Often used in multiple comparison testing in the context of ANOVA.
+
+<span class="emph">Phi coefficient</span>: A measure of association: (A\*D - B\*C)/(sqrt((A+C)\*(D+B)\*(A+B)\*(D+C))).  In the above example this would be `r psych::phi(matrix(c(A,C,B,D),2))`.
+
+
+Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.:
+
+
+```{r confusionMatrix2, echo=F, cache=F, results='asis', eval=T}
+# cm1 = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0',
+#                  'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','\\(F₊/N₋\\) = FPR = Type I',
+#                  '', '0', 'F₋/N₊ = FNR = Type II','T₋/N₋ = TNR = specificity'), 4, 4, byrow=T)# %>% data.frame(stringsAsFactors=F)
+# cm2 = matrix(c('', '', '', 'Actual',
+#                  '', '', '1', '0',
+#                  'Predicted', '1', 'T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity = recall','F<sub>+</sub>/N<sub>-</sub> = FPR = Type I',
+#                  '', '0', 'F<sub>-</sub>/N<sub>+</sub> = FNR = Type II','T<sub>-</sub>/N<sub>-</sub> = TNR = specificity'), 4, 4, byrow=T)
+# 
+# library(DT)
+# DT::datatable(cm1, options=list(dom='t',
+#                             ordering=F,
+#                             columnDefs = list(list(className = 'dt-right', targets = 1:3))),
+#           width='35%', colnames=rep('', 4), rownames=F) %>%
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# 
+# 
+# DT::datatable(cm2, options=list(dom='t',
+#                             ordering=F,
+#                             columnDefs = list(list(className = 'dt-right', targets = 1:3))),
+#           width='35%', colnames=rep('', 4), rownames=F) %>%
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')
+# htmlTable::htmlTable(cm1)
+
+# cm1
+# 
+
+# htmltools::br()
+# 
+# datatable(lets, options=list(dom='t', 
+#                              ordering=F, 
+#                              columnDefs = list(list(className = 'dt-right', targets = 1:3))), 
+#           width='35%', colnames=rep('', 4), rownames=F) %>% 
+#   formatStyle(columns=1:4, backgroundColor='#fffff8')  # only way to remove the idiotic row coloring
+
+
+```
+
+
+<div class="" style="text-align:center; width:75%">
+|   | Actual = 1  | Actual = 0  |
+|:-:|:-:|:-:|
+| Predicted = 1  | T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity =recall  | F<sub>+</sub>/N<sub>-</sub> = Type I  |
+| Predicted = 0  |  F<sub>-</sub>/N<sub>+</sub> = Type II |  T<sub>-</sub>/N<sub>_+_</sub> = TNR = specificity |
+</div>
+
+
+
+There are many other measures such as area under a Receiver Operating Curve (<span class="emph">ROC</span>), <span class="emph">odds ratio</span>, and even more names for some of the above.  The gist is that given any particular situation you might be interested in one or several of them, and it would generally be a good idea to look at a few.
+
+
+
+
+
+## The Dataset
+
+We will use the wine data set from the UCI Machine Learning data repository.  The goal is to predict wine quality, of which there are 7 values (integers 3-9).  We will turn this into a binary classification task to predict whether a wine is 'good' or not, which is arbitrarily chosen as 6 or higher.  After getting the hang of things, you might redo the analysis as a multiclass problem or even toy with regression approaches, just note there are very few 3s or 9s so you really only have 5 values to work with.  The original data along with detailed description can be found [here](http://archive.ics.uci.edu/ml/datasets/Wine+Quality), but aside from quality it contains predictors such as residual sugar, alcohol content, acidity and other characteristics of the wine[^wineraters].
+
+The original data is separated into white and red data sets. I have combined them and created additional variables: `color` and its binary version `white` indicating whether it is a white wine, and `good`, indicating scores greater than or equal to 6 (denoted as 'Good', else 'Bad').  Feel free to inspect the data a little bit before moving on[^sulfur].
+
+```{r dataprep, echo=FALSE}
+red = read.csv('data/winequality-red.csv', sep=';')
+white = read.csv('data/winequality-white.csv', sep=';')
+wine = rbind(data.frame(color='red', white=0, red) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))),
+             data.frame(color='white', white=1, white) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))))
+write.csv(wine, 'data/wine.csv', row.names=F)
+
+```
+
+
+```{r readwine, echo=1}
+wine = read.csv('data/wine.csv')
+DT::datatable(wine, options=list(dom='ftp', scrollX=T), width='50%')
+```
+
+## R Implementation
+
+I will use the <span class="pack">caret</span> package in R.  It makes implementation of validation, data partitioning, performance assessment, prediction and other procedures about as easy as it can be.  However, <span class="pack">caret</span> is mostly using other R packages for the modeling functions underlying the process, and those should be investigated for additional information.  Check out the [caret home page](https://topepo.github.io/caret/index.html) for more detail. The methods selected here were chosen for breadth of approach, in order to give a good sense of the variety of techniques available. In what follows, the associated packages and functions used are: 
+
+- <span class="pack">glmnet</span>: <span class="func">glmnet</span>
+- <span class="pack">class</span>: <span class="func">knn</span>
+- <span class="pack">caret</span>: <span class="func">avNNet</span>
+- <span class="pack">randomForest</span>: <span class="func">randomForest</span>
+- <span class="pack">e1071</span>: <span class="func">svm</span>
+
+
+In addition to <span class="pack">caret</span>, it's a good idea to use your computer's resources as much as possible, or some of these procedures may take a notably long time, and more so with the more data you have.  The <span class="pack">caret</span> package will do this behind the scenes, but you first need to set things up. Say, for example, you have a quad core processor, meaning your processor has four cores essentially acting as independent CPUs. You can set up R for parallel processing, then run <span class="pack">caret</span> functions as you normally would.  The following code demonstrates how, but see [this](https://topepo.github.io/caret/parallel-processing.html) for details.
+
+
+```{r parallel, eval=FALSE}
+library(doParallel)
+cl = makeCluster(7)
+registerDoParallel(cl)
+
+# All subsequent models are then run in parallel
+model = train(y ~ ., data = training, method = 'rf')
+```
+
+## Feature Selection & The Data Partition
+
+This data set is large enough to leave a holdout sample, allowing us to initially search for the best of a given modeling approach over a grid of tuning parameters specific to the technique.  To iterate previous discussion, we don't want test performance contaminated with the tuning process.  With the best model at $t$ tuning parameter(s), we will assess performance with prediction on the holdout set.
+
+I also made some decisions to deal with the notable collinearity in the data, which can severely hamper some methods.  We can look at the simple correlation matrix to start (hover for values).
+
+
+```{r winecor, echo=FALSE}
+wine %>% 
+  select_if(is.numeric) %>% 
+  cor %>% 
+  heatR::corrheat(width='75%', xaxis_font_size='75%')
+```
+
+<br>
+
+I ran regressions to examine the R^2^ for each predictor in a model as if it were the dependent variable predicted by the other input variables.  The highest was for density at over 96%[^vif], and further investigation suggested color and sulfur dioxide are largely captured by the other variables already also.  These will not be considered in the following models.
+
+
+
+<span class="pack">Caret</span> has its own partitioning function we can use here to separate the data into training and test data.  There are `r nrow(wine)` total observations, of which I will put 80% into the training set.  The function <span class="func">createDataPartition</span> will produce indices to use as the training set.  In addition to this, we will standardize the continuous variables to have a mean of zero and standard deviation of one.  For the training data set, this will be done as part of the training process, so that any subsets under consideration are scaled separately, but for the test set <span class="pack">caret</span> will do it automatically.
+
+
+```{r partition, echo=1:8}
+library(caret)
+set.seed(1234) # so that the indices will be the same when re-run
+trainIndices = createDataPartition(wine$good, p=.8, list=F)
+
+wine_train = wine %>% 
+  select(-free.sulfur.dioxide, -density, -quality, -color, -white) %>% 
+  slice(trainIndices)
+
+wine_test = wine %>% 
+  select(-free.sulfur.dioxide, -density, -quality, -color, -white) %>% 
+  slice(-trainIndices)
+```
+
+
+Let's take an initial peek at how the predictors separate on the target.  In the following I'm 'predicting' the pre-possessed data so as to get the transformed data.  Again, we'll leave the preprocessing to the training process eventually, but here it will put them on the same scale for visual display. 
+
+
+```{r featureplot, echo=3:4, eval=c(2,4)}
+wine_trainplot = predict(preProcess(select(wine_train, -good), method='range'), 
+                         select(wine_train, -good))
+wine_trainplot = select(wine_train, -good) %>% 
+  preProcess(method='range') %>% 
+  predict(newdata= select(wine_train, -good))
+featurePlot(wine_trainplot, wine_train$good, 'box')
+wine_trainplot %>% 
+  mutate(good = wine_train$good) %>% 
+  gather(key=predictor, value=value, -good) %>% 
+  ggplot(aes(x=good, y=value)) +
+  geom_boxplot() +
+  facet_wrap(~predictor, nrow=2) +
+  theme_trueMinimal() +
+  theme(
+    legend.key = element_rect(fill='#fffff8', colour = NA),
+    legend.background = element_rect(fill='#fffff8', colour = NA),
+    panel.background = element_blank(),
+    panel.grid = element_blank(),
+    strip.background = element_blank(),
+    plot.background = element_rect(fill = "#fffff8", colour = NA)
+  )
+```
+
+
+For the training set, it looks like alcohol content[^drunkratings] and volatile acidity separate most with regard to the 'good' class. While this might give us some food for thought, note that the figure does not give insight into interaction or nonlinear effects, which some methods we use will explore.
+
+
+## Regularized regression
+
+We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we're used to, while incorporating concepts and techniques from the machine learning world.  
+
+In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus, we'll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter `alpha` to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have another parameter, `lambda`, which controls the penalty amount.
+
+You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process. 
+
+The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.
+
+```{r regreg_train, eval=FALSE, echo=2:10}
+set.seed(1234)
+cv_opts = trainControl(method='cv', number=10)
+regreg_opts = expand.grid(.alpha = seq(.1, 1, length = 5),
+                          .lambda = seq(.1, .5, length = 5))
+results_regreg <- train(good~., 
+                        data=wine_train,
+                        method = "glmnet", 
+                        trControl = cv_opts,
+                        preProcess = c("center", "scale"),
+                        tuneGrid = regreg_opts)
+save(results_regreg, file='data/results_regreg.RData')
+```
+```{r regreg_train_results, echo=FALSE, cache.rebuild=F}
+load('data/results_regreg.RData')
+results_regreg
+```
+
+The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in models that do not do any better than chance.  
+
+With the tuning parameters in place, now let's see the results on the test set.  The <span class="func">predict</span> function here will automatically use the best $\alpha$ and $\lambda$ from the previous process.
+
+```{r regreg_test, echo=-4}
+preds_regreg = predict(results_regreg, wine_test)
+good_observed = wine_test$good
+confusionMatrix(preds_regreg, good_observed, positive='Good')
+conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good') 
+```
+
+
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
+
+Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients, which is okay since we scaled the data as part of the process.
+
+
+<!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
+
+<!-- Probably best to leave out. -->
+
+
+```{r regregvarimp, echo=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
+# varImp doesn't seem to work with new version of knn
+g = varImp(results_regreg)$importance %>%
+  select(Overall) %>% 
+  mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Overall)])) %>% 
+  ggplot() +
+  geom_point(aes(x=Variable, y=Overall, size=Overall), color='#ff5500', show.legend=F) +
+  labs(x='', y='Importance') +
+  theme(axis.text.x=element_text(angle=-45, hjust=0)) +
+  theme_trueMinimal() +                       # since gg will not respect transparent background
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+# plotly::ggplotly()  # tufte + plotly still means no latex
+g
+```
+
+### Strengths & Weaknesses
+
+#### Strengths
+
+- Intuitive approach.  In the end, it's still just a standard regression model you're already familiar with.
+- Widely used for many problems.  Would be fine to use in any setting you would use standard/logistic regression.
+
+#### Weaknesses
+
+- Does not automatically seek out interactions and non-linearity, and as such will generally not be as predictive as other techniques.
+- Variables have to be scaled or results will just be reflective of data types.
+- May have issues with correlated predictors
+
+
+### Final Thoughts
+
+Incorporating regularization would be fine as your default method, and something to strongly consider.  Furthermore, these approaches will have better prediction on new data than their standard complements.  As such they are a nice balance between staying interpretable while enhancing predictive capability. However, in general they are not going to be as strong of a method as others in the ML universe, and possibly not even competitive without a lot of feature engineering.  If prediction is all you care about for a particular modeling setting, you'll want to try something else.
+
+
+
+## $k$-nearest Neighbors
+
+Consider the typical distance matrix[^knn_dist] that is often used for cluster analysis of observations[^knn_unsupervised]. If we choose something like *Euclidean distance* as a metric, each point in the matrix gives the value of how far an observation is from some other, given their respective values on a set of variables.
+
+<span class="emph">K-nearest neighbors</span> approaches exploit this information for predictive purposes.  Let us take a classification example, and $k = 5$ neighbors.  For a given observation $x_i$, find the 5 closest neighbors in terms of Euclidean distance based on the predictor variables.  The class that is predicted is whatever class the majority of the neighbors are labeled as[^knn_vis].  For continuous outcomes, we might take the mean of those neighbors as the prediction.
+
+In this scenario, the number of neighbors $k$ will be the tuning parameter, and so we will have a set of values for $k$ to try out[^knn_tune]. The workhorse function under the hood originally comes from the highly descriptively named <span class="pack">class</span> package, authored by the well-known country music duo Venables & Ripley.
+
+
+```{r knn_train, eval=FALSE, echo=2:10}
+set.seed(1234)
+knn_opts = data.frame(k=c(seq(3, 11, 2), 25, 51, 101)) # odd to avoid ties
+results_knn = train(good~., 
+                    data=wine_train, 
+                    method='knn',
+                    preProcess=c('center', 'scale'), 
+                    trControl=cv_opts,
+                    tuneGrid = knn_opts)
+
+results_knn
+save(results_knn, file='data/results_knn.RData')
+```
+```{r knn_train_results, echo=FALSE, cache.rebuild=F}
+load('data/results_knn.RData')
+results_knn
+```
+
+
+In this case it looks like choosing the nearest `r results_knn$finalModel$k` neighbors ($k=$  `r results_knn$finalModel$k`) works best in terms of accuracy.  Now that $k$ is chosen, let's see how well the model performs on the test set.
+
+```{r knn_test, echo=-3}
+preds_knn = predict(results_knn, wine_test)
+confusionMatrix(preds_knn, good_observed, positive='Good')
+conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') #create an object to use in Sexpr
+```
+
+
+
+
+```{r knnvarimp, echo=FALSE, eval=FALSE, dev='svglite', fig.align='center', fig.width=6, fig.height=4}
+# varImp doesn't seem to work with new version of knn
+g = varImp(results_knn)$importance %>%
+  select(Good) %>% 
+  mutate(Variable=factor(rownames(.), levels=rownames(.)[order(.$Good)])) %>% 
+  ggplot() +
+  geom_point(aes(x=Variable, y=Good, size=Good), color='#ff5500', show.legend=F) +
+  labs(x='', y='Importance') +
+  theme(axis.text.x=element_text(angle=-45, hjust=0)) +
+  theme_trueMinimal() +                       # since gg will not respect transparent background
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+# plotly::ggplotly()  # tufte + plotly still means no latex
+g
+```
+
+
+### Strengths & Weaknesses
+
+**Strengths**[^knn_strength]
+
+- Intuitive approach.
+- Robust to outliers on the predictors.
+
+
+**Weaknesses**
+
+- Susceptible to irrelevant features.
+- Susceptible to correlated inputs.
+- Ability to handle data of mixed types.
+- Big data. Though approaches are available that help in this regard.
+
+### Final Thoughts
+
+To be perfectly honest, knn approaches have mostly fallen out of favor, due to the above issues and their relatively poor predictive capability in common settings.  However, they are conceptually simple, and thus a good way to start getting used to machine learning approaches, as knn regression doesn't take one too far afield from what they already know (i.e. regression, distance matrix/clustering).
+
+
+## Neural Networks
+<img src="img/nnet.png" style="display:block; margin: 0 auto;" width=50%>
+
+<span class="emph">Neural networks</span> have been around for a long while as a general concept in artificial intelligence and even as a machine learning algorithm, and often work quite well.  In some sense, neural networks can be thought of as nonlinear regression[^nnet_abs].  Visually however, we can see them as a graphical model with layers of inputs and outputs.  Weighted combinations of the inputs are created and put through some function (e.g. the sigmoid function) to produce the next layer of inputs. This next layer goes through the same process to produce either another layer, or to predict the output, or even multiple outputs, which serves as the final layer.  All the layers between the input and output are usually referred to as *hidden* layers. If there were a single hidden layer with a single unit and no transformation, then it becomes the standard regression problem.  
+
+One of the issues with neural nets is determining how many hidden layers and how many hidden units in a layer.  Overly complex neural nets will suffer from high variance will thus be less generalizable, particularly if there is less relevant information in the training data.  Another notion is that of <span class="emph">weight decay</span>, however this tied to the same concept as regularization, which we discussed in a previous section, where a penalty term would be applied to a norm of the weights.  Another regularization technique is <span class="emph">dropout</span>, where either observed or hidden units are randomly removed, and results averaged from the subsequent models.
+
+A comment about the following: if you are not set up for utilizing multiple processors the following will be relatively slow.  You can replace `method = 'avNNet'`, from the <span class="pack">caret</span> package, with `method = 'nnet'` from the <span class="pack">nnet</span> package, and shorten `tuneLength = 3`, which will be faster without much loss of accuracy.  Also, the function we're using has only one hidden layer, but the other neural net methods accessible via the <span class="pack">caret</span> package may allow for more, though the gains in prediction with additional layers are likely to be modest relative to complexity and computational cost. In addition, if the underlying function[^nnet_function] has additional arguments, you may pass those on in the train function itself.  Here I am increasing the `maxit`, or maximum iterations, argument.
+
+
+```{r nnet_train, echo=2:10, eval=FALSE}
+set.seed(1234)
+results_nnet = train(good~., 
+                     data=wine_train, 
+                     method='avNNet',
+                     trControl=cv_opts, 
+                     preProcess=c('center', 'scale'),
+                     tuneLength=5, 
+                     trace=F, 
+                     maxit=1000)
+results_nnet
+save(results_nnet, file='data/results_nnet.RData')
+```
+```{r nnet_train_results, echo=FALSE, cache.rebuild=F}
+load('data/results_nnet.RData')
+results_nnet
+```
+
+
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization for the latter)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
+
+
+```{r nnet_test, echo=-3}
+preds_nnet = predict(results_nnet, wine_test)
+confusionMatrix(preds_nnet, good_observed, positive='Good')
+conf_nnet = confusionMatrix(preds_nnet, good_observed, positive='Good') 
+```
+
+
+We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 1)`%), sensitivity, specificity etc.
+
+### Strengths & Weaknesses
+
+**Strengths**
+
+- Good prediction generally.
+- Incorporating the predictive power of different combinations of inputs.
+- Some tolerance to correlated inputs.
+
+**Weaknesses**
+
+- Susceptible to irrelevant features.
+- Not robust to outliers.
+- For traditional implementations, big data with complex models.
+
+### Final Thoughts
+
+As a final note, to say that neural networks have undergone a resurgence over the past 10 years is a gross understatement.  Practically everything you're hearing about <span class="emph">artificial intelligence</span> and <span class="emph">deep learning</span> can be translated to 'complicated neural networks'.  Neural networks are so ubiquitous, the inevitable backlash has now begun, where some are questioning whether they can be taken any further.  In any event, you should be familiar with them.  A nice visualization of how neural networks work can be found at [Chris Colah's blog](https://colah.github.io/posts/2014-03-NN-Manifolds-Topology/).  I talk a little about [deep learning][deep learning] in the next section, and there is some demo code in the [appendix][python].
+
+
+## Trees & Forests
+
+Classification and regression trees provide yet another and notably different approach to prediction.  Consider a single input variable and binary dependent variable.  We will start by searching all values of the input to find a point where, if we partition the data at that point, it will lead to the best classification accuracy.  So, for a single variable whose range might be 1 to 10, we find that a cut at 5.75 results in the best classification if all observations greater than or equal to 5.75 are classified as positive, and the rest negative.  This general approach is fairly straightforward and conceptually easy to grasp, and it is because of this that tree approaches are appealing.
+
+
+Now let's add a second input, also on a 1 to 10 range.  We now might find that even better classification results if, upon looking at the portion of data regarding those greater than or equal to 5.75, that we only classify positive if they are also less than 3 on the second variable.  The following is a hypothetical tree reflecting this.
+
+```{r hypotree, echo=FALSE, eval=F, cache=FALSE}
+# for whatever reason, this ceases to display appropriate fontsize in github book; display png until issue is fixed.
+library(DiagrammeR)
+grViz('digraph tree {
+graph [rankdir = TD  bgcolor="#fffff8"]
+
+node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
+
+node [fontcolor=gray25 fontname=Roboto fixedsize=true fontsize=5]
+X1 [width=.5] X2 [width=.5]; 
+Negative1 [label="Negative" shape=circle color="#ff5500" width=.5]; 
+Negative2 [label="Negative" shape=circle color="#ff5500" width=.5]; 
+Positive [ shape=circle color="#00aaff" width=.5];
+
+edge [color=gray50 arrowhead=dot]
+X1 -> Negative1 [label = " < 5.75", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+X1 -> X2 [label = " > 5.75", fontcolor="gray50" fontsize=7.5];
+X2 -> Negative2 [label = " > 3", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+
+}')
+```
+
+<img src="img/tree1.png" style="display:block; margin: 0 auto;" width=35%>
+
+Now let's see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% in alcohol content (i.e. volatility >.25, alcohol between 9.85 and 10.63), they also get classified as good.  Any remaining observations are classified as bad wines.  In this way, the classification tree is getting at interactions among the variables involved- volatile acidity interacts with alcohol in predicting whether the wine is good or not.
+
+```{r winetree, echo=FALSE, eval=F, cache=FALSE}
+grViz('digraph tree {
+graph [rankdir = TD bgcolor="#fffff8"]
+
+node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
+
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize=5]
+alcohol1 [label="alcohol" width=.5];
+alcohol2 [label="alcohol" width=.5];
+va [label="volatile.acidity" width=.5]; 
+Bad1  [label="Bad" shape=circle color="#ff5500" width=.5]; 
+Good1 [label="Good" shape=circle color="#00aaff" width=.5];
+Good2 [label="Good" shape=circle color="#00aaff" width=.5];
+Good3 [label="Good" shape=circle color="#00aaff" width=.5];
+
+edge [color=gray50 arrowhead=dot]
+alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize=7.5];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize=7.5];
+va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+
+}')
+```
+
+<img src="img/tree2.png" style="display:block; margin: 0 auto;">
+
+Unfortunately, a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold-out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
+
+Random forests are referred to as an <span class="emph">ensemble</span> method, one that is actually a combination of many models, and there are others we'll mention later.  There are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here (the argument `mtry`).  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set.
+
+There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of `mtry` predictor variables, etc.  But in the end, we are just harnessing the power of many trees, any one of which would be highly interpretable.  In the following, the <span class="pack">randomForest</span> package does the work.
+
+<!-- For all 9-1 splits of the data, -->
+<!-- Create 1000 random resamples of size $N_9$, -->
+<!-- For each t of 1000, create a tree -->
+<!-- At each split of each tree, randomly pick mtry predictor variables as potential splitter variables. -->
+<!-- Examine performance on the kth partition of data. -->
+<!-- Select the mtry that produces the best performance. -->
+<!-- Run the test data through the selected forest. -->
+
+
+```{r rf_train, echo=2:10, eval=FALSE}
+set.seed(1234)
+rf_opts = data.frame(mtry=c(2:6))
+results_rf = train(good~., 
+                   data=wine_train, 
+                   method='rf',
+                   preProcess=c('center', 'scale'), 
+                   trControl=cv_opts, 
+                   tuneGrid=rf_opts, 
+                   n.tree=1000)
+results_rf
+save(results_rf, file='data/results_rf.RData')
+```
+```{r rf_train_results, echo=FALSE, cache.rebuild=F}
+load('data/results_rf.RData')
+results_rf
+```
+
+
+The initial results look promising with mtry = `r results_rf$bestTune$mtry` producing the best initial result.  Now for application to the test set.
+
+```{r rf_test, echo=-3}
+preds_rf = predict(results_rf, wine_test)
+confusionMatrix(preds_rf, good_observed, positive='Good')
+conf_rf = confusionMatrix(preds_rf, good_observed, positive='Good')
+```
+
+
+This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data-specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches[^rfasbaseline].
+
+Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
+
+### Strengths & Weaknesses
+
+**Strengths**
+
+- A single tree is highly interpretable.
+- Easily incorporates features of different types (categorical and numeric).
+- Tolerance to irrelevant features.
+- Some tolerance to correlated inputs.
+- Good with big data.
+- Handling of missing values.
+
+**Weaknesses**
+
+- Few, but like all techniques, it might be relatively less predictive in certain situations.
+
+
+### Final Thoughts
+
+Random forests are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^rf_notcontinuous], are relatively fast, allow for an assessment of variable importance, and just plain work.  Unless you have massive amounts of data, even all the complicated neural net approaches out there will struggle to do better[^rf_100sclassifiers].  
+
+## Support Vector Machines
+
+
+```{r svm_plot, echo=FALSE, eval=T}
+#### svm plots
+set.seed(123)
+x = rnorm(50)
+y = rnorm(50)
+z = rnorm(50)
+
+#inner product space
+# z = sqrt(2)*x*y
+
+lab = factor((x + z) > 0, labels=c("class1","class2"))
+# lab = factor((x + sqrt(2)*x*y) > 0, labels=c("class1","class2"))
+
+d = data.frame(x,y,z,lab)
+# d2 = d[order(x,y),]
+# d3 = expand.grid(x=x,y=y); d3=d3[order(x,y),]
+
+gsvm = ggplot(aes(x,y), data=d) + 
+  geom_point(aes(color=lab), size=3, pch=19) + 
+  scale_color_manual(values=c("#FF5500", "#00aaff")) +
+  lazerhawk::theme_trueMinimal() +                       # since gg will not respect transparent background
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+
+
+# plot_ly(d, x = ~x, y = ~z, z = ~y, color = ~lab, colors = c("#FF5500", "#00aaff")) %>%
+#   add_markers(marker=list(opacity=.75)) %>% 
+#   lazerhawk::theme_plotly() %>% 
+#   layout(paper_bgcolor='#fffff8',
+#          plot_bgcolor='#fffff8')
+```
+
+
+<span class="emph">Support Vector Machines</span> (SVM) will be our last example, and are perhaps the least intuitive.  SVMs seek to map the input space to a higher dimension via a kernel function, and in that transformed feature space, find a hyperplane that will result in maximal separation of the data.
+
+To better understand this process, consider the following image of two inputs, $x$ and $y$. Cursory inspection shows no easy separation between classes.  However, if we can map the data to a higher dimension[^svm_higherd], as shown in the following graph, we might find a more clear separation. 
+
+```{r svm2d, echo=FALSE, dev='svglite', out.width=400}
+gsvm
+```
+
+
+<img src="img/svm3d.png" style="display:block; margin: 0 auto;" width=50%><br>
+
+Note that there are a number of choices in regard to the kernel function that does the mapping, but in that higher dimension, the decision boundary is chosen which will result in maximum distance (largest margin) between classes.  Real data will not be so clean cut, and total separation impossible, but the idea is the same.
+
+For the following we use `method = 'svmLinear2'`, where the underlying package is <span class="pack">e1071</span>. The tuning parameter is a regularization parameter applied to the cost function.
+
+
+```{r svm_train, eval=FALSE, echo=2:8}
+set.seed(1234)
+results_svm = train(good~., 
+                    data=wine_train, 
+                    method='svmLinear2',
+                    preProcess=c('center', 'scale'), 
+                    trControl=cv_opts, 
+                    tuneLength=5)
+results_svm
+save(results_svm, file='data/results_svm.RData')
+```
+```{r svm_train_results, echo=FALSE, cache.rebuild=F}
+load('data/results_svm.RData')
+results_svm
+```
+
+
+```{r svm_test, echo=-3}
+preds_svm = predict(results_svm, wine_test)
+confusionMatrix(preds_svm, good_observed, positive='Good')
+conf_svm = confusionMatrix(preds_svm, good_observed, positive='Good') #create an object to use in Sexpr
+```
+
+
+Results for the initial support vector machine do not match the random forest for this data set, with accuracy of `r round(conf_svm$overall[1]*100,1)`%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options.
+
+### Strengths & Weaknesses
+
+**Strengths**
+
+- Good prediction in a variety of situations.
+- Can utilize predictive power of linear combinations of inputs.
+
+**Weaknesses**
+
+- Very black box.
+- Computational scalability.
+- Natural handling of mixed data types.
+
+### Final Thoughts
+
+Support vector machines can provide very good prediction in a variety of settings, while doing relatively poorly in others. They will often require a notable amount of tuning, whereas generalizations of the SVM would estimate such parameters as part of the process. In short, you will typically have better, more interpretable, and/or less computationally intensive options in most circumstances.
+
+
+
+
+[^minmax]: See, for example, the <span class="func">rescale</span> function in the <span class="pack">scales</span> package.
+
+[^pcr]: For example, via principal components or partial least squares regression.
+
+[^discretize2]: See @harrell2015regression for a good summary of reasons why not to.
+
+[^ensemble]: The topic of ensembles is briefly noted later.
+
+[^aic]: In situations where it is appropriate to calculate in the first place, model selection via AIC can often compare to the bootstrap and k-fold cross-validation approaches.
+
+[^confusion]: This term has always struck me as highly sub-optimal.
+
+[^wineraters]: I think it would be interesting to have included characteristics of the people giving the rating.
+
+[^sulfur]: Oddly, total.sulfur.dioxide is integer for all but a handful of values.
+
+[^vif]: Some might recognize this approach.  In traditional statistics settings, 1-R^2^ is known as tolerance, and its inverse is the *variance inflation factor*.
+
+[^drunkratings]: That alcohol content is a positive predictor of 'quality' is also seen with data I've scraped from BeerAdvocate.  As such, if you are looking for a good drink via ratings, maybe temper the ratings a bit if the alcohol content is high.
+
+[^dotplot]: You can quickly obtain this plot via the <span class="func">dotplot</span> function.
+
+[^knn_dist]: See the function <span class="func">dist</span> in base R, for example.
+
+[^knn_unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is no target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
+
+[^knn_vis]: See the <span class="func">knn.ani</span> function in the <span class="pack">animation</span> package for a visual demonstration. [Link to demo](https://yihui.name/animation/example/knn-ani/).
+
+[^knn_tune]: Note also you can just specify a tuning length instead.  See the help file for the <span class="func">train</span> function.
+
+[^knn_strength]: See table 10.1 in @hastie_elements_2009 for a more comprehensive list for this and other methods discussed in this section.
+
+[^nnet_abs]: Neural nets, random forests, boosting, and additive models can all be put under the heading of basis function approaches.
+
+[^nnet_function]: For this example, ultimately the primary function is <span class="func">nnet</span> in the <span class="pack">nnet</span> package that comes with base R.
+
+[^nnet_rot]: You may find some rules of thumb from older sources, but using regularization and cross-validation is a much better way to 'guess'.
+
+[^rfasbaseline]: In my opinion, random forests should be a baseline by which to judge new techniques.  If one can't consistently do better than an a standard random forest with default settings, there isn't much to get excited about.
+
+[^rf_notcontinuous]: A lot of papers testing various methods seem to avoid realistic data situations. One is never going to see data where every variable is normally or uniformly distributed, so it boggles a bit to think about why anyone would care if some technique does slightly better than a random forest under conditions that don't exist naturally.
+
+[^rf_modelindie]: Our previous assessment was model independent.
+
+[^rf_100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusions.
+
+
+
+[^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.
+
+<!--chapter:end:03_blackbox.Rmd-->
+
+# Wrap-up
+
+<span class="newthought">In this section, I note some other techniques</span> one may come across, and others that will provide additional insight into machine learning applications.
+
+## Unsupervised Learning
+
+<span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to.  In this situation, we are more interested in the discovery of structure within the data.  For more examples, see this [document](https://m-clark.github.io/sem/FA_notes.html).
+
+
+### Clustering
+
+Many of the techniques used in unsupervised learning are commonly taught in various disciplines as simply "cluster" analysis.  The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure.  Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).
+
+
+### Latent Variable Models
+
+```{r lvmodel, echo=FALSE, eval=T, dev='svg', background='#FFFFF8'}
+library(DiagrammeR)
+tags$div(style="width:50%; margin: 0 25%; bgcolor='transparent'",
+DiagrammeR("
+digraph DAG2 {
+ # Intialization of graph attributes
+ graph [overlap = false rankdir=TB bgcolor=transparent]
+ 
+ # Initialization of node attributes
+ node [shape = circle,
+ fontname = Helvetica,
+ color = gray80,
+ type = box,
+ fixedsize = true]
+ 
+ # Node statements
+ node [width=.75, height=.75, shape=circle, color=gray80];
+ LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1</sub>>];
+ LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2</sub>>];
+ 
+ node [width=1, shape=square, color=gray50, fontcolor=gray25]
+
+ # oddly ordered to deal with random reordering by Diagrammer
+ subgraph {
+    rank=same;
+    X2 [width=.5 height=.5 label=<X<sub>2</sub>>]; 
+    X1 [width=.5 height=.5 label=<X<sub>1</sub>>]; 
+    X4 [width=.5 height=.5 label=<X<sub>4</sub>>]; 
+    X3 [width=.5 height=.5 label=<X<sub>3</sub>>]; 
+    X5 [width=.5 height=.5 label=<X<sub>5</sub>>]; 
+    X6 [width=.5 height=.5 label=<X<sub>6</sub>>]; 
+ }
+ # Initialization of edge attributes
+ edge [color = gray50, rel = yields minlen=2]
+ 
+ # Edge statements
+ LV1 -> {X1 X2 X3 X4};
+ LV2 -> {X3 X4} [style=dashed] ;
+ LV2 -> {X5 X6};
+}
+ ", type='grViz', width='100%', height='100%')
+)
+```
+
+<!-- <span class="marginnote"><img src="img/lvmodel.png" style="display:block; margin: 0 auto;"></span> -->
+
+Sometimes the desire is to reduce the dimensionality of the inputs to a more manageable set of information.  In this manner we are thinking that much of the data can be seen as having only a few sources of variability, often called latent variables or factors.  Again, this takes familiar forms such as principal components and ("exploratory") factor analysis, but would also include independence components analysis and partial least squares techniques.  Note also that these can be part of a supervised technique (e.g. principal components regression) or the main focus of analysis (as with latent variable models in structural equation modeling).
+
+
+### Graphical Structure
+
+```{r senate_network, echo=FALSE, eval=T}
+# library(igraph)
+# g = read_graph('figure/senate_graph.graphml', format='graphml')
+library(GGally)
+library(network)
+library(sna)
+library(ggnetwork)
+library(ggplot2)
+
+senate = read.csv('data/Senate_Raw.csv')
+senate_atts = read.csv('data/senate_graph (Nodes).csv')
+adj0 = lazerhawk::createAdjacency(senate, n1='Vertex.1', n2='Vertex.2', 
+                                  value='Percent_Agreement', diagonal=0)
+adj = apply(adj0, 2, as.numeric) *100
+adj[adj<65] = 0
+colnames(adj) = rownames(adj) = union(unique(senate$Vertex.1), unique(senate$Vertex.2))
+
+library(network)
+n = network(adj, directed=F, loops=F, matrix.type='adjacency')
+n = set.edge.value(n,"Weight",adj)
+n %v% "importance" = senate_atts$Betweenness.Centrality
+n %v% "class" = senate_atts$Modularity.Class
+
+# As of 2017-09, ggnetwork is abandoned. The [,1] fixes the error, but switch to visnetwork or something
+gnet = ggnetwork::ggnetwork(n, weights='Weight', layout='kamadakawai')
+ggsenate = ggplot(gnet, aes(x = x[,1], y = y[,1], xend = xend[,1], yend = yend[,1])) +
+  geom_edges(aes(), color = "gray95", show.legend=F) + #size=Weight
+  geom_nodes(aes(x[,1], y[,1], size=importance), color='transparent', show.legend=F) +
+  geom_nodetext(aes(label = vertex.names, size=importance, color=factor(class)), fontface = "bold", show.legend=F) +
+  scale_color_manual(values=c('#3A3A98FF', "#832424FF")) +
+  scale_size_continuous(range=c(2, 7), trans='exp') +
+  theme_blank() +
+  theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+# ggsenate
+# ggsave(ggsenate, filename='img/senate.svg', device='svg')
+# ggsave(ggsenate, filename='img/senate.png', device='png')
+```
+
+
+<!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
+
+Other techniques are available to understand structure among observations or features.  Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren't so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes.  One can examine [my document](https://m-clark.github.io/sem) that covers more of these and latent variable approaches.
+
+
+
+```{r echo=FALSE, dev='svglite', out.width=400}
+ggsenate
+```
+<p style="font-size: 8pt">
+An example network graph of U.S. senators in 2006. Node size is based on the *betweeness* centrality measure, edge size the percent agreement (graph filtered to edges >= 65%). Color is based on the clustering discovered within the graph [(link to data)](http://support.google.com/fusiontables/answer/2566732?hl=en&ref_topic=2572801).
+</p>
+
+
+### Imputation
+
+We can also use ML techniques when we are missing data, as a means to impute the missing values.  While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used.  For example, both k-nearest neighbors and random forest techniques have been applied to imputation[^matcomp]. 
+
+Beyond this we can infer values that are otherwise unavailable in a different sense.  Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in.  In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question.  Such <span class="emph">recommender systems</span> are widely used these days.
+
+
+## Ensembles
+
+In many situations we can combine the information of multiple models to enhance prediction.  This can take place within a specific technique, e.g. random forests, or between models that utilize different techniques.  I will discuss some standard techniques, but there are a great variety of forms in which model combination might take place.
+
+### Bagging
+
+<span class="emph">Bagging</span>, or *bootstrap aggregation*, uses bootstrap sampling to create many data sets on which a procedure is then performed.  The final prediction is based on an average of all the predictions made for each observation.  In general, bagging helps reduce the variance while leaving bias unaffected. A conceptual outline of the procedure is provided.
+
+
+*Model Generation*
+
+1. Sample $N$ observations with replacement $B$ times to create $B$ data sets of size $N$.
+2. Apply the learning technique to each of $B$ data sets to create $t$ models.
+3. Store the $t$ results.
+
+*Classification*
+
+For each of $t$ number of models:
+
+1. Predict the class of $N$ observations of the original data set.
+2. Return the class predicted most often across the $t$ number of models (or alternatively, the proportion $t =1$ as a probability).
+
+
+The approach would be identical for the continuous target domain, where the final prediction would be the average across all models.
+
+### Boosting
+
+With <span class="emph">boosting</span> we take a different approach to refitting models.  Consider a classification task in which we start with a basic learner and apply it to the data of interest.  Next, the learner is refit, but with more weight (importance) given to *misclassified* observations.  This process is repeated until some stopping rule is reached (e.g. reaching some $M$ iterations).  An example of the AdaBoost algorithm is provided (in the following $\mathbb{I}$ is the indicator function).
+
+
+Set initial weights $w_i$ to $1/N$.
+
+for $m=1:M$ {
+
+- Fit a classifier $m$ with given weights to the data resulting in predictions $f^{(m)}_i$ that minimizes some loss function.
+    
+- Compute the error rate $\text{err}_m = \frac{{\sum_{i=1}^N}\mathbb{I}(y_i\ne f^{(m)}_i)}{\sum^N_{i=1}w^{(m)}_i}$
+    
+- Compute $\alpha_m = \log[(1-err_m)/err_m]$
+    
+- Set $w_i \leftarrow w_i\exp[\alpha_m \mathbb{I}(y_i\ne f^{(m)}_i)]$
+    
+} 
+
+Return $\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]$
+
+
+Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.  A very popular implementation is [XGBoost](https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html) and its variants.  The following shows an implementation.
+
+
+```{r xgboost, echo=-18, eval=FALSE}
+library(xgboost)
+modelLookup("xgbLinear")
+modelLookup("xgbTree")
+
+xgb_opts = expand.grid(eta=c(.3,.4),
+                       max_depth=c(9, 12),
+                       colsample_bytree=c(.6,.8),
+                       subsample=c(.5,.75,1),
+                       nrounds=1000,
+                       min_child_weight=1,
+                       gamma=0)
+
+set.seed(1234)
+results_xgb = train(good~., 
+                    data=wine_train, 
+                    method='xgbTree',
+                    preProcess=c('center', 'scale'), 
+                    trControl=cv_opts, 
+                    tuneGrid=xgb_opts)
+results_xgb
+save(results_xgb, file='data/results_xgb.RData')
+preds_gb = predict(results_xgb, wine_test)
+confusionMatrix(preds_gb, good_observed, positive='Good')
+```
+
+
+### Stacking
+
+<span class="emph">Stacking</span> is a method that can generalize beyond a single fitting technique, though it can be applied in a fashion similar to boosting for a single technique.  Here we will use it broadly to mean any method to combine models of different forms. Consider the four approaches we demonstrated earlier: k-nearest neighbors, neural net, random forest, and the support vector machine.  We saw that they do not have the same predictive accuracy, though they weren't bad in general. Perhaps by combining their respective efforts, we could get even better prediction than using any particular one. 
+
+The issue then is how we might combine them.  We really don't have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes.  Another approach would be to use a weighted vote, where the votes are weighted by the accuracy of their respective models.  
+
+Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response.  With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data).  In this manner, the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models.  Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.
+
+
+## Deep Learning
+
+<span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working and is highly flexible. Many techniques are largely focused on AI applications, but are not restricted to those.  They've been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks[^seqnn], convolutional neural networks, and recurrent/recursive neural networks.  Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.  
+
+Such models require massive amounts of data, a lot of tuning, and generally serious hardware[^dl]. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, and <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.
+
+Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on other data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
+
+You can start your journey into this sort of stuff at http://deeplearning.net/, and I have a minimal demos for R and Python in the [appendix][Deep learning example].
+
+
+## Feature Selection & Importance
+
+We hit on this topic some before, but much like there are a variety of ways to gauge performance, there are different approaches to select features and/or determine their importance. Invariably feature selection takes place from the outset when we choose what data to collect in the first place.  Hopefully guided by theory, in other cases it may be restricted by user input, privacy issues, time constraints and so forth.  But once we obtain the initial data set however, we may still want to trim the models under consideration.
+
+In standard approaches we might have in the past used forward or other selection procedure, or perhaps some more explicit model comparison approach.  Concerning the content here, take for instance the lasso regularization procedure we spoke of earlier.  'Less important' variables may be shrunk entirely to zero, and thus feature selection is an inherent part of the process, and is useful in the face of many, many predictors, sometimes outnumbering our sample points. As another example, consider any particular approach where the importance metric might be something like the drop in accuracy when the variable is excluded.
+
+Variable importance was given almost full weight in the discussion of typical applied research in the past, based on statistical significance results from a one-shot analysis, and virtually ignorant of prediction on new data.  We still have the ability to focus on feature performance with ML techniques, while shifting more of the focus toward prediction at the same time.  For the uninitiated, it might require new ways of thinking about how one measures importance though.
+
+
+## Natural language processing/Text Analysis
+
+In some situations, the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined).  In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state.  The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model.  In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information. Deep learning has been widely applied in this realm.  For some applied examples of basic text analysis in R, see [this](http://m-clark.github.io/text-analysis-with-R/).
+
+
+## Bayesian Approaches
+
+It should be noted that the approaches outlined in this document are couched in the frequentist tradition.  But one should be aware that many of the concepts and techniques would carry over into the Bayesian perspective, and even some machine learning techniques might only be feasible or make more sense within the Bayesian framework (e.g. online learning).  However the core nature of Bayesian estimation makes it difficult to implement in ways that scale to even moderately large data situations.
+
+
+
+
+
+## More Stuff
+
+Aside from what has already been noted, there still exists a great many applications for ML such as data set shift[^datasetshift], semi-supervised learning[^semi], online learning[^online], and many more.  
+
+
+
+
+## Summary
+
+### Cautionary Notes
+
+A standard mantra in machine learning and statistics generally is that there is [no free lunch](http://www.no-free-lunch.org/).  All methods have certain assumptions, and if those don't hold the results will be problematic at best.  Also, even if in truth learner A is better than B, B can often outperform A in the finite situations we actually deal with in practice.  
+
+In general, without context, no algorithm can be said to be any better than another on average. Furthermore, being more complicated doesn't mean a technique is better.  As previously noted, simply incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and may perform quite well in many situations.  The basic conclusion is that 
+
+> *Machine learning **is not** magic!*
+
+ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you're using it have long since passed.  Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.
+
+
+### Some Guidelines
+
+Here are some thoughts to keep in mind, though these may be applicable to applied statistical practice generally.
+
+- More data beats a cleverer algorithm, but a lot of data is not enough by itself (@domingos_few_2012). 
+
+- Avoid overfitting.
+
+- Let the data speak for itself. 
+
+- "Nothing is more practical than a good theory."[^lewin]
+
+- While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression $\rightarrow$ random forest $\rightarrow$ your-fancy-technique.  Don't get too excited if you aren't doing significantly better than a random forest with default settings.
+
+- Drawing up a visual diagram of your process is a good way to keep your analysis on the path to your goal.  Some programs can even make this explicit.
+
+- Keep the tuning parameter/feature selection process separate from the final test process for assessing error.
+
+- Learn multiple models, selecting the best or possibly combining them.
+
+
+### Conclusion
+
+It is hoped that this document sheds some light on a few areas that might otherwise be unfamiliar to some in more applied disciplines. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades.  The tools available from them are myriad, and expanding all the time.  Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!
+
+
+[^lewin]: Kurt Lewin, and iterated by V. Vapnik for the machine learning context.
+
+[^matcomp]: Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.
+
+[^dl]: You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.
+
+[^datasetshift]: Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.
+
+[^semi]: Learning with both labeled and unlabeled data.
+
+[^online]: Learning from a continuous stream of data.
+
+[^seqnn]: Such models are no different than the neural nets of the 80s and 90s, save for maybe newer or more efficient optimization implementations.
+
+<!--chapter:end:04_other.Rmd-->
+
+# Appendix
+ 
+ 
+## Bias Variance Demo
+ 
+```{r biasvar_demo, eval=FALSE}
+set.seed(123)
+x = runif(1000)
+ytrue = sin(3*pi*x)
+basedat = cbind(x,ytrue)[order(x),]
+ 
+gendatfunc = function(noise=.5, n=1000){
+  x = runif(n)
+  y = sin(3*pi*x) + rnorm(n, sd=noise) # truth
+  d = cbind(x, y)
+  d
+}
+ 
+gendat = replicate(100, gendatfunc(n=100))
+str(gendat)
+ 
+library(kernlab)
+ 
+rbf1 = apply(gendat, 3, 
+             function(d) predict(gausspr(y~x, data=data.frame(d), kpar=list(sigma=.5)), 
+                                 newdata = data.frame(x), type='response'))
+rbf2 = apply(gendat, 3, 
+             function(d) predict(gausspr(y~x, data=data.frame(d)), 
+                                 newdata = data.frame(x), type='response') )
+ 
+library(ggplot2); library(tidyverse); library(gridExtra)
+ 
+rbf1_samp = rbf1 %>% 
+  data.frame %>% 
+  cbind(x, .) %>%
+  slice(sample(1:100, 25)) %>% 
+  gather(key=sample, value=yhat, -x)
+ 
+rbf2_samp = rbf2 %>% 
+  data.frame %>% 
+  cbind(x, .) %>%
+  slice(sample(1:100, 25)) %>% 
+  gather(key=sample, value=yhat, -x)
+ 
+g1 = ggplot(data=data.frame(basedat)) +
+  geom_blank() +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf1_samp) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='Low Variance') + 
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+ 
+g2 = ggplot(data=data.frame(basedat)) +
+  geom_line(aes(x=x, y=ytrue), color='#00aaff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf1))) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='High Bias') + 
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+ 
+g3 = ggplot(data=data.frame(basedat)) +
+  geom_blank() +
+  geom_line(aes(x=x, y=yhat, group=sample), color='#ff5500', alpha=.25, data=rbf2_samp) +
+    ylim(c(-1.5, 1.5)) +
+  labs(y='', title='High Variance') + 
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+ 
+g4 = ggplot(data=data.frame(basedat)) +
+  geom_line(aes(x=x, y=ytrue), color='#00aaff') +
+  geom_line(aes(x=x, y=yhat), color='#ff5500', data.frame(yhat=rowMeans(rbf2))) +
+  ylim(c(-1.5, 1.5)) +
+  labs(y='', title='Low Bias') + 
+  lazerhawk::theme_trueMinimal() +
+    theme(
+    legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    legend.background = ggplot2::element_rect(fill='#fffff8', colour = NA),
+    panel.background = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.background = ggplot2::element_blank(),
+    plot.background = ggplot2::element_rect(fill = "#fffff8", colour = NA)
+  )
+ 
+grid.arrange(g1, g2, g3, g4, ncol=2)
+```
+ 
+ 
+ 
+## Programming Languages
+ 
+### R
+
+Demonstrations for this document were done with R, and specifically the <span class="pack">caret</span> package. I would highly recommend using it for your own needs, as it makes a lot the ML process simpler, while providing access to whatever technique you want to use, even while it comes with the ability to use hundreds of approaches out of the box.  
+
+#### Deep learning example
+
+The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>.  The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>.  For more on using TensorFlow with R, check out [RStudio's documentation](https://tensorflow.rstudio.com/).
+
+This is a <span class="emph">sequential neural net</span> with three layers.  I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting[^onepointo].  Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>.  This R implementation also provides some nice visualizations to keep your interest while it runs. 
+
+This is just a starting point, so don't expect any better performance than those shown previously, but it'll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.
+
+```{r rdl, eval=FALSE}
+library(keras)
+
+X_train = model.matrix(lm(good ~ . -1, data=wine_train)) %>% scale()
+y_train = as.numeric(wine_train$good) - 1
+X_test = model.matrix(lm(good ~ . -1, data=wine_test)) %>% scale()
+y_test = as.numeric(wine_test$good) - 1
+
+model = keras_model_sequential() 
+
+model %>%
+  layer_dense(units = 256, activation = 'relu', input_shape = c(9)) %>%
+  layer_dropout(rate = 0.4) %>% 
+  layer_dense(units = 128, activation = 'relu') %>%
+  layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 64, activation = 'relu') %>%
+  layer_dropout(rate = 0.2) %>%
+  layer_dense(units = 1, activation = 'sigmoid')
+
+summary(model)
+
+model %>% compile(
+  optimizer = 'nadam',
+  loss = "binary_crossentropy",
+  metrics = "accuracy"
+)
+
+history = model %>% 
+  fit(X_train, 
+      y_train, 
+      epochs = 10000, 
+      validation_split = 0.1,
+      verbose = 1,
+      view_metrics = 1)
+
+plot(history)
+
+# model %>% evaluate(X_test, y_test)
+
+ypred = model %>% predict_classes(X_test)
+caret::confusionMatrix(ypred, y_test, positive='1')
+```
+
+
+
+
+### Python
+
+If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website.  That said, R probably isn't even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible[^rfaster].  As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.
+
+One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>.  It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.
+
+```{python pyrf, eval=T, engine.path="/Users/micl/anaconda3/bin/python", echo=-c(7,10), cache=TRUE}
+import sklearn as sk
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.ensemble import RandomForestClassifier
+# from os import chdir
+
+# import data
+# chdir('D:\Documents\Stats\Repositories\Docs\introduction-to-machine-learning')
+wine = pd.read_csv('data/wine.csv')
+
+# data preprocessing
+np.random.seed(1234)
+X = wine.drop(['free.sulfur.dioxide', 'density', 'quality', 'color', 'white','good'], axis=1)
+X = MinMaxScaler().fit_transform(X)  # by default on 0, 1 scale
+y = wine['good']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# train model
+rf = RandomForestClassifier(n_estimators=1000)
+rf_train = rf.fit(X_train, y_train)
+
+# get test predictions
+rf_predict = rf_train.predict(X_test)
+
+# create confusion matrix, and accuracy
+cm = sk.metrics.confusion_matrix(y_test,rf_predict)
+cm_prob = cm / np.sum(cm)  # as probs
+print(cm_prob)
+
+acc = sk.metrics.accuracy_score(y_test, rf_predict)
+acc = pd.DataFrame(np.array([acc]), columns=['Accuracy'])
+print(acc)
+```
+
+#### Deep learning example
+
+Here is a bit of code to get you started with a scikit approach to deep learning. This is a 'deep neural net' with seven layers.  I also add some 'dropout'.  This isn't too viable a model as far as settings go, and won't do any better than those shown previously[^dnn], but it'll run fine on your machine so you can at least play with it.
+
+```{python dl, eval=F}
+import tensorflow.contrib.learn as skflow
+from sklearn import metrics
+
+feats = skflow.infer_real_valued_columns_from_input(X_train)
+
+classifier_tf = skflow.DNNClassifier(feature_columns=feats, 
+                                     hidden_units=[50, 50, 50, 40, 30, 20, 10], 
+                                     dropout=.2,
+                                     n_classes=2)
+classifier_tf.fit(X_train, y_train, steps=10000)
+predictions = list(classifier_tf.predict(X_test, as_iterable=True))
+score = metrics.accuracy_score(y_test, predictions)
+print("Accuracy: %f" % score)
+```
+
+
+### Other
+
+I wouldn't recommend a proprietary tool when better open source tools are available, but I will say **Matlab** is also very popular in machine learning, and specific areas like image processing. **Julia** has been coming along as well.  Of course, for maximum speed people still prefer lower level languages like **C++**, **Java**, and **Go**, and many of the Python modules are interfaces to such lower-level libraries. And for whatever reason, people are reinventing ML wheels in languages like **Javascript** and others.  See the [awesome list](https://github.com/josephmisiti/awesome-machine-learning) for more.
+
+What I can't recommend is a traditional statistics package like SPSS, SAS, or Stata. Not only did they miss this boat by well over a decade, their offerings are slim and less capable.  It seems SAS is probably the only one that's made serious effort here, and it has some audience in the business world due to its long entrenchment there.  And you don't have to take my word for it- here's a comparison of trends at [indeed.com](https://www.indeed.com/jobtrends/q-R-and-%28%22machine-learning%22-or-%22data-science%22%29-q-python-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SAS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SPSS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Stata-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Matlab-and-%28%22machine-learning%22-or-%22data-science%22%29.html).
+
+
+## Brief Glossary of Common Terms
+
+
+<span class="emph">bias</span>: could mean the intercept (e.g. in neural nets), typically refers to the bias in bias-variance decomposition
+
+<span class="emph">classifier</span>: specific model or technique (i.e. function) that maps observations to classes
+
+<span class="emph">confusion matrix</span>: a table of predicted class membership vs. true class membership
+
+<span class="emph">hypothesis</span>: a specific model $h(x)$ of all possible in the hypothesis space $\mathcal{H}$
+
+<span class="emph">input, feature, attribute</span>: independent variable, explanatory variable, covariate, predictor variable, column
+
+<span class="emph">instance, example</span>: observation, row
+
+<span class="emph">learning</span>: model fitting
+
+<span class="emph">machine learning</span>: a form of statistics utilizing various algorithms with a goal to generalize to new data situations
+
+<span class="emph">regularization, penalization, shrinkage</span>: The process of adding a penalty to the size of coefficients, thus shrinking them towards zero but resulting in less overfitting (at an increase to bias)
+
+<span class="emph">supervised</span>: has a dependent variable
+
+<span class="emph">target, label</span>: dependent variable, response, the outcome of interest
+
+<span class="emph">unsupervised</span>: no dependent variable (or rather, only dependent variables); think clustering, PCA etc.
+
+<span class="emph">weights</span>:  coefficients, parameters
+
+
+# References
+
+
+[^rfaster]: Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.
+
+[^dnn]: Just for giggles I let that particular one go for 100000 steps and it finally started to get into > 81% on the test set. 
+
+[^onepointo]: You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.
+
+<!--chapter:end:1000_appendix.Rmd-->
+
