@@ -38,7 +38,7 @@ In this case it would converge to the same answer as the squared error/least squ
 
 #### R Example
 
-The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients ($\beta$ from before) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  In the following, the true values for the intercept and other coefficients are `(0, -.5, .5)`. We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
+The following provides conceptual code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients ($\beta$ from before) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  In the following, the true values for the intercept and other coefficients are `(0, -.5, .5)`. We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
 
 
 ```{r squareloss}
@@ -48,20 +48,25 @@ sqerrloss = function(beta, X, y){
 }
 
 # data setup
-set.seed(123)
-N = 100
-X = cbind(1, rnorm(N), rnorm(N))
-beta = c(0, -.5, .5)
-y =  rnorm(N, X%*%beta, sd=1)
+set.seed(123)                              # for reproducibility
+N = 100                                    # sample size
+X = cbind(1, X1=rnorm(N), X2=rnorm(N))     # model matrix: intercept, 2 predictors
+beta = c(0, -.5, .5)                       # true coef values
+y =  rnorm(N, X%*%beta, sd=1)              # target
 
 # results
-our_func = optim(par=c(0,0,0), fn=sqerrloss, X=X, y=y, method='BFGS')
+our_func = optim(par=c(0,0,0),             # starting values
+                 fn=sqerrloss, 
+                 X=X, 
+                 y=y, 
+                 method='BFGS')
 lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
+
 rbind(optim=c(our_func$par, our_func$value), 
-      lm=c(coef(lm_result), sum(resid(lm_result)^2)))
+      lm=c(coef(lm_result), loss=sum(resid(lm_result)^2)))
 ```
 
-While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.
+While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.  Just to be clear, this is an exercise to understand how optimization works, not something you'd ever do for the standard regression setting.  However, many ML tools will require you to supply your data as a model matrix, specify target(s), and select both a loss function and optimizer, and even possibly additional options for the latter.
 
 
 
@@ -99,7 +104,9 @@ A final loss function to consider, typically used with support vector machines, 
 
 $$L(Y, f(X)) = \max(1-yf, 0)$$
 
-Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.  The following compares these (from @hastie_elements_2009).
+Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.  
+
+The following image compares these (from @hastie_elements_2009, fig. 10.4).  As before we are assuming y is {-1,1}, and here f is our prediction, where positive values are classified as 1 and negative values are classified as -1.  $yf$, the margin, is akin to the residual from regression, where positive values indicate correct classification.  
 
 <img src="img/lossfuncs.png" style="display:block; margin: 0 auto;" width=50%>
 
@@ -341,7 +348,7 @@ Along with the above there are variations such as repeated cross validation, the
 
 
 
-[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used of all techniques.
+[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used estimation technique for statistical inference.
 
 [^optimfunc]: Type `?optim` at the console for more detail.
 

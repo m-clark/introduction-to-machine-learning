@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2018-03-20">
+<meta name="date" content="2018-03-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -259,28 +259,33 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="r-example" class="section level4">
 <h4>R Example</h4>
-<p>The following provides code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (<span class="math inline">\(\beta\)</span> from before) based on minimizing the squared error. <code>X</code> is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept. <code>y</code> is the continuous variable to be modeled. In the following, the true values for the intercept and other coefficients are <code>(0, -.5, .5)</code>. We can then compare the results with the <span class="func">lm</span> function from base R<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
+<p>The following provides conceptual code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (<span class="math inline">\(\beta\)</span> from before) based on minimizing the squared error. <code>X</code> is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept. <code>y</code> is the continuous variable to be modeled. In the following, the true values for the intercept and other coefficients are <code>(0, -.5, .5)</code>. We can then compare the results with the <span class="func">lm</span> function from base R<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sqerrloss =<span class="st"> </span><span class="cf">function</span>(beta, X, y){
   mu =<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta
   <span class="kw">sum</span>((y<span class="op">-</span>mu)<span class="op">^</span><span class="dv">2</span>)
 }
 
 <span class="co"># data setup</span>
-<span class="kw">set.seed</span>(<span class="dv">123</span>)
-N =<span class="st"> </span><span class="dv">100</span>
-X =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N), <span class="kw">rnorm</span>(N))
-beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>.<span class="dv">5</span>, .<span class="dv">5</span>)
-y =<span class="st">  </span><span class="kw">rnorm</span>(N, X<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">1</span>)
+<span class="kw">set.seed</span>(<span class="dv">123</span>)                              <span class="co"># for reproducibility</span>
+N =<span class="st"> </span><span class="dv">100</span>                                    <span class="co"># sample size</span>
+X =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="dt">X1=</span><span class="kw">rnorm</span>(N), <span class="dt">X2=</span><span class="kw">rnorm</span>(N))     <span class="co"># model matrix: intercept, 2 predictors</span>
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>.<span class="dv">5</span>, .<span class="dv">5</span>)                       <span class="co"># true coef values</span>
+y =<span class="st">  </span><span class="kw">rnorm</span>(N, X<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">1</span>)              <span class="co"># target</span>
 
 <span class="co"># results</span>
-our_func =<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">fn=</span>sqerrloss, <span class="dt">X=</span>X, <span class="dt">y=</span>y, <span class="dt">method=</span><span class="st">&#39;BFGS&#39;</span>)
+our_func =<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),             <span class="co"># starting values</span>
+                 <span class="dt">fn=</span>sqerrloss, 
+                 <span class="dt">X=</span>X, 
+                 <span class="dt">y=</span>y, 
+                 <span class="dt">method=</span><span class="st">&#39;BFGS&#39;</span>)
 lm_result =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>., <span class="kw">data.frame</span>(X[,<span class="op">-</span><span class="dv">1</span>]))  <span class="co"># check with lm </span>
+
 <span class="kw">rbind</span>(<span class="dt">optim=</span><span class="kw">c</span>(our_func<span class="op">$</span>par, our_func<span class="op">$</span>value), 
-      <span class="dt">lm=</span><span class="kw">c</span>(<span class="kw">coef</span>(lm_result), <span class="kw">sum</span>(<span class="kw">resid</span>(lm_result)<span class="op">^</span><span class="dv">2</span>)))</code></pre></div>
-<pre><code>      (Intercept)         X1        X2         
+      <span class="dt">lm=</span><span class="kw">c</span>(<span class="kw">coef</span>(lm_result), <span class="dt">loss=</span><span class="kw">sum</span>(<span class="kw">resid</span>(lm_result)<span class="op">^</span><span class="dv">2</span>)))</code></pre></div>
+<pre><code>      (Intercept)         X1        X2     loss
 optim   0.1350654 -0.6331715 0.5238113 87.78187
 lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
-<p>While <span class="func">lm</span> uses a different approach, they are both going to result in the ‘least-squares’ estimates.</p>
+<p>While <span class="func">lm</span> uses a different approach, they are both going to result in the ‘least-squares’ estimates. Just to be clear, this is an exercise to understand how optimization works, not something you’d ever do for the standard regression setting. However, many ML tools will require you to supply your data as a model matrix, specify target(s), and select both a loss function and optimizer, and even possibly additional options for the latter.</p>
 </div>
 </div>
 <div id="categorical-outcomes" class="section level3">
@@ -306,7 +311,8 @@ lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
 <h4>Hinge Loss</h4>
 <p>A final loss function to consider, typically used with support vector machines, is the hinge loss function.</p>
 <p><span class="math display">\[L(Y, f(X)) = \max(1-yf, 0)\]</span></p>
-<p>Here negative values of <span class="math inline">\(yf\)</span> are misclassifications, and so correct classifications do not contribute to the loss. We could also note it as <span class="math inline">\(\sum (1-yf)_+\)</span> , i.e. summing only those positive values of <span class="math inline">\(1-yf\)</span>. The following compares these (from <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-hastie_elements_2009">2009</a>)</span>).</p>
+<p>Here negative values of <span class="math inline">\(yf\)</span> are misclassifications, and so correct classifications do not contribute to the loss. We could also note it as <span class="math inline">\(\sum (1-yf)_+\)</span> , i.e. summing only those positive values of <span class="math inline">\(1-yf\)</span>.</p>
+<p>The following image compares these (from <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-hastie_elements_2009">2009</a>)</span>, fig. 10.4). As before we are assuming y is {-1,1}, and here f is our prediction, where positive values are classified as 1 and negative values are classified as -1. <span class="math inline">\(yf\)</span>, the margin, is akin to the residual from regression, where positive values indicate correct classification.</p>
 <p><img src="img/lossfuncs.png" style="display:block; margin: 0 auto;" width=50%></p>
 <p>Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.</p>
 </div>
@@ -348,9 +354,9 @@ regularized_result =<span class="st"> </span><span class="kw">optim</span>(<span
 <p><br></p>
 <p><div id="htmlwidget-ac291b881a17a3904e44" style="width:50%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-ac291b881a17a3904e44">{"x":{"filter":"none","data":[["(Intercept)","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.145,-0.27,0.586,0.385,0.844,0.511,0.423,0.304,-0.076,0.547,0.625],[0.114,-0.001,0.01,0.001,0.335,0.003,0.003,0,-0,0.001,0.165]],"container":"<table class=\"compact|nowrap\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Standard LM<\/th>\n      <th>Regularized Model<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":11,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,11,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; if (value!==null) $(this.api().cell(row, 0).node()).css({'background-color':'#fffff8'});\nvar value=data[1]; if (value!==null) $(this.api().cell(row, 1).node()).css({'background-color':'#fffff8'});\nvar value=data[2]; if (value!==null) $(this.api().cell(row, 2).node()).css({'background-color':'#fffff8'});\nvar value=data[3]; if (value!==null) $(this.api().cell(row, 3).node()).css({'background-color':'#fffff8'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script> <br></p>
+<p>From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero. Now we move to testing. Normally both the training and test sets will be a random split of the original set, for this demo we’ll generate the test as we did with the training.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create test data</span>
 N_test =<span class="st"> </span><span class="dv">50</span>
-X_test =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N_test), <span class="kw">rnorm</span>(N_test))
 X_test =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">matrix</span>(<span class="kw">rnorm</span>(N_test<span class="op">*</span><span class="dv">10</span>), <span class="dt">ncol=</span><span class="dv">10</span>))
 y_test =<span class="st"> </span><span class="kw">rnorm</span>(N_test, X_test<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">2</span>)
 
@@ -371,8 +377,8 @@ fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_
 <span class="kw">data.frame</span>(<span class="dt">lm_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_lm),
            <span class="dt">regularized_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre></div>
 <pre><code>   lm_test regularized_test
-1 220.7264         217.6205</code></pre>
-<p>From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero, while the residual sum of squares has increased just a tad. On the test data however, the squared error loss is lower.</p>
+1 254.0681         232.4942</code></pre>
+<p>We can see that the residual sum of squares has increased just a tad for the regularized fit on the training data. On the test data however, the squared error loss is lower.</p>
 <p>In general, we can add the same sort of penalty to any number of models, such as logistic regression, neural net models, recommender systems etc. The primary goal again is to hopefully increase our ability to generalize the selected model to new data. Note that the estimates produced are in fact <em>biased</em>, but we have decreased the variance with new predictions as a counterbalance, and this brings us to the topic of the next section.</p>
 </div>
 </div>
@@ -467,7 +473,7 @@ An illustration of 3-fold classification.
 <h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-hastie_elements_2009">
-<p>Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction, Second Edition</em>. 2nd ed. 2009. Corr. 10th Printing. Springer.</p>
+<p>Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction, Second Edition</em>. 2nd ed. 2017. Corr. 12th Printing. Springer.</p>
 </div>
 <div id="ref-domingos_few_2012">
 <p>Domingos, Pedro. 2012. “A Few Useful Things to Know About Machine Learning.” <em>Commun. ACM</em> 55 (10). doi:<a href="https://doi.org/10.1145/2347736.2347755">10.1145/2347736.2347755</a>.</p>
@@ -479,7 +485,7 @@ An illustration of 3-fold classification.
 <div class="footnotes">
 <hr />
 <ol start="10">
-<li id="fn10"><p>Well some of you. Many applied methods courses don’t teach the basic maximum likelihood approach, even though it’s the most widely used of all techniques.<a href="concepts.html#fnref10">↩</a></p></li>
+<li id="fn10"><p>Well some of you. Many applied methods courses don’t teach the basic maximum likelihood approach, even though it’s the most widely used estimation technique for statistical inference.<a href="concepts.html#fnref10">↩</a></p></li>
 <li id="fn11"><p>Type <code>?optim</code> at the console for more detail.<a href="concepts.html#fnref11">↩</a></p></li>
 <li id="fn12"><p>For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also. We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).<a href="concepts.html#fnref12">↩</a></p></li>
 <li id="fn13"><p>In terminology we will discuss further later, such models might have low bias but notable variance.<a href="concepts.html#fnref13">↩</a></p></li>
