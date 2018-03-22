@@ -1,26 +1,25 @@
 <!DOCTYPE html>
-<html >
+<!-- saved from url=(0072)https://m-clark.github.io/introduction-to-machine-learning/appendix.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<head>
-
-  <meta charset="UTF-8">
+  
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Machine Learning</title>
   <meta name="description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
   <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Machine Learning" />
-  <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/" />
-  <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
-  <meta property="og:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
-  <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
+  <meta property="og:title" content="Machine Learning">
+  <meta property="og:type" content="book">
+  <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/">
+  <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png">
+  <meta property="og:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
+  <meta name="github-repo" content="m-clark/introduction-to-machine-learning/">
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Machine Learning" />
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Machine Learning">
   
-  <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
-  <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
+  <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
+  <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png">
 
 
 
@@ -31,14 +30,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="wrap-up.html">
-<link rel="next" href="references.html">
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link rel="prev" href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html">
+<link rel="next" href="https://m-clark.github.io/introduction-to-machine-learning/references.html">
+<script src="./appendix_files/jquery.min.js.download"></script><style></style>
+<link href="./appendix_files/style.css" rel="stylesheet">
+<link href="./appendix_files/plugin-bookdown.css" rel="stylesheet">
+<link href="./appendix_files/plugin-highlight.css" rel="stylesheet">
+<link href="./appendix_files/plugin-search.css" rel="stylesheet">
+<link href="./appendix_files/plugin-fontsettings.css" rel="stylesheet">
 
 
 
@@ -46,22 +45,19 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
-<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.4/datatables.js"></script>
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
-<script src="libs/d3-3.5.3/./d3.min.js"></script>
-<link href="libs/d3heatmapcore-0.0.0/heatmapcore.css" rel="stylesheet" />
-<script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
-<script src="libs/d3-tip-0.6.6/index.js"></script>
-<script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
-<script src="libs/viz-0.3/viz.js"></script>
-<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+<script src="./appendix_files/htmlwidgets.js.download"></script>
+<script src="./appendix_files/datatables.js.download"></script>
+<link href="./appendix_files/jquery.dataTables.min.css" rel="stylesheet">
+<link href="./appendix_files/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="./appendix_files/jquery.dataTables.min.js.download"></script>
+<script src="./appendix_files/d3.min.js.download"></script>
+<link href="./appendix_files/heatmapcore.css" rel="stylesheet">
+<script src="./appendix_files/heatmapcore.js.download"></script>
+<script src="./appendix_files/index.js.download"></script>
+<script src="./appendix_files/d3heatmap.js.download"></script>
+<script src="./appendix_files/viz.js.download"></script>
+<link href="./appendix_files/styles.css" rel="stylesheet">
+<script src="./appendix_files/grViz.js.download"></script>
 
 
 <style type="text/css">
@@ -102,133 +98,353 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="css\book.css" type="text/css" />
-<link rel="stylesheet" href="css\standard_html.css" type="text/css" />
-</head>
+<link rel="stylesheet" href="./appendix_files/book.css" type="text/css">
+<link rel="stylesheet" href="./appendix_files/standard_html.css" type="text/css">
+<script type="text/javascript" src="./appendix_files/MathJax.js.download"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.mjx-chtml {display: inline-block; line-height: 0; text-indent: 0; text-align: left; text-transform: none; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; word-wrap: normal; word-spacing: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; margin: 0; padding: 1px 0}
+.MJXc-display {display: block; text-align: center; margin: 1em 0; padding: 0}
+.mjx-chtml[tabindex]:focus, body :focus .mjx-chtml[tabindex] {display: inline-table}
+.mjx-full-width {text-align: center; display: table-cell!important; width: 10000em}
+.mjx-math {display: inline-block; border-collapse: separate; border-spacing: 0}
+.mjx-math * {display: inline-block; -webkit-box-sizing: content-box!important; -moz-box-sizing: content-box!important; box-sizing: content-box!important; text-align: left}
+.mjx-numerator {display: block; text-align: center}
+.mjx-denominator {display: block; text-align: center}
+.MJXc-stacked {height: 0; position: relative}
+.MJXc-stacked > * {position: absolute}
+.MJXc-bevelled > * {display: inline-block}
+.mjx-stack {display: inline-block}
+.mjx-op {display: block}
+.mjx-under {display: table-cell}
+.mjx-over {display: block}
+.mjx-over > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-under > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-stack > .mjx-sup {display: block}
+.mjx-stack > .mjx-sub {display: block}
+.mjx-prestack > .mjx-presup {display: block}
+.mjx-prestack > .mjx-presub {display: block}
+.mjx-delim-h > .mjx-char {display: inline-block}
+.mjx-surd {vertical-align: top}
+.mjx-mphantom * {visibility: hidden}
+.mjx-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 2px 3px; font-style: normal; font-size: 90%}
+.mjx-annotation-xml {line-height: normal}
+.mjx-menclose > svg {fill: none; stroke: currentColor}
+.mjx-mtr {display: table-row}
+.mjx-mlabeledtr {display: table-row}
+.mjx-mtd {display: table-cell; text-align: center}
+.mjx-label {display: table-row}
+.mjx-box {display: inline-block}
+.mjx-block {display: block}
+.mjx-span {display: inline}
+.mjx-char {display: block; white-space: pre}
+.mjx-itable {display: inline-table; width: auto}
+.mjx-row {display: table-row}
+.mjx-cell {display: table-cell}
+.mjx-table {display: table; width: 100%}
+.mjx-line {display: block; height: 0}
+.mjx-strut {width: 0; padding-top: 1em}
+.mjx-vsize {width: 0}
+.MJXc-space1 {margin-left: .167em}
+.MJXc-space2 {margin-left: .222em}
+.MJXc-space3 {margin-left: .278em}
+.mjx-chartest {display: block; visibility: hidden; position: absolute; top: 0; line-height: normal; font-size: 500%}
+.mjx-chartest .mjx-char {display: inline}
+.mjx-chartest .mjx-box {padding-top: 1000px}
+.MJXc-processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MJXc-processed {display: none}
+.mjx-test {display: block; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow: hidden; height: 1px}
+.mjx-ex-box-test {position: absolute; width: 1px; height: 60ex}
+.mjx-line-box-test {display: table!important}
+.mjx-line-box-test span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+#MathJax_CHTML_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.mjx-chtml .mjx-noError {line-height: 1.2; vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+.MJXc-TeX-unknown-R {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: normal}
+.MJXc-TeX-unknown-I {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: normal}
+.MJXc-TeX-unknown-B {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: bold}
+.MJXc-TeX-unknown-BI {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: bold}
+.MJXc-TeX-ams-R {font-family: MJXc-TeX-ams-R,MJXc-TeX-ams-Rw}
+.MJXc-TeX-cal-B {font-family: MJXc-TeX-cal-B,MJXc-TeX-cal-Bx,MJXc-TeX-cal-Bw}
+.MJXc-TeX-frak-R {font-family: MJXc-TeX-frak-R,MJXc-TeX-frak-Rw}
+.MJXc-TeX-frak-B {font-family: MJXc-TeX-frak-B,MJXc-TeX-frak-Bx,MJXc-TeX-frak-Bw}
+.MJXc-TeX-math-BI {font-family: MJXc-TeX-math-BI,MJXc-TeX-math-BIx,MJXc-TeX-math-BIw}
+.MJXc-TeX-sans-R {font-family: MJXc-TeX-sans-R,MJXc-TeX-sans-Rw}
+.MJXc-TeX-sans-B {font-family: MJXc-TeX-sans-B,MJXc-TeX-sans-Bx,MJXc-TeX-sans-Bw}
+.MJXc-TeX-sans-I {font-family: MJXc-TeX-sans-I,MJXc-TeX-sans-Ix,MJXc-TeX-sans-Iw}
+.MJXc-TeX-script-R {font-family: MJXc-TeX-script-R,MJXc-TeX-script-Rw}
+.MJXc-TeX-type-R {font-family: MJXc-TeX-type-R,MJXc-TeX-type-Rw}
+.MJXc-TeX-cal-R {font-family: MJXc-TeX-cal-R,MJXc-TeX-cal-Rw}
+.MJXc-TeX-main-B {font-family: MJXc-TeX-main-B,MJXc-TeX-main-Bx,MJXc-TeX-main-Bw}
+.MJXc-TeX-main-I {font-family: MJXc-TeX-main-I,MJXc-TeX-main-Ix,MJXc-TeX-main-Iw}
+.MJXc-TeX-main-R {font-family: MJXc-TeX-main-R,MJXc-TeX-main-Rw}
+.MJXc-TeX-math-I {font-family: MJXc-TeX-math-I,MJXc-TeX-math-Ix,MJXc-TeX-math-Iw}
+.MJXc-TeX-size1-R {font-family: MJXc-TeX-size1-R,MJXc-TeX-size1-Rw}
+.MJXc-TeX-size2-R {font-family: MJXc-TeX-size2-R,MJXc-TeX-size2-Rw}
+.MJXc-TeX-size3-R {font-family: MJXc-TeX-size3-R,MJXc-TeX-size3-Rw}
+.MJXc-TeX-size4-R {font-family: MJXc-TeX-size4-R,MJXc-TeX-size4-Rw}
+@font-face {font-family: MJXc-TeX-ams-R; src: local('MathJax_AMS'), local('MathJax_AMS-Regular')}
+@font-face {font-family: MJXc-TeX-ams-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_AMS-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_AMS-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_AMS-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-B; src: local('MathJax_Caligraphic Bold'), local('MathJax_Caligraphic-Bold')}
+@font-face {font-family: MJXc-TeX-cal-Bx; src: local('MathJax_Caligraphic'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-cal-Bw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Bold.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Bold.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-R; src: local('MathJax_Fraktur'), local('MathJax_Fraktur-Regular')}
+@font-face {font-family: MJXc-TeX-frak-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-B; src: local('MathJax_Fraktur Bold'), local('MathJax_Fraktur-Bold')}
+@font-face {font-family: MJXc-TeX-frak-Bx; src: local('MathJax_Fraktur'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-frak-Bw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Bold.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Bold.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-BI; src: local('MathJax_Math BoldItalic'), local('MathJax_Math-BoldItalic')}
+@font-face {font-family: MJXc-TeX-math-BIx; src: local('MathJax_Math'); font-weight: bold; font-style: italic}
+@font-face {font-family: MJXc-TeX-math-BIw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Math-BoldItalic.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-BoldItalic.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-BoldItalic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-R; src: local('MathJax_SansSerif'), local('MathJax_SansSerif-Regular')}
+@font-face {font-family: MJXc-TeX-sans-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-B; src: local('MathJax_SansSerif Bold'), local('MathJax_SansSerif-Bold')}
+@font-face {font-family: MJXc-TeX-sans-Bx; src: local('MathJax_SansSerif'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-sans-Bw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Bold.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Bold.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-I; src: local('MathJax_SansSerif Italic'), local('MathJax_SansSerif-Italic')}
+@font-face {font-family: MJXc-TeX-sans-Ix; src: local('MathJax_SansSerif'); font-style: italic}
+@font-face {font-family: MJXc-TeX-sans-Iw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Italic.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Italic.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-script-R; src: local('MathJax_Script'), local('MathJax_Script-Regular')}
+@font-face {font-family: MJXc-TeX-script-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Script-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Script-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Script-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-type-R; src: local('MathJax_Typewriter'), local('MathJax_Typewriter-Regular')}
+@font-face {font-family: MJXc-TeX-type-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Typewriter-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Typewriter-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Typewriter-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-R; src: local('MathJax_Caligraphic'), local('MathJax_Caligraphic-Regular')}
+@font-face {font-family: MJXc-TeX-cal-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-B; src: local('MathJax_Main Bold'), local('MathJax_Main-Bold')}
+@font-face {font-family: MJXc-TeX-main-Bx; src: local('MathJax_Main'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-main-Bw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Bold.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-I; src: local('MathJax_Main Italic'), local('MathJax_Main-Italic')}
+@font-face {font-family: MJXc-TeX-main-Ix; src: local('MathJax_Main'); font-style: italic}
+@font-face {font-family: MJXc-TeX-main-Iw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Italic.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-R; src: local('MathJax_Main'), local('MathJax_Main-Regular')}
+@font-face {font-family: MJXc-TeX-main-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-I; src: local('MathJax_Math Italic'), local('MathJax_Math-Italic')}
+@font-face {font-family: MJXc-TeX-math-Ix; src: local('MathJax_Math'); font-style: italic}
+@font-face {font-family: MJXc-TeX-math-Iw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Math-Italic.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size1-R; src: local('MathJax_Size1'), local('MathJax_Size1-Regular')}
+@font-face {font-family: MJXc-TeX-size1-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size1-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size2-R; src: local('MathJax_Size2'), local('MathJax_Size2-Regular')}
+@font-face {font-family: MJXc-TeX-size2-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size2-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size3-R; src: local('MathJax_Size3'), local('MathJax_Size3-Regular')}
+@font-face {font-family: MJXc-TeX-size3-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size3-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size4-R; src: local('MathJax_Size4'), local('MathJax_Size4-Regular')}
+@font-face {font-family: MJXc-TeX-size4-Rw; src /*1*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size4-Regular.eot'); src /*2*/: url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('https://cdn.bootcss.com/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+</style></head>
 
-<body>
+<body><div id="MathJax_Message" style="display: none;"></div>
 
 
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+  <div class="book without-animation with-summary   font-size-2 font-family-1" data-basepath=".">
 
-    <div class="book-summary">
+    <div class="book-summary"><div class="book-search" role="search"><input type="search" class="form-control" placeholder="Type to search"></div>
       <nav role="navigation">
 
 <ul class="summary">
-<li class='before'><a href="https://m-clark.github.io/">Machine Learning</span></a></li>
+<li class="before"><a href="https://m-clark.github.io/">Machine Learning</a></li>
 
 <li class="divider"></li>
-<li><a href="index.html#section"></a></li>
-<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+<li><a href="https://m-clark.github.io/introduction-to-machine-learning/index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/preface.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html"><i class="fa fa-check"></i>Introduction</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs.&nbsp;Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#loss-functions"><i class="fa fa-check"></i>Loss Functions</a><ul>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#continuous-outcomes"><i class="fa fa-check"></i>Continuous Outcomes</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#categorical-outcomes"><i class="fa fa-check"></i>Categorical Outcomes</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html"><i class="fa fa-check"></i>Concepts</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#loss-functions"><i class="fa fa-check"></i>Loss Functions</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#continuous-outcomes"><i class="fa fa-check"></i>Continuous Outcomes</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#categorical-outcomes"><i class="fa fa-check"></i>Categorical Outcomes</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#regularization"><i class="fa fa-check"></i>Regularization</a><ul>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#r-example-1"><i class="fa fa-check"></i>R Example</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#regularization"><i class="fa fa-check"></i>Regularization</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#r-example-1"><i class="fa fa-check"></i>R Example</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-tradeoff"><i class="fa fa-check"></i>Bias-Variance Tradeoff</a><ul>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance"><i class="fa fa-check"></i>Bias &amp; Variance</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#the-tradeoff"><i class="fa fa-check"></i>The Tradeoff</a></li>
-<li><a href="concepts.html#diagnosing-bias-variance-issues-possible-solutions">Diagnosing Bias-Variance Issues <em>&amp;</em> Possible Solutions</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-summary"><i class="fa fa-check"></i>Bias-Variance Summary</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#bias-variance-tradeoff"><i class="fa fa-check"></i>Bias-Variance Tradeoff</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#bias-variance"><i class="fa fa-check"></i>Bias &amp; Variance</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#the-tradeoff"><i class="fa fa-check"></i>The Tradeoff</a></li>
+<li><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#diagnosing-bias-variance-issues-possible-solutions">Diagnosing Bias-Variance Issues <em>&amp;</em> Possible Solutions</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#bias-variance-summary"><i class="fa fa-check"></i>Bias-Variance Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#cross-validation"><i class="fa fa-check"></i>Cross-Validation</a><ul>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#adding-another-validation-set"><i class="fa fa-check"></i>Adding Another Validation Set</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#k-fold-cross-validation"><i class="fa fa-check"></i>K-fold Cross-Validation</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bootstrap"><i class="fa fa-check"></i>Bootstrap</a></li>
-<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized regression</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
-</ul></li>
-<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#cross-validation"><i class="fa fa-check"></i>Cross-Validation</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#adding-another-validation-set"><i class="fa fa-check"></i>Adding Another Validation Set</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#k-fold-cross-validation"><i class="fa fa-check"></i>K-fold Cross-Validation</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#bootstrap"><i class="fa fa-check"></i>Bootstrap</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized regression</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural language processing/Text Analysis</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+<li><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#k-nearest-neighbors"><span class="math inline"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-1-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-1" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-2" class="mjx-mrow"><span id="MJXc-Node-3" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.491em; padding-bottom: 0.308em;">k</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">k</script></span>-nearest Neighbors</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#bias-variance-demo"><i class="fa fa-check"></i>Bias Variance Demo</a></li>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#programming-languages"><i class="fa fa-check"></i>Programming Languages</a><ul>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#r"><i class="fa fa-check"></i>R</a></li>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#python"><i class="fa fa-check"></i>Python</a></li>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#other"><i class="fa fa-check"></i>Other</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#brief-glossary-of-common-terms"><i class="fa fa-check"></i>Brief Glossary of Common Terms</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural language processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="wrap-up.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html"><i class="fa fa-check"></i>Appendix</a><ul style="display: block;">
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#bias-variance-demo"><i class="fa fa-check"></i>Bias Variance Demo</a></li>
+<li class="chapter active" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#programming-languages"><i class="fa fa-check"></i>Programming Languages</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#r"><i class="fa fa-check"></i>R</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#python"><i class="fa fa-check"></i>Python</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#other"><i class="fa fa-check"></i>Other</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#brief-glossary-of-common-terms"><i class="fa fa-check"></i>Brief Glossary of Common Terms</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="https://m-clark.github.io/introduction-to-machine-learning/references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
-<li class='after'><a href="https://m-clark.github.io/"><img src="img/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
-<li class='after'><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="img/ccbysa.png" /></a></li>
+<li class="after"><a href="https://m-clark.github.io/"><img src="./appendix_files/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
+<li class="after"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="./appendix_files/ccbysa.png"></a></li>
 
 </ul>
 
       </nav>
     </div>
 
-    <div class="book-body">
+    <div class="book-body fixed">
       <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
+        <div class="book-header fixed" role="navigation" style="background-color: rgb(255, 255, 248);">
+          <a class="btn pull-left js-toolbar-action" aria-label="" href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#"><i class="fa fa-align-justify"></i></a><a class="btn pull-left js-toolbar-action" aria-label="Search" href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#"><i class="fa fa-search"></i></a><div class="dropdown pull-right  js-toolbar-action"><a class="btn toggle-dropdown" aria-label="Share" href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#"><i class="fa fa-share-alt"></i></a><div class="dropdown-menu dropdown-left"><div class="dropdown-caret"><span class="caret-outer"></span><span class="caret-inner"></span></div><div class="buttons"><button class="button size-5 ">Twitter</button><button class="button size-5 ">Facebook</button><button class="button size-5 ">Google+</button><button class="button size-5 ">Weibo</button><button class="button size-5 ">Instapaper</button></div></div></div><div class="dropdown pull-left font-settings js-toolbar-action"><a class="btn toggle-dropdown" aria-label="Font Settings" href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#"><i class="fa fa-font"></i></a><div class="dropdown-menu dropdown-right"><div class="dropdown-caret"><span class="caret-outer"></span><span class="caret-inner"></span></div><div class="buttons"><button class="button size-2 font-reduce">A</button><button class="button size-2 font-enlarge">A</button></div><div class="buttons"><button class="button size-2 ">Serif</button><button class="button size-2 ">Sans</button></div><div class="buttons"><button class="button size-3 ">White</button><button class="button size-3 ">Sepia</button><button class="button size-3 ">Night</button></div></div></div><h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="https://m-clark.github.io/introduction-to-machine-learning/"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
           </h1>
         </div>
 
@@ -259,10 +475,10 @@ gendat =<span class="st"> </span><span class="kw">replicate</span>(<span class="
  
 rbf1 =<span class="st"> </span><span class="kw">apply</span>(gendat, <span class="dv">3</span>, 
              <span class="cf">function</span>(d) <span class="kw">predict</span>(<span class="kw">gausspr</span>(y<span class="op">~</span>x, <span class="dt">data=</span><span class="kw">data.frame</span>(d), <span class="dt">kpar=</span><span class="kw">list</span>(<span class="dt">sigma=</span>.<span class="dv">5</span>)), 
-                                 <span class="dt">newdata =</span> <span class="kw">data.frame</span>(x), <span class="dt">type=</span><span class="st">&#39;response&#39;</span>))
+                                 <span class="dt">newdata =</span> <span class="kw">data.frame</span>(x), <span class="dt">type=</span><span class="st">'response'</span>))
 rbf2 =<span class="st"> </span><span class="kw">apply</span>(gendat, <span class="dv">3</span>, 
              <span class="cf">function</span>(d) <span class="kw">predict</span>(<span class="kw">gausspr</span>(y<span class="op">~</span>x, <span class="dt">data=</span><span class="kw">data.frame</span>(d)), 
-                                 <span class="dt">newdata =</span> <span class="kw">data.frame</span>(x), <span class="dt">type=</span><span class="st">&#39;response&#39;</span>) )
+                                 <span class="dt">newdata =</span> <span class="kw">data.frame</span>(x), <span class="dt">type=</span><span class="st">'response'</span>) )
  
 <span class="kw">library</span>(ggplot2); <span class="kw">library</span>(tidyverse); <span class="kw">library</span>(gridExtra)
  
@@ -280,62 +496,62 @@ rbf2_samp =<span class="st"> </span>rbf2 <span class="op">%&gt;%</span><span cla
  
 g1 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span><span class="kw">data.frame</span>(basedat)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_blank</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat, <span class="dt">group=</span>sample), <span class="dt">color=</span><span class="st">&#39;#ff5500&#39;</span>, <span class="dt">alpha=</span>.<span class="dv">25</span>, <span class="dt">data=</span>rbf1_samp) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat, <span class="dt">group=</span>sample), <span class="dt">color=</span><span class="st">'#ff5500'</span>, <span class="dt">alpha=</span>.<span class="dv">25</span>, <span class="dt">data=</span>rbf1_samp) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&#39;&#39;</span>, <span class="dt">title=</span><span class="st">&#39;Low Variance&#39;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">''</span>, <span class="dt">title=</span><span class="st">'Low Variance'</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span>lazerhawk<span class="op">::</span><span class="kw">theme_trueMinimal</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme</span>(
-    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
-    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
     <span class="dt">panel.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">panel.grid =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">strip.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
-    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;#fffff8&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
+    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">"#fffff8"</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
   )
  
 g2 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span><span class="kw">data.frame</span>(basedat)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>ytrue), <span class="dt">color=</span><span class="st">&#39;#00aaff&#39;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat), <span class="dt">color=</span><span class="st">&#39;#ff5500&#39;</span>, <span class="kw">data.frame</span>(<span class="dt">yhat=</span><span class="kw">rowMeans</span>(rbf1))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>ytrue), <span class="dt">color=</span><span class="st">'#00aaff'</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat), <span class="dt">color=</span><span class="st">'#ff5500'</span>, <span class="kw">data.frame</span>(<span class="dt">yhat=</span><span class="kw">rowMeans</span>(rbf1))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&#39;&#39;</span>, <span class="dt">title=</span><span class="st">&#39;High Bias&#39;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">''</span>, <span class="dt">title=</span><span class="st">'High Bias'</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span>lazerhawk<span class="op">::</span><span class="kw">theme_trueMinimal</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme</span>(
-    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
-    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
     <span class="dt">panel.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">panel.grid =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">strip.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
-    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;#fffff8&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
+    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">"#fffff8"</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
   )
  
 g3 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span><span class="kw">data.frame</span>(basedat)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_blank</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat, <span class="dt">group=</span>sample), <span class="dt">color=</span><span class="st">&#39;#ff5500&#39;</span>, <span class="dt">alpha=</span>.<span class="dv">25</span>, <span class="dt">data=</span>rbf2_samp) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat, <span class="dt">group=</span>sample), <span class="dt">color=</span><span class="st">'#ff5500'</span>, <span class="dt">alpha=</span>.<span class="dv">25</span>, <span class="dt">data=</span>rbf2_samp) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&#39;&#39;</span>, <span class="dt">title=</span><span class="st">&#39;High Variance&#39;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">''</span>, <span class="dt">title=</span><span class="st">'High Variance'</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span>lazerhawk<span class="op">::</span><span class="kw">theme_trueMinimal</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme</span>(
-    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
-    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
     <span class="dt">panel.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">panel.grid =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">strip.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
-    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;#fffff8&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
+    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">"#fffff8"</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
   )
  
 g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span><span class="kw">data.frame</span>(basedat)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>ytrue), <span class="dt">color=</span><span class="st">&#39;#00aaff&#39;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat), <span class="dt">color=</span><span class="st">&#39;#ff5500&#39;</span>, <span class="kw">data.frame</span>(<span class="dt">yhat=</span><span class="kw">rowMeans</span>(rbf2))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>ytrue), <span class="dt">color=</span><span class="st">'#00aaff'</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>yhat), <span class="dt">color=</span><span class="st">'#ff5500'</span>, <span class="kw">data.frame</span>(<span class="dt">yhat=</span><span class="kw">rowMeans</span>(rbf2))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&#39;&#39;</span>, <span class="dt">title=</span><span class="st">&#39;Low Bias&#39;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">''</span>, <span class="dt">title=</span><span class="st">'Low Bias'</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span>lazerhawk<span class="op">::</span><span class="kw">theme_trueMinimal</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme</span>(
-    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
-    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&#39;#fffff8&#39;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.key =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
+    <span class="dt">legend.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">'#fffff8'</span>, <span class="dt">colour =</span> <span class="ot">NA</span>),
     <span class="dt">panel.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">panel.grid =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
     <span class="dt">strip.background =</span> ggplot2<span class="op">::</span><span class="kw">element_blank</span>(),
-    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;#fffff8&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
+    <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">"#fffff8"</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
   )
  
 <span class="kw">grid.arrange</span>(g1, g2, g3, g4, <span class="dt">ncol=</span><span class="dv">2</span>)</code></pre></div>
@@ -348,7 +564,7 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
 <div id="deep-learning-example" class="section level4">
 <h4>Deep learning example</h4>
 <p>The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>. The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>. For more on using TensorFlow with R, check out <a href="https://tensorflow.rstudio.com/">RStudio’s documentation</a>.</p>
-<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn56" class="footnoteRef" id="fnref56"><sup>56</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
+<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fn56" class="footnoteRef" id="fnref56"><sup>56</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
 <p>This is just a starting point, so don’t expect any better performance than those shown previously, but it’ll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
 
@@ -360,20 +576,20 @@ y_test =<span class="st"> </span><span class="kw">as.numeric</span>(wine_test<sp
 model =<span class="st"> </span><span class="kw">keras_model_sequential</span>() 
 
 model <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">256</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>, <span class="dt">input_shape =</span> <span class="kw">c</span>(<span class="dv">9</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">256</span>, <span class="dt">activation =</span> <span class="st">'relu'</span>, <span class="dt">input_shape =</span> <span class="kw">c</span>(<span class="dv">9</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.4</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">128</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">128</span>, <span class="dt">activation =</span> <span class="st">'relu'</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.3</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">64</span>, <span class="dt">activation =</span> <span class="st">&#39;relu&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">64</span>, <span class="dt">activation =</span> <span class="st">'relu'</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">1</span>, <span class="dt">activation =</span> <span class="st">&#39;sigmoid&#39;</span>)
+<span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">1</span>, <span class="dt">activation =</span> <span class="st">'sigmoid'</span>)
 
 <span class="kw">summary</span>(model)
 
 model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compile</span>(
-  <span class="dt">optimizer =</span> <span class="st">&#39;nadam&#39;</span>,
-  <span class="dt">loss =</span> <span class="st">&quot;binary_crossentropy&quot;</span>,
-  <span class="dt">metrics =</span> <span class="st">&quot;accuracy&quot;</span>
+  <span class="dt">optimizer =</span> <span class="st">'nadam'</span>,
+  <span class="dt">loss =</span> <span class="st">"binary_crossentropy"</span>,
+  <span class="dt">metrics =</span> <span class="st">"accuracy"</span>
 )
 
 history =<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span>
@@ -389,12 +605,12 @@ history =<span class="st"> </span>model <span class="op">%&gt;%</span><span clas
 <span class="co"># model %&gt;% evaluate(X_test, y_test)</span>
 
 ypred =<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">predict_classes</span>(X_test)
-caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_test, <span class="dt">positive=</span><span class="st">&#39;1&#39;</span>)</code></pre></div>
+caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_test, <span class="dt">positive=</span><span class="st">'1'</span>)</code></pre></div>
 </div>
 </div>
 <div id="python" class="section level3">
 <h3>Python</h3>
-<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn57" class="footnoteRef" id="fnref57"><sup>57</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
+<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fn57" class="footnoteRef" id="fnref57"><sup>57</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
 <p>One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>. It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> sklearn <span class="im">as</span> sk
 <span class="im">import</span> pandas <span class="im">as</span> pd
@@ -402,38 +618,44 @@ caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_
 <span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split
 <span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler
 <span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier
-<span class="co"># from os import chdir            # if desired</span>
-<span class="co"># chdir(&#39;your_directory&#39;)</span>
+
 <span class="co"># import data</span>
-wine <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/wine.csv&#39;</span>)
+wine <span class="op">=</span> pd.read_csv(<span class="st">'data/wine.csv'</span>)
+
 <span class="co"># data preprocessing</span>
 np.random.seed(<span class="dv">1234</span>)
-X <span class="op">=</span> wine.drop([<span class="st">&#39;free.sulfur.dioxide&#39;</span>, <span class="st">&#39;density&#39;</span>, <span class="st">&#39;quality&#39;</span>, <span class="st">&#39;color&#39;</span>, <span class="st">&#39;white&#39;</span>,<span class="st">&#39;good&#39;</span>], axis<span class="op">=</span><span class="dv">1</span>)
+X <span class="op">=</span> wine.drop([<span class="st">'free.sulfur.dioxide'</span>, <span class="st">'density'</span>, <span class="st">'quality'</span>, <span class="st">'color'</span>, <span class="st">'white'</span>,<span class="st">'good'</span>], axis<span class="op">=</span><span class="dv">1</span>)
 X <span class="op">=</span> MinMaxScaler().fit_transform(X)  <span class="co"># by default on 0, 1 scale</span>
-y <span class="op">=</span> wine[<span class="st">&#39;good&#39;</span>]
+y <span class="op">=</span> wine[<span class="st">'good'</span>]
 X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>)
+
 <span class="co"># train model</span>
 rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">1000</span>)
 rf_train <span class="op">=</span> rf.fit(X_train, y_train)
+
 <span class="co"># get test predictions</span>
 rf_predict <span class="op">=</span> rf_train.predict(X_test)
+
 <span class="co"># create confusion matrix, and accuracy</span>
 cm <span class="op">=</span> sk.metrics.confusion_matrix(y_test,rf_predict)
 cm_prob <span class="op">=</span> cm <span class="op">/</span> np.<span class="bu">sum</span>(cm)  <span class="co"># as probs</span>
-<span class="bu">print</span>(cm_prob)</code></pre></div>
-<pre><code>[[ 0.26692308  0.09076923]
- [ 0.07615385  0.56615385]]</code></pre>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">acc <span class="op">=</span> sk.metrics.accuracy_score(y_test, rf_predict)
-acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="op">=</span>[<span class="st">&#39;Accuracy&#39;</span>])
+<span class="bu">print</span>(cm_prob)
+
+acc <span class="op">=</span> sk.metrics.accuracy_score(y_test, rf_predict)
+acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="op">=</span>[<span class="st">'Accuracy'</span>])
 <span class="bu">print</span>(acc)</code></pre></div>
-<pre><code>   Accuracy
+<pre><code>[[ 0.26692308  0.09076923]
+ [ 0.07615385  0.56615385]]
+   Accuracy
 0  0.833077</code></pre>
 <div id="deep-learning-example-1" class="section level4">
 <h4>Deep learning example</h4>
-<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn58" class="footnoteRef" id="fnref58"><sup>58</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
+<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fn58" class="footnoteRef" id="fnref58"><sup>58</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow.contrib.learn <span class="im">as</span> skflow
 <span class="im">from</span> sklearn <span class="im">import</span> metrics
+
 feats <span class="op">=</span> skflow.infer_real_valued_columns_from_input(X_train)
+
 classifier_tf <span class="op">=</span> skflow.DNNClassifier(feature_columns<span class="op">=</span>feats, 
                                      hidden_units<span class="op">=</span>[<span class="dv">50</span>, <span class="dv">50</span>, <span class="dv">50</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>], 
                                      dropout<span class="op">=</span>.<span class="dv">2</span>,
@@ -441,7 +663,7 @@ classifier_tf <span class="op">=</span> skflow.DNNClassifier(feature_columns<spa
 classifier_tf.fit(X_train, y_train, steps<span class="op">=</span><span class="dv">10000</span>)
 predictions <span class="op">=</span> <span class="bu">list</span>(classifier_tf.predict(X_test, as_iterable<span class="op">=</span><span class="va">True</span>))
 score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
-<span class="bu">print</span>(<span class="st">&quot;Accuracy: </span><span class="sc">%f</span><span class="st">&quot;</span> <span class="op">%</span> score)</code></pre></div>
+<span class="bu">print</span>(<span class="st">"Accuracy: </span><span class="sc">%f</span><span class="st">"</span> <span class="op">%</span> score)</code></pre></div>
 </div>
 </div>
 <div id="other" class="section level3">
@@ -452,10 +674,10 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 </div>
 <div id="brief-glossary-of-common-terms" class="section level2">
 <h2>Brief Glossary of Common Terms</h2>
-<p><span class="emph">bias</span>: could mean the intercept (e.g. in neural nets), typically refers to the bias in bias-variance decomposition</p>
-<p><span class="emph">classifier</span>: specific model or technique (i.e. function) that maps observations to classes</p>
-<p><span class="emph">confusion matrix</span>: a table of predicted class membership vs. true class membership</p>
-<p><span class="emph">hypothesis</span>: a specific model <span class="math inline">\(h(x)\)</span> of all possible in the hypothesis space <span class="math inline">\(\mathcal{H}\)</span></p>
+<p><span class="emph">bias</span>: could mean the intercept (e.g.&nbsp;in neural nets), typically refers to the bias in bias-variance decomposition</p>
+<p><span class="emph">classifier</span>: specific model or technique (i.e.&nbsp;function) that maps observations to classes</p>
+<p><span class="emph">confusion matrix</span>: a table of predicted class membership vs.&nbsp;true class membership</p>
+<p><span class="emph">hypothesis</span>: a specific model <span class="math inline"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-2-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="font-size: 119%; position: relative;"><span id="MJXc-Node-4" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-5" class="mjx-mrow"><span id="MJXc-Node-6" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.475em; padding-bottom: 0.265em;">h</span></span><span id="MJXc-Node-7" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.475em; padding-bottom: 0.58em;">(</span></span><span id="MJXc-Node-8" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.213em; padding-bottom: 0.265em;">x</span></span><span id="MJXc-Node-9" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.475em; padding-bottom: 0.58em;">)</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>h</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-2">h(x)</script></span> of all possible in the hypothesis space <span class="math inline"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-3-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mi class=&quot;MJX-tex-caligraphic&quot; mathvariant=&quot;script&quot;&gt;H&lt;/mi&gt;&lt;/mrow&gt;&lt;/math&gt;" role="presentation" style="font-size: 119%; position: relative;"><span id="MJXc-Node-10" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-11" class="mjx-mrow"><span id="MJXc-Node-12" class="mjx-texatom"><span id="MJXc-Node-13" class="mjx-mrow"><span id="MJXc-Node-14" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.423em; padding-bottom: 0.37em;">H</span></span></span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow class="MJX-TeXAtom-ORD"><mi class="MJX-tex-caligraphic" mathvariant="script">H</mi></mrow></math></span></span><script type="math/tex" id="MathJax-Element-3">\mathcal{H}</script></span></p>
 <p><span class="emph">input, feature, attribute</span>: independent variable, explanatory variable, covariate, predictor variable, column</p>
 <p><span class="emph">instance, example</span>: observation, row</p>
 <p><span class="emph">learning</span>: model fitting</p>
@@ -468,11 +690,11 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 </div>
 </div>
 <div class="footnotes">
-<hr />
+<hr>
 <ol start="56">
-<li id="fn56"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="appendix.html#fnref56">↩</a></p></li>
-<li id="fn57"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref57">↩</a></p></li>
-<li id="fn58"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="appendix.html#fnref58">↩</a></p></li>
+<li id="fn56"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fnref56">↩</a></p></li>
+<li id="fn57"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fnref57">↩</a></p></li>
+<li id="fn58"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="https://m-clark.github.io/introduction-to-machine-learning/appendix.html#fnref58">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -480,17 +702,17 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
           </div>
         </div>
       </div>
-<a href="wrap-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="https://m-clark.github.io/introduction-to-machine-learning/wrap-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="https://m-clark.github.io/introduction-to-machine-learning/references.html" class="navigation navigation-next " aria-label="Next page" style="margin-right: 33px;"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="./appendix_files/app.min.js.download"></script>
+<script src="./appendix_files/lunr.js.download"></script>
+<script src="./appendix_files/plugin-search.js.download"></script>
+<script src="./appendix_files/plugin-sharing.js.download"></script>
+<script src="./appendix_files/plugin-fontsettings.js.download"></script>
+<script src="./appendix_files/plugin-bookdown.js.download"></script>
+<script src="./appendix_files/jquery.highlight.js.download"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -536,6 +758,7 @@ gitbook.start({
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
-</body>
 
-</html>
+
+
+</body></html>
