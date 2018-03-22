@@ -231,7 +231,6 @@ white = read.csv('data/winequality-white.csv', sep=';')
 wine = rbind(data.frame(color='red', white=0, red) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))),
              data.frame(color='white', white=1, white) %>% mutate(good=factor(if_else(quality>=6, 'Good', 'Bad'))))
 write.csv(wine, 'data/wine.csv', row.names=F)
-
 ```
 
 
@@ -499,6 +498,7 @@ g
 - Susceptible to irrelevant features.
 - Susceptible to correlated inputs.
 - Ability to handle data of mixed types.
+- Notably imbalanced target labels.
 - Big data. Though approaches are available that help in this regard.
 
 ### Final Thoughts
