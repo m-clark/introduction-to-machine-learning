@@ -339,7 +339,7 @@ In this example, we'll use the <span class="pack">glmnet</span> package, which w
 
 You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process. 
 
-The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.
+The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.  However, note that <span class="pack">caret</span> also has ways to search the space automatically.  One argument, `tuneLength`, will create a grid of that number of values for each tuning parameter (e.g. `tuneLength=3` for two parameters would create a 9x2 grid as we do below).  In addition, there is a `search` argument for `trainControl` that can search the parameter space randomly but create no more values than what is specified by `tuneLength`.
 
 ```{r regreg_train, eval=FALSE, echo=2:10}
 set.seed(1234)
@@ -371,7 +371,24 @@ conf_regreg = confusionMatrix(preds_regreg, good_observed, positive='Good')
 ```
 
 
-We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  Perhaps the other approaches will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
+We get a lot of information here, but to focus on accuracy, we get around `r round(conf_regreg$overall[1]*100, 1)`%.  Note that this is performance on the *test set*, i.e. data that wasn't used to train the model.  The lower bound (and p-value) suggests we are statistically predicting better than the *No Information Rate* (i.e., just guessing the more prevalent 'Bad' category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine.  The other metrics not previously discussed are as follows:
+
+- **Kappa**: a chance-corrected measure of agreement between predictions and true values.
+- **Mcnemar's test**: this is actually just [Mcnemar's test](https://en.wikipedia.org/wiki/McNemar%27s_test) on the confusion matrix; like a Chi-square for paired data.
+- **Prevalence**: how often does the event occur (A+C)/Total
+- **Detection Rate**: A/Total
+- **Detection Prevalence**: How often the positive class was predicted (A+B)/Total
+- **Balanced Accuracy**: The mean of sensitivity and specificity.
+
+
+In addition, one can get the precision/recall form of the output by changing the mode for the confusion matrix.
+
+```{r prec_recall}
+confusionMatrix(preds_regreg, good_observed, positive='Good', mode='prec_recall')
+```
+
+
+Perhaps the other approaches that follow will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
 
 Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients, which is okay since we scaled the data as part of the process.
 
@@ -456,7 +473,7 @@ In this case it looks like choosing the nearest `r results_knn$finalModel$k` nei
 ```{r knn_test, echo=-3}
 preds_knn = predict(results_knn, wine_test)
 confusionMatrix(preds_knn, good_observed, positive='Good')
-conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') #create an object to use in Sexpr
+conf_knn = confusionMatrix(preds_knn, good_observed, positive='Good') 
 ```
 
 

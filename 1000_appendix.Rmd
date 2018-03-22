@@ -173,17 +173,17 @@ If your data fits on your machine and/or your analysis time is less than a coupl
 
 One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>.  It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.
 
-```{python pyrf, eval=T, engine.path="/Users/micl/anaconda3/bin/python", echo=-c(7,10), cache=TRUE}
+```{python pyrf, eval=T, cache=TRUE}
 import sklearn as sk
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
-# from os import chdir
+# from os import chdir            # if desired
+# chdir('your_directory')
 
 # import data
-# chdir('D:\Documents\Stats\Repositories\Docs\introduction-to-machine-learning')
 wine = pd.read_csv('data/wine.csv')
 
 # data preprocessing
