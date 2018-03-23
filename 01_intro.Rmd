@@ -45,7 +45,7 @@ One thing that is important to keep in mind as you begin is that standard techni
 All introductory statistics courses will cover linear regression in great detail, and it certainly can serve as a starting point here.  We can describe it as follows in matrix notation in terms of the underlying data generating process:
 
 $$\mu = X\beta$$
-$$y \sim N(\mu,\sigma^{2})$$
+$$y \sim N(\mu,\textrm{I}\sigma^{2})$$
 
 Where $y$ is conditionally  a normally distributed response [<span class="emph">target</span>] with mean $\mu$ and constant variance $\sigma^{2}$.  X is a typical model matrix, i.e. a matrix of predictor variables and in which the first column is a vector of 1s for the intercept [<span class="emph">bias</span>][^bias], and $\beta$ is the vector of coefficients [<span class="emph">weights</span>] corresponding to the intercept and predictors in the model matrix.
 

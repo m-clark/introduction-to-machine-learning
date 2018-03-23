@@ -173,42 +173,54 @@ If your data fits on your machine and/or your analysis time is less than a coupl
 
 One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>.  It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.
 
-```{python pyrf, eval=T, cache=TRUE}
-import sklearn as sk
+<!-- Though no change was made to the code, nor any need to re-evaluate what was alrady displayed, something caused knitr to do so and empty lines are now ignored; separate chunks until fixed -->
+
+```{python pyrf, engine.path= '/Users/micl/anaconda3/bin/python',  eval=T, cache=TRUE}
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
 # from os import chdir            # if desired
 # chdir('your_directory')
+```
 
+```{python pyrf_import}
 # import data
 wine = pd.read_csv('data/wine.csv')
+```
 
+```{python pyrf_dataproc}
 # data preprocessing
 np.random.seed(1234)
 X = wine.drop(['free.sulfur.dioxide', 'density', 'quality', 'color', 'white','good'], axis=1)
 X = MinMaxScaler().fit_transform(X)  # by default on 0, 1 scale
 y = wine['good']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
+```
+```{python pyrf_2_train}
 # train model
 rf = RandomForestClassifier(n_estimators=1000)
 rf_train = rf.fit(X_train, y_train)
-
+```
+```{python pyrf_test}
 # get test predictions
 rf_predict = rf_train.predict(X_test)
-
+```
+```{python pyrf_assess}
 # create confusion matrix, and accuracy
-cm = sk.metrics.confusion_matrix(y_test,rf_predict)
+cm = confusion_matrix(y_test,rf_predict)
 cm_prob = cm / np.sum(cm)  # as probs
 print(cm_prob)
-
-acc = sk.metrics.accuracy_score(y_test, rf_predict)
+```
+```{python pyrf2}
+acc = accuracy_score(y_test, rf_predict)
 acc = pd.DataFrame(np.array([acc]), columns=['Accuracy'])
 print(acc)
 ```
+
+
 
 #### Deep learning example
 

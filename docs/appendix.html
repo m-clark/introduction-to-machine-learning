@@ -47,21 +47,18 @@
 
 
 <script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
-<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.4/datatables.js"></script>
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/datatables-binding-0.2/datatables.js"></script>
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="libs/d3-3.5.3/./d3.min.js"></script>
 <link href="libs/d3heatmapcore-0.0.0/heatmapcore.css" rel="stylesheet" />
 <script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
 <script src="libs/d3-tip-0.6.6/index.js"></script>
-<script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
+<script src="libs/d3heatmap-binding-0.6.1.1/d3heatmap.js"></script>
 <script src="libs/viz-0.3/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+<script src="libs/grViz-binding-0.9.2/grViz.js"></script>
 
 
 <style type="text/css">
@@ -102,8 +99,8 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="css\book.css" type="text/css" />
-<link rel="stylesheet" href="css\standard_html.css" type="text/css" />
+<link rel="stylesheet" href="css/book.css" type="text/css" />
+<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
 </head>
 
 <body>
@@ -396,34 +393,35 @@ caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_
 <h3>Python</h3>
 <p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn57" class="footnoteRef" id="fnref57"><sup>57</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
 <p>One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>. It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> sklearn <span class="im">as</span> sk
-<span class="im">import</span> pandas <span class="im">as</span> pd
+<!-- Though no change was made to the code, nor any need to re-evaluate what was alrady displayed, something caused knitr to do so and empty lines are now ignored; separate chunks until fixed -->
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> pandas <span class="im">as</span> pd
 <span class="im">import</span> numpy <span class="im">as</span> np
 <span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split
 <span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler
 <span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier
+<span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, accuracy_score
 <span class="co"># from os import chdir            # if desired</span>
-<span class="co"># chdir(&#39;your_directory&#39;)</span>
-<span class="co"># import data</span>
-wine <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/wine.csv&#39;</span>)
-<span class="co"># data preprocessing</span>
+<span class="co"># chdir(&#39;your_directory&#39;)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># import data</span>
+wine <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/wine.csv&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># data preprocessing</span>
 np.random.seed(<span class="dv">1234</span>)
 X <span class="op">=</span> wine.drop([<span class="st">&#39;free.sulfur.dioxide&#39;</span>, <span class="st">&#39;density&#39;</span>, <span class="st">&#39;quality&#39;</span>, <span class="st">&#39;color&#39;</span>, <span class="st">&#39;white&#39;</span>,<span class="st">&#39;good&#39;</span>], axis<span class="op">=</span><span class="dv">1</span>)
 X <span class="op">=</span> MinMaxScaler().fit_transform(X)  <span class="co"># by default on 0, 1 scale</span>
 y <span class="op">=</span> wine[<span class="st">&#39;good&#39;</span>]
-X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>)
-<span class="co"># train model</span>
+X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># train model</span>
 rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">1000</span>)
-rf_train <span class="op">=</span> rf.fit(X_train, y_train)
-<span class="co"># get test predictions</span>
-rf_predict <span class="op">=</span> rf_train.predict(X_test)
-<span class="co"># create confusion matrix, and accuracy</span>
-cm <span class="op">=</span> sk.metrics.confusion_matrix(y_test,rf_predict)
+rf_train <span class="op">=</span> rf.fit(X_train, y_train)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># get test predictions</span>
+rf_predict <span class="op">=</span> rf_train.predict(X_test)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># create confusion matrix, and accuracy</span>
+cm <span class="op">=</span> confusion_matrix(y_test,rf_predict)
 cm_prob <span class="op">=</span> cm <span class="op">/</span> np.<span class="bu">sum</span>(cm)  <span class="co"># as probs</span>
 <span class="bu">print</span>(cm_prob)</code></pre></div>
 <pre><code>[[ 0.26692308  0.09076923]
  [ 0.07615385  0.56615385]]</code></pre>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">acc <span class="op">=</span> sk.metrics.accuracy_score(y_test, rf_predict)
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">acc <span class="op">=</span> accuracy_score(y_test, rf_predict)
 acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="op">=</span>[<span class="st">&#39;Accuracy&#39;</span>])
 <span class="bu">print</span>(acc)</code></pre></div>
 <pre><code>   Accuracy
@@ -433,7 +431,9 @@ acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="
 <p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn58" class="footnoteRef" id="fnref58"><sup>58</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow.contrib.learn <span class="im">as</span> skflow
 <span class="im">from</span> sklearn <span class="im">import</span> metrics
+
 feats <span class="op">=</span> skflow.infer_real_valued_columns_from_input(X_train)
+
 classifier_tf <span class="op">=</span> skflow.DNNClassifier(feature_columns<span class="op">=</span>feats, 
                                      hidden_units<span class="op">=</span>[<span class="dv">50</span>, <span class="dv">50</span>, <span class="dv">50</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>], 
                                      dropout<span class="op">=</span>.<span class="dv">2</span>,

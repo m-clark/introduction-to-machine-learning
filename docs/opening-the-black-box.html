@@ -47,21 +47,18 @@
 
 
 <script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
-<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.4/datatables.js"></script>
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/datatables-binding-0.2/datatables.js"></script>
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="libs/d3-3.5.3/./d3.min.js"></script>
 <link href="libs/d3heatmapcore-0.0.0/heatmapcore.css" rel="stylesheet" />
 <script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
 <script src="libs/d3-tip-0.6.6/index.js"></script>
-<script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
+<script src="libs/d3heatmap-binding-0.6.1.1/d3heatmap.js"></script>
 <script src="libs/viz-0.3/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+<script src="libs/grViz-binding-0.9.2/grViz.js"></script>
 
 
 <style type="text/css">
@@ -102,8 +99,8 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="css\book.css" type="text/css" />
-<link rel="stylesheet" href="css\standard_html.css" type="text/css" />
+<link rel="stylesheet" href="css/book.css" type="text/css" />
+<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
 </head>
 
 <body>
@@ -486,29 +483,29 @@ good_observed =<span class="st"> </span>wine_test<span class="op">$</span>good
 
           Reference
 Prediction Bad Good
-      Bad  197   76
-      Good 279  746
+      Bad  196   76
+      Good 280  746
                                           
-               Accuracy : 0.7265          
-                 95% CI : (0.7014, 0.7506)
+               Accuracy : 0.7257          
+                 95% CI : (0.7006, 0.7499)
     No Information Rate : 0.6333          
-    P-Value [Acc &gt; NIR] : 6.665e-13       
+    P-Value [Acc &gt; NIR] : 1.029e-12       
                                           
-                  Kappa : 0.3531          
+                  Kappa : 0.351           
  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
                                           
             Sensitivity : 0.9075          
-            Specificity : 0.4139          
-         Pos Pred Value : 0.7278          
-         Neg Pred Value : 0.7216          
+            Specificity : 0.4118          
+         Pos Pred Value : 0.7271          
+         Neg Pred Value : 0.7206          
              Prevalence : 0.6333          
          Detection Rate : 0.5747          
-   Detection Prevalence : 0.7897          
-      Balanced Accuracy : 0.6607          
+   Detection Prevalence : 0.7904          
+      Balanced Accuracy : 0.6597          
                                           
        &#39;Positive&#39; Class : Good            
                                           </code></pre>
-<p>We get a lot of information here, but to focus on accuracy, we get around 72.7%. Note that this is performance on the <em>test set</em>, i.e. data that wasn’t used to train the model. The lower bound (and p-value) suggests we are statistically predicting better than the <em>No Information Rate</em> (i.e., just guessing the more prevalent ‘Bad’ category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine. The other metrics not previously discussed are as follows:</p>
+<p>We get a lot of information here, but to focus on accuracy, we get around 72.6%. Note that this is performance on the <em>test set</em>, i.e. data that wasn’t used to train the model. The lower bound (and p-value) suggests we are statistically predicting better than the <em>No Information Rate</em> (i.e., just guessing the more prevalent ‘Bad’ category), and sensitivity and positive predictive power are good, though at the cost of being able to distinguish bad wine. The other metrics not previously discussed are as follows:</p>
 <ul>
 <li><strong>Kappa</strong>: a chance-corrected measure of agreement between predictions and true values.</li>
 <li><strong>Mcnemar’s test</strong>: this is actually just <a href="https://en.wikipedia.org/wiki/McNemar%27s_test">Mcnemar’s test</a> on the confusion matrix; like a Chi-square for paired data.</li>
@@ -523,24 +520,24 @@ Prediction Bad Good
 
           Reference
 Prediction Bad Good
-      Bad  197   76
-      Good 279  746
+      Bad  196   76
+      Good 280  746
                                           
-               Accuracy : 0.7265          
-                 95% CI : (0.7014, 0.7506)
+               Accuracy : 0.7257          
+                 95% CI : (0.7006, 0.7499)
     No Information Rate : 0.6333          
-    P-Value [Acc &gt; NIR] : 6.665e-13       
+    P-Value [Acc &gt; NIR] : 1.029e-12       
                                           
-                  Kappa : 0.3531          
+                  Kappa : 0.351           
  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
                                           
-              Precision : 0.7278          
+              Precision : 0.7271          
                  Recall : 0.9075          
-                     F1 : 0.8078          
+                     F1 : 0.8074          
              Prevalence : 0.6333          
          Detection Rate : 0.5747          
-   Detection Prevalence : 0.7897          
-      Balanced Accuracy : 0.6607          
+   Detection Prevalence : 0.7904          
+      Balanced Accuracy : 0.6597          
                                           
        &#39;Positive&#39; Class : Good            
                                           </code></pre>
@@ -722,29 +719,29 @@ The final values used for the model were size = 9, decay = 1e-04 and bag = FALSE
 
           Reference
 Prediction Bad Good
-      Bad  288  114
-      Good 188  708
-                                          
-               Accuracy : 0.7673          
-                 95% CI : (0.7434, 0.7901)
-    No Information Rate : 0.6333          
-    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-                                          
-                  Kappa : 0.4821          
- Mcnemar&#39;s Test P-Value : 2.661e-05       
-                                          
-            Sensitivity : 0.8613          
-            Specificity : 0.6050          
-         Pos Pred Value : 0.7902          
-         Neg Pred Value : 0.7164          
-             Prevalence : 0.6333          
-         Detection Rate : 0.5455          
-   Detection Prevalence : 0.6903          
-      Balanced Accuracy : 0.7332          
-                                          
-       &#39;Positive&#39; Class : Good            
-                                          </code></pre>
-<p>We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (76.7%), sensitivity, specificity etc.</p>
+      Bad  295  109
+      Good 181  713
+                                         
+               Accuracy : 0.7766         
+                 95% CI : (0.7529, 0.799)
+    No Information Rate : 0.6333         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.5032         
+ Mcnemar&#39;s Test P-Value : 3.056e-05      
+                                         
+            Sensitivity : 0.8674         
+            Specificity : 0.6197         
+         Pos Pred Value : 0.7975         
+         Neg Pred Value : 0.7302         
+             Prevalence : 0.6333         
+         Detection Rate : 0.5493         
+   Detection Prevalence : 0.6888         
+      Balanced Accuracy : 0.7436         
+                                         
+       &#39;Positive&#39; Class : Good           
+                                         </code></pre>
+<p>We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (77.7%), sensitivity, specificity etc.</p>
 <div id="strengths-weaknesses-2" class="section level3">
 <h3>Strengths &amp; Weaknesses</h3>
 <p><strong>Strengths</strong></p>
@@ -818,29 +815,29 @@ The final value used for the model was mtry = 3.</code></pre>
 
           Reference
 Prediction Bad Good
-      Bad  336  100
-      Good 140  722
+      Bad  328   93
+      Good 148  729
                                           
-               Accuracy : 0.8151          
-                 95% CI : (0.7929, 0.8359)
+               Accuracy : 0.8143          
+                 95% CI : (0.7921, 0.8351)
     No Information Rate : 0.6333          
-    P-Value [Acc &gt; NIR] : &lt; 2e-16         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
                                           
-                  Kappa : 0.5947          
- Mcnemar&#39;s Test P-Value : 0.01182         
+                  Kappa : 0.5903          
+ Mcnemar&#39;s Test P-Value : 0.0005043       
                                           
-            Sensitivity : 0.8783          
-            Specificity : 0.7059          
-         Pos Pred Value : 0.8376          
-         Neg Pred Value : 0.7706          
+            Sensitivity : 0.8869          
+            Specificity : 0.6891          
+         Pos Pred Value : 0.8312          
+         Neg Pred Value : 0.7791          
              Prevalence : 0.6333          
-         Detection Rate : 0.5562          
-   Detection Prevalence : 0.6641          
-      Balanced Accuracy : 0.7921          
+         Detection Rate : 0.5616          
+   Detection Prevalence : 0.6757          
+      Balanced Accuracy : 0.7880          
                                           
        &#39;Positive&#39; Class : Good            
                                           </code></pre>
-<p>This is our best result so far with 81.5% accuracy, with a lower bound well beyond the 63% we’d have guessing. Random forests do not suffer from some of the data-specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models. Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches<a href="#fn44" class="footnoteRef" id="fnref44"><sup>44</sup></a>.</p>
+<p>This is our best result so far with 81.4% accuracy, with a lower bound well beyond the 63% we’d have guessing. Random forests do not suffer from some of the data-specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models. Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches<a href="#fn44" class="footnoteRef" id="fnref44"><sup>44</sup></a>.</p>
 <p>Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner<a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a>, and there are other functions used by caret that can produce their own metrics also. In this case, randomForest can provide importance based on a version of the ‘decrease in inaccuracy’ approach we talked before (as well as another index known as gini impurity). The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.</p>
 <div id="strengths-weaknesses-3" class="section level3">
 <h3>Strengths &amp; Weaknesses</h3>
