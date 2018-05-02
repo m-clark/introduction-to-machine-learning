@@ -337,7 +337,7 @@ We discussed regularized regression previously, and can start with such models. 
 
 In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus, we'll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter `alpha` to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have another parameter, `lambda`, which controls the penalty amount.
 
-You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process. 
+You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process[^tuning]. 
 
 The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.  However, note that <span class="pack">caret</span> also has ways to search the space automatically.  One argument, `tuneLength`, will create a grid of that number of values for each tuning parameter (e.g. `tuneLength=3` for two parameters would create a 9x2 grid as we do below).  In addition, there is a `search` argument for `trainControl` that can search the parameter space randomly but create no more values than what is specified by `tuneLength`.
 
@@ -359,7 +359,16 @@ load('data/results_regreg.RData')
 results_regreg
 ```
 
-The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in models that do not do any better than chance.  
+The results suggest $\alpha$ = `r results_regreg$bestTune[1]` and $\lambda$ = `r results_regreg$bestTune[2]`.  Do not mistake these for truth! However, we have to make a decision, and this at least provides us the means.  The additional column, $\kappa$ (kappa), can be seen as a measure of agreement between predictions and true values, but corrected for chance agreement.  It suggests several settings would result in models that do not do any better than chance.  Here is visual display of the results.
+
+```{r regreg_train_plot, eval=FALSE}
+ggplot(results_regreg)
+```
+
+```{r regreg_train_plot_pretty, eval=FALSE}
+ggplot(results_regreg) +
+  theme_trueMinimal() 
+```
 
 With the tuning parameters in place, now let's see the results on the test set.  The <span class="func">predict</span> function here will automatically use the best $\alpha$ and $\lambda$ from the previous process.
 
@@ -502,6 +511,26 @@ g
 ```
 
 
+```{r knn_lime, echo=FALSE}
+set.seed(1234)
+sample_index = sample(1:nrow(wine_test), 5)
+sample_test = wine_test %>% 
+  slice(sample_index) %>% 
+  select(-good)
+
+library(lime)
+knn_lime = lime(wine_train, results_knn)
+knn_explain = explain(sample_test, 
+                       knn_lime, 
+                       n_features = 3, 
+                       labels = 'Good')
+plot_features(knn_explain)
+plot_explanations(knn_explain)
+save(knn_explain, file = 'data/knn_explain.RData')
+```
+
+
+
 ### Strengths & Weaknesses
 
 **Strengths**[^knn_strength]
@@ -552,7 +581,21 @@ results_nnet
 ```
 
 
-We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization for the latter)')`.  Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
+We see that the best model has `r results_nnet$finalModel$tuneValue$size` hidden layer nodes and a decay parameter of `r ifelse(results_nnet$finalModel$tuneValue$decay != 0, results_nnet$finalModel$tuneValue$decay, '0 (though one might choose the next best that actually includes regularization for the latter)')`.  Here is a visual display of those results.
+
+```{r nnet_train_plot, eval=FALSE}
+ggplot(results_nnet)
+```
+
+```{r nnet_train_plot_pretty, eval=FALSE}
+ggplot(results_nnet) +
+  theme_trueMinimal() +
+  labs(x='Number of Hidden Units') +
+  scale_x_continuous(breaks = c(1,3,5,7,9))
+```
+
+
+Typically, you might think of how many hidden units you want to examine in terms of the amount of data you have (i.e. estimated parameters to N ratio), and here we have a decent amount of data.  In this situation, you might start with very broad values for the number of inputs (e.g. a sequence by 10s) and then narrow your focus (e.g. between 20 and 30s)[^nnet_rot], but with at least some weight decay you should be able to avoid overfitting. I was able to get an increase in test accuracy of about 1.5% using up to 50 hidden units.
 
 
 ```{r nnet_test, echo=-3}
@@ -563,6 +606,27 @@ conf_nnet = confusionMatrix(preds_nnet, good_observed, positive='Good')
 
 
 We note improved prediction with the neural net model relative to the previous approaches, with increases in accuracy (`r round(conf_nnet$overall[1]*100, 1)`%), sensitivity, specificity etc.
+
+
+
+```{r nnet_lime, echo=FALSE, eval=FALSE}
+set.seed(1234)
+sample_index = sample(1:nrow(wine_test), 5)
+sample_test = wine_test %>% 
+  slice(sample_index) %>% 
+  select(-good)
+
+library(lime)
+nnet_lime = lime(wine_train, results_nnet)
+nnet_explain = explain(sample_test, 
+                       nnet_lime, 
+                       n_features = 3, 
+                       labels = 'Good')
+plot_features(nnet_explain)
+plot_explanations(nnet_explain)
+save(nnet_explain, file = 'data/nnet_explain.RData')
+```
+
 
 ### Strengths & Weaknesses
 
@@ -692,6 +756,127 @@ This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accurac
 
 Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
 
+### Understanding the results
+
+As we get further into black box models, it becomes harder to understand what is going on with the predictors.  If our only goal is prediction, we might not care that much.  However, advances continue to be made in helping us understand what's happening under the hood.
+
+#### Variable Importance
+
+To begin, we can get variable importance metrics as we did before with the regularized regression.  How might we get such a measure from a random forest?  The package itself provides two different ways.  From the help file:
+
+- The first measure is computed from permuting OOB (out-of-bag) data: For each tree, the prediction error on the out-of-bag portion of the data is recorded (error rate for classification, MSE for regression). Then the same is done after permuting each predictor variable. The difference between the two are then averaged over all trees, and normalized by the standard deviation of the differences. 
+
+- The second measure is the total decrease in node impurities from splitting on the variable, averaged over all trees. For classification, the node impurity is measured by the Gini index. For regression, it is measured by residual sum of squares.
+
+So the first compares the prediction of a variable with a random version of itself, while the second considers the error rates induced by splitting on a variable.  Either way, we can then see which variables are relatively more important. The following shows the normalized result where the best predictor is given a value of 100, and the worst 0.
+
+```{r rf_varimp}
+varImp(results_rf)
+```
+
+TODO: minimum depth https://cran.r-project.org/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html#various-variable-importance-measures
+
+#### Effects plots
+
+So we can see that alcohol content and acidity are the most important, but what is the nature of the relationship? Partial dependence plots can allow us to understand the predictive effect of any particular covariate, controlling for the effects of others.  This is particularly important in the case where we have nonlinear relationships as we do here.
+
+```{r rf_pd_plot}
+# https://arxiv.org/pdf/1501.07196
+# tibble causes problem so convert wine_train to standard df.
+library(ggRandomForests)
+rf2 = rfsrc(formula = good ~., 
+            data=data.frame(wine_train), 
+            mtry = results_rf$finalModel$mtry)
+
+gg_v = gg_variable(rf2)
+gg_md <- gg_minimal_depth(rf2)
+
+# We want the top ranked minimal depth variables only,
+# plotted in minimal depth rank order.
+xvar <- gg_md$topvars[1:2]
+# plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1)
+
+
+# plot the variable list in a single panel plot
+plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1) +
+  labs(y='Probability Good', x="") +
+  scale_color_manual(values=c("#FF5500", "#4EC172")) + 
+  geom_smooth(aes(group=1), color="#98244C") +
+  theme_trueMinimal()
+```
+
+
+#### LIME
+
+Local Interpretable Model-agnostic Explanations
+
+The general approach lime takes to achieving this goal is as follows:
+
+- For each prediction to explain, permute the observations n times[^rf_lime_permute].
+- Let the complex model predict the outcome of all permuted observations.
+- Calculate the distance from all permutations to the original observation.
+- Convert the distance to a similarity score.
+- Select m features best describing the complex model outcome from the permuted data.
+- Fit a simple model to the permuted data, explaining the complex model outcome with the m features from the permuted data weighted by its similarity to the original observation.
+- Extract the feature weights from the simple model and use these as explanations for the complex models local behavior.
+
+MC explanation:
+
+Permute the data n times to create data with similar distributional properties to the original.
+
+Get similarity scores of the permuted observations to the observations you wish to explain.
+
+Make predictions with the permuted data based on the ML model.
+
+Select m features best describing the complex model outcome from the permuted data.
+
+Fit a simple model, e.g. regression, predicting the predictions from the ML model with the m features, where observations are weighted by similarity to the to-be-eplained observations.
+
+The coefficients from the simple model serve as the feature weights. The 'explanation fit' is R2 from that simple model.
+
+
+Predict the predictions based on t
+
+For most applied users, there's little interpretable about the approach. Perhaps if we look at the product we can get more information.
+
+```{r rf_lime}
+set.seed(1234)
+sample_index = sample(1:nrow(wine_test), 5)
+sample_test = wine_test %>% 
+  slice(sample_index) %>% 
+  select(-good)
+
+library(lime)
+rf_lime = lime(wine_train, results_rf)
+rf_explain = explain(sample_test, 
+                     rf_lime, 
+                     n_features = 3, 
+                     labels = 'Good')
+```
+
+The <span class="objclass">rf_explain</span> object is a data frame that can be explored as is, or visualized.  We'll start with the feature plot.
+
+```{r rf_lime_vis1}
+plot_features(rf_explain)
+```
+
+Consider case 1. The predicted probability of the being a good wine is low at .38.  The main *reasons* for this are that its volatile acidity is greater than .4, and its alcohol content is relatively low[^rf_lime_binning]. It's residual sugar content is actually working *towards* a 'good' classification.  The weights give a us a good idea of how much the predicted probability would change if we did not have those features present.  The explanation fit is a measure of the 
+
+Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident   
+
+
+```{r rf_lime_vis2}
+plot_explanations(rf_explain)
+```
+
+
+```{r rf_lime_save, echo=FALSE}
+save(rf_explain, file = 'data/rf_explain.RData')
+```
+
+
+I don't use lime with the other models because the story is the pretty much the same.  Now that you know what to expect, feel free to try it out yourself.
+
 ### Strengths & Weaknesses
 
 **Strengths**
@@ -777,10 +962,12 @@ results_svm = train(good~.,
                     method='svmLinear2',
                     preProcess=c('center', 'scale'), 
                     trControl=cv_opts, 
-                    tuneLength=5)
+                    tuneLength=5,
+                    probability=TRUE)  # to get probs along with classifications
 results_svm
 save(results_svm, file='data/results_svm.RData')
 ```
+
 ```{r svm_train_results, echo=FALSE, cache.rebuild=F}
 load('data/results_svm.RData')
 results_svm
@@ -795,6 +982,19 @@ conf_svm = confusionMatrix(preds_svm, good_observed, positive='Good') #create an
 
 
 Results for the initial support vector machine do not match the random forest for this data set, with accuracy of `r round(conf_svm$overall[1]*100,1)`%.  However, you might choose a different kernel than the linear one used here, as well as tinker with other options.
+
+```{r svm_lime, echo=FALSE, eval=FALSE}
+# need to retrain with probability = TRUE if going to use
+svm_lime = lime(wine_train, results_svm)
+svm_explain = explain(sample_test, 
+                       svm_lime, 
+                       n_features = 3, 
+                       labels = 'Good')
+plot_features(svm_explain)
+plot_explanations(svm_explain)
+save(svm_explain, file = 'data/svm_explain.RData')
+```
+
 
 ### Strengths & Weaknesses
 
@@ -838,6 +1038,8 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^dotplot]: You can quickly obtain this plot via the <span class="func">dotplot</span> function.
 
+[^tuning]: Its now possible to use a model select the tuning parameters themselves, i.e. in which the parameters are outputs to the model, and the estimates would then be fed into the main model.  Services such as [Google's CloudML](https://cloud.google.com/blog/big-data/2017/08/hyperparameter-tuning-in-cloud-machine-learning-engine-using-bayesian-optimization) already offer this, thus paving the way for data scientists to be fully automated well before truck drivers or fast food workers.
+
 [^knn_dist]: See the function <span class="func">dist</span> in base R, for example.
 
 [^knn_unsupervised]: Often referred to as <span class="emph">unsupervised</span> learning as there is no target/dependent variable. We do not cover such techniques here but they are a large part of machine learning just as they are with statistics in general.
@@ -862,6 +1064,8 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^rf_100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusions.
 
+[^rf_lime_permute]: This could be done in different ways.  For example, given a numeric feature add some random noise given its place in the distribution of values seen for that feature. In the plots shown, the values, e.g. 9.5 and 10.3, are at quantiles (.25 and .5) of the alcohol.  The data has been permuted within those quantile bins.
 
+[^rf_lime_binning]: I used <span class="pack">lime's</span> default quantile binning approach which binarizes everything at their min, .25, .5, .75, and max quantile values. This makes for easier interpretation and comparison, but I also think that <span class="pack">lime</span> doesn't evaluate the pre-processing argument of the model, and thus would be using the original data and weights that would reflect variable scales more than their importance.
 
 [^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.
