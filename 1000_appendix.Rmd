@@ -250,6 +250,20 @@ I wouldn't recommend a proprietary tool when better open source tools are availa
 What I can't recommend is a traditional statistics package like SPSS, SAS, or Stata. Not only did they miss this boat by well over a decade, their offerings are slim and less capable.  It seems SAS is probably the only one that's made serious effort here, and it has some audience in the business world due to its long entrenchment there.  And you don't have to take my word for it- here's a comparison of trends at [indeed.com](https://www.indeed.com/jobtrends/q-R-and-%28%22machine-learning%22-or-%22data-science%22%29-q-python-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SAS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SPSS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Stata-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Matlab-and-%28%22machine-learning%22-or-%22data-science%22%29.html).
 
 
+## Local Interpretable Model-agnostic Explanations
+
+The general approach lime takes to achieving this goal is as follows:
+
+- For each prediction to explain, permute the observations n times[^rf_lime_permute].
+- Let the complex model predict the outcome of all permuted observations.
+- Calculate the distance from all permutations to the original observation.
+- Convert the distance to a similarity score.
+- Select m features best describing the complex model outcome from the permuted data.
+- Fit a simple model to the permuted data, explaining the complex model outcome with the m features from the permuted data weighted by its similarity to the original observation.
+- Extract the feature weights from the simple model and use these as explanations for the complex models local behavior.
+
+See @ribeiro2016 for details
+
 ## Brief Glossary of Common Terms
 
 

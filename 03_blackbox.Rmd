@@ -808,17 +808,6 @@ plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1) +
 
 #### LIME
 
-Local Interpretable Model-agnostic Explanations
-
-The general approach lime takes to achieving this goal is as follows:
-
-- For each prediction to explain, permute the observations n times[^rf_lime_permute].
-- Let the complex model predict the outcome of all permuted observations.
-- Calculate the distance from all permutations to the original observation.
-- Convert the distance to a similarity score.
-- Select m features best describing the complex model outcome from the permuted data.
-- Fit a simple model to the permuted data, explaining the complex model outcome with the m features from the permuted data weighted by its similarity to the original observation.
-- Extract the feature weights from the simple model and use these as explanations for the complex models local behavior.
 
 MC explanation:
 
@@ -828,16 +817,16 @@ Get similarity scores of the permuted observations to the observations you wish 
 
 Make predictions with the permuted data based on the ML model.
 
-Select m features best describing the complex model outcome from the permuted data.
+Select m features (how?) best describing the complex model outcome from the permuted data.
 
 Fit a simple model, e.g. regression, predicting the predictions from the ML model with the m features, where observations are weighted by similarity to the to-be-eplained observations.
 
 The coefficients from the simple model serve as the feature weights. The 'explanation fit' is R2 from that simple model.
 
+The basic idea is to create a human interpretable prediction- not just a prediction but why that prediction was made.  People using the model have some idea of what's going on with the model (i.e. domain knowledge), but they will trust the prediction of such a model if they understand the reasoning behind it.  Examining this prediction reasoning at representative or otherwise key settings of the predictors allows for a more global understanding of the model as a whole.
 
-Predict the predictions based on t
 
-For most applied users, there's little interpretable about the approach. Perhaps if we look at the product we can get more information.
+Perhaps if we look at the product we can get more information.  We get some sample observations, create an 'explainer', and then explain the predictions of those observations.
 
 ```{r rf_lime}
 set.seed(1234)
