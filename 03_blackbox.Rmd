@@ -728,11 +728,12 @@ There's a lot going on here to be sure: there is a sampling process for cross-va
 set.seed(1234)
 rf_opts = data.frame(mtry=c(2:6))
 results_rf = train(good~., 
-                   data=wine_train, 
-                   method='rf',
-                   preProcess=c('center', 'scale'), 
-                   trControl=cv_opts, 
-                   tuneGrid=rf_opts, 
+                   data = wine_train,
+                   method = 'rf',
+                   preProcess = c('center', 'scale'),
+                   trControl = cv_opts,
+                   tuneGrid = rf_opts,
+                   localImp = T,
                    n.tree=1000)
 results_rf
 save(results_rf, file='data/results_rf.RData')
@@ -762,37 +763,172 @@ As we get further into black box models, it becomes harder to understand what is
 
 #### Variable Importance
 
+
+##### VIMP
+
 To begin, we can get variable importance metrics as we did before with the regularized regression.  How might we get such a measure from a random forest?  The package itself provides two different ways.  From the help file:
 
-- The first measure is computed from permuting OOB (out-of-bag) data: For each tree, the prediction error on the out-of-bag portion of the data is recorded (error rate for classification, MSE for regression). Then the same is done after permuting each predictor variable. The difference between the two are then averaged over all trees, and normalized by the standard deviation of the differences. 
+- The first measure is computed from permuting OOB (out-of-bag) data: For each tree, the prediction error on the out-of-bag portion of the data is recorded (error rate for classification, MSE for regression). Then the same is done after permuting each predictor variable (adding noise). The difference between the two are then averaged over all trees, and normalized by the standard deviation of the differences. 
 
 - The second measure is the total decrease in node impurities from splitting on the variable, averaged over all trees. For classification, the node impurity is measured by the Gini index. For regression, it is measured by residual sum of squares.
 
 So the first compares the prediction of a variable with a random version of itself, while the second considers the error rates induced by splitting on a variable.  Either way, we can then see which variables are relatively more important. The following shows the normalized result where the best predictor is given a value of 100, and the worst 0.
 
-```{r rf_varimp}
+```{r rf_varimp, eval=FALSE}
 varImp(results_rf)
 ```
 
+```{r rf_varimp_clean, echo=FALSE}
+varImp(results_rf)$importance %>% 
+  rownames_to_column(var='Variable') %>% 
+  arrange(desc(Overall)) %>%
+  kable(format = 'html', digits = 2, align='lc') %>%
+  kable_styling(full_width = F, bootstrap_options = c('basic', 'bordered', 'condensed')) %>% 
+  row_spec(row=1:9, background="#fffff8")
+```
+
+##### Minimal depth
+
+There are some issues with the basic variable importance appoach outlined previously, such as being dependent on the type of prediction error used, and going much further than simply rank ordering variables.  <span class="emph">Minimal depth</span> provides a more formal assessment based on the tree structure.  Given the trees in a forest, more important variables are those that are split higher up the tree.  We can essentially get the average depth at which a variable occurs across all trees.
+
+The first thing considered are the subtrees containing splits on the variable in question.  We want *maximal subtrees* where the variable is split. For example in our previous example the maximal subtree for alcohol is the entire tree, and its minimal depth is 0, as it is split at the root note[^zero_depth].
+
+```{r max_sub_tree, echo=FALSE, eval=F, cache=FALSE}
+grViz('digraph tree {
+graph [rankdir = TD bgcolor="#fffff8"]
+
+node [shape = rectangle, style=filled, fillcolor=white, color="#ff5500", width=.75]
+
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize=5]
+alcohol1 [label="alcohol" width=.5];
+alcohol2 [label="alcohol" width=.5];
+va [label="volatile.acidity" width=.5]; 
+Bad1  [label="Bad" shape=circle width=.5]; 
+Good1 [label="Good" shape=circle width=.5];
+Good2 [label="Good" shape=circle width=.5];
+Good3 [label="Good" shape=circle width=.5];
+
+edge [color="#ff5500" arrowhead=dot]
+alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize=7.5 ];
+alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize=7.5];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize=7.5 ];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize=7.5 ];
+va -> alcohol2 [label = " > 0.25", fontcolor="gray50" fontsize=7.5];
+va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize=7.5 ];
+
+}')
+
+DiagrammeR::grViz('digraph tree {
+graph [rankdir = TD bgcolor="#fffff8"]
+
+node [shape = rectangle, style=filled, fillcolor=white, color=gray, width=.75]
+
+node [fontcolor=gray25, fontname=Helvetica, fixedsize=true, fontsize=5]
+alcohol1 [label="alcohol" width=.5 color="#ff5500"];
+alcohol2 [label="alcohol" width=.5 color="#ff5500"];
+va [label="volatile.acidity" width=.5]; 
+sulf [label="sulphates" width=.5]; 
+
+Bad1  [label="Bad" shape=circle width=.5 color="#ff5500"]; 
+Bad2  [label="Bad" shape=circle width=.5  color="#ff5500"]; 
+Good1 [label="Good" shape=circle width=.5  color="#ff5500"];
+Good2 [label="Good" shape=circle width=.5 color="#ff5500"];
+Good3 [label="Good" shape=circle width=.5];
+
+edge [color=gray50 arrowhead=dot]
+sulf -> alcohol1 [label = " < .6", fontcolor="gray50" fontsize=7.5];
+alcohol1 -> Good1 [label = " > 9.85", fontcolor="gray50" fontsize=7.5  color="#ff5500" ];
+alcohol1 -> Bad2 [label = " < 9.85", fontcolor="gray50" fontsize=7.5  color="#ff5500" ];
+
+sulf -> va [label = " > .6", fontcolor="gray50" fontsize=7.5];
+# alcohol1 -> Good1 [label = " > 10.63", fontcolor="gray50" fontsize=7.5 color="#00aaff"];
+# alcohol1 -> va [label = " < 10.63", fontcolor="gray50" fontsize=7.5];
+alcohol2 -> Good2 [label = " > 9.85", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+alcohol2 -> Bad1 [label = " < 9.85", fontcolor="gray50" fontsize=7.5 color="#ff5500"];
+va -> alcohol2 [label = " > 0.40", fontcolor="gray50" fontsize=7.5];
+va -> Good3 [label = " < 0.40", fontcolor="gray50" fontsize=7.5];
+
+}')
+```
+
+
+<img src="img/min_depth_1.png" style="display:block; margin: 0 auto;" width=75%>
+
+For the following, we have two splits with alcohol in a single tree, thus there are two maximal subtrees one at depth 1 and one at depth 2.  *All* maximal subtrees are considered for minimal depth importance.
+
+<img src="img/min_depth_2.png" style="display:block; margin: 0 auto;" width=33%>
+
+We can use <span class="pack">randomForestExplainer</span> to get and plot this information, both for individual variables but also interactions of two or more variables.  Note that the latter will take an inordinately long time.
+
+```{r min_depth, eval=F, echo=1:3}
+library(randomForestExplainer)
+plot_min_depth_distribution(results_rf$finalModel)
+plot_min_depth_interactions(results_rf$finalModel, k=7) # only do 7 best interactions
+md_plot = plot_min_depth_distribution(results_rf$finalModel)
+md_plot_inter = plot_min_depth_interactions(results_rf$finalModel, k=7) 
+save(md_plot, md_plot_inter, file='data/rf_explainer_min_depth.RData')
+```
+
+```{r min_depth_plot, echo=FALSE}
+load('data/rf_explainer_min_depth.RData')
+library(randomForestExplainer)
+md_plot$data = md_plot$data %>% drop_na()
+md_plot +
+  scale_fill_viridis(begin=.8, end = 0, option = 'plasma', discrete = T) +
+  theme_trueMinimal() +
+  theme(panel.border = element_blank())
+
+md_plot_inter$layers[[1]]$geom_params$width = .5
+md_plot_inter$layers[[3]]$aes_params$colour =  alpha('#ff5500', .25)
+md_plot_inter +
+  scale_fill_viridis(end = .75, option = 'plasma') +
+  theme_trueMinimal() +
+  theme(panel.border = element_blank())
+```
+
+We can see at least one difference relative to the VIMP measures.  It appears that sulphates importance may only be through its interaction with alcohol, rather than anything it was doing on its own. Chlorides interacts with both alcohol and volatile acidity, which may be why its minimal depth ranking is third after those two.  And finally, citric acid is valued fourth in terms of minimal depth, but is not among the most important interactions.
+
 TODO: minimum depth https://cran.r-project.org/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html#various-variable-importance-measures
+
+Minimal depth assumes that variables with high impact on the
+prediction are those that most frequently split nodes nearest to the trunks of the trees (i.e.
+at the root node) where they partition large samples of the population.
+Within a tree, node levels are numbered based on their relative distance to the trunk of the
+tree (with the root at 0). Minimal depth measures the important risk factors by averaging
+the depth of the rst split for each variable over all trees within the forest. Lower values of
+this measure indicate variables important in splitting large groups of patients.
+The maximal subtree for a variable x is the largest subtree whose root node splits on x. All
+parent nodes of x's maximal subtree have nodes that split on variables other than x. The
+largest maximal subtree possible is at the root node. If a variable does not split the root
+node, it can have more than one maximal subtree, or a maximal subtree may also not exist if
+there are no splits on the variable. The minimal depth of a variables is a surrogate measure of
+predictiveness of the variable. The smaller the minimal depth, the more impact the variable
+has sorting observations, and therefore on the forest prediction.
+
 
 #### Effects plots
 
-So we can see that alcohol content and acidity are the most important, but what is the nature of the relationship? Partial dependence plots can allow us to understand the predictive effect of any particular covariate, controlling for the effects of others.  This is particularly important in the case where we have nonlinear relationships as we do here.
+So we can see that alcohol content and volatile acidity are the most important, but what is the nature of the relationship? <span class="emph">Partial dependence plots</span> allow us to understand the predictive effect of any particular covariate, controlling for the effects of others.  This is particularly important in the case where we have nonlinear relationships as we do here.
 
-```{r rf_pd_plot}
+The ggRandomForests package provides such plots, as well as other ways to explore variable importance we'll look at.  Unfortunately, they forgot to work with the basic randomForest class objects, so we'll use the randomForestSRC package it is associated with.
+
+
+```{r run_rfsrc}
 # https://arxiv.org/pdf/1501.07196
 # tibble causes problem so convert wine_train to standard df.
 library(ggRandomForests)
 rf2 = rfsrc(formula = good ~., 
-            data=data.frame(wine_train), 
+            data = data.frame(wine_train),
             mtry = results_rf$finalModel$mtry)
+```
 
+
+```{r rf_pd_plot}
 gg_v = gg_variable(rf2)
 gg_md <- gg_minimal_depth(rf2)
 
-# We want the top ranked minimal depth variables only,
-# plotted in minimal depth rank order.
+# We want the top ranked minimal depth variables only, plotted in minimal depth
+# rank order.
 xvar <- gg_md$topvars[1:2]
 # plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1)
 
@@ -804,6 +940,8 @@ plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1) +
   geom_smooth(aes(group=1), color="#98244C") +
   theme_trueMinimal()
 ```
+
+
 
 
 #### LIME
@@ -846,8 +984,13 @@ rf_explain = explain(sample_test,
 
 The <span class="objclass">rf_explain</span> object is a data frame that can be explored as is, or visualized.  We'll start with the feature plot.
 
-```{r rf_lime_vis1}
+```{r rf_lime_vis1, eval=FALSE}
 plot_features(rf_explain)
+```
+
+```{r rf_lime_vis1_clean, echo=FALSE}
+plot_features(rf_explain) +
+  scale_fill_manual(values=c('#ff5500BF', '#00aaffBF'))
 ```
 
 ```{r rf_lime_misc_proc, echo=FALSE}
@@ -870,8 +1013,19 @@ Now for case 2.  This is very strongly classified as a good wine, with high alco
 
 With case 4 & 5, we see an interesting situation. Case 4 has a lower probability of being good, but the explanation is relatively better.  The `r str_replace(case_5$feature[1], pattern='\\.', replacement=' ')` works against a good classification in both cases.  For the Case 4 though,  the `r str_replace(case_5$feature[2], pattern='\\.', replacement=' ')` works *for* it almost equally. Not so much in for Case 5.
 
-```{r rf_lime_vis2}
+
+The following plot shows the same thing albeit more succinctly.
+
+```{r rf_lime_vis2, eval=FALSE}
 plot_explanations(rf_explain)
+```
+
+```{r rf_lime_vis2_clean, echo=FALSE}
+plot_explanations(rf_explain) +
+  # scale_fill_viridis(option='plasma')
+  scale_fill_gradient2(low='#ff5500', high = '#00aaff') +
+  theme(panel.border = element_blank(),
+        panel.grid.major.x = element_line(colour = 'gray92'))
 ```
 
 
@@ -1068,6 +1222,8 @@ Support vector machines can provide very good prediction in a variety of setting
 [^rf_modelindie]: Our previous assessment was model independent.
 
 [^rf_100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusions.
+
+[^zero_depth]: Some might start with depth = 1.
 
 [^rf_lime_permute]: This could be done in different ways.  For example, given a numeric feature add some random noise given its place in the distribution of values seen for that feature. In the plots shown, the values, e.g. 9.5 and 10.3, are at quantiles (.25 and .5) of the alcohol.  The data has been permuted within those quantile bins.
 
