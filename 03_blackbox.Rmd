@@ -817,7 +817,7 @@ Get similarity scores of the permuted observations to the observations you wish 
 
 Make predictions with the permuted data based on the ML model.
 
-Select m features (how?) best describing the complex model outcome from the permuted data.
+Select m features (e.g. forward selection, lasso) best describing the complex model outcome from the permuted data.
 
 Fit a simple model, e.g. regression, predicting the predictions from the ML model with the m features, where observations are weighted by similarity to the to-be-eplained observations.
 
@@ -839,7 +839,8 @@ library(lime)
 rf_lime = lime(wine_train, results_rf)
 rf_explain = explain(sample_test, 
                      rf_lime, 
-                     n_features = 3, 
+                     n_features = 3,
+                     feature_select = 'highest_weights',
                      labels = 'Good')
 ```
 
@@ -849,10 +850,25 @@ The <span class="objclass">rf_explain</span> object is a data frame that can be 
 plot_features(rf_explain)
 ```
 
-Consider case 1. The predicted probability of the being a good wine is low at .38.  The main *reasons* for this are that its volatile acidity is greater than .4, and its alcohol content is relatively low[^rf_lime_binning]. It's residual sugar content is actually working *towards* a 'good' classification.  The weights give a us a good idea of how much the predicted probability would change if we did not have those features present.  The explanation fit is a measure of the 
+```{r rf_lime_misc_proc, echo=FALSE}
+case_1 = rf_explain %>% 
+  filter(case == 1)
+case_2 = rf_explain %>% 
+  filter(case == 2)
+case_3 = rf_explain %>% 
+  filter(case == 3)
+case_4 = rf_explain %>% 
+  filter(case == 4)
+case_5 = rf_explain %>% 
+  filter(case == 5)
+```
 
-Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident   
 
+Consider case 1. The predicted probability of the being a good wine is low at .38.  The main *reasons* for this are that its `r str_replace(case_1$feature[1], pattern='\\.', replacement=' ')` is greater than .4, and its `r str_replace(case_1$feature[2], pattern='\\.', replacement=' ')` content is relatively low[^rf_lime_binning]. It's `r str_replace(case_1$feature[3], pattern='\\.', replacement=' ')` content is actually working *towards* a 'good' classification.  The weights give a us a good idea of how much the predicted probability would change if we did not have those features present.  The explanation fit is a measure of the fit of the simple model, basically just an R^2^.
+
+Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident undertanding of the prediction.  Case three is a similar expected probability, but the volatile acidity actually makes us a little less confident.
+
+With case 4 & 5, we see an interesting situation. Case 4 has a lower probability of being good, but the explanation is relatively better.  The `r str_replace(case_5$feature[1], pattern='\\.', replacement=' ')` works against a good classification in both cases.  For the Case 4 though,  the `r str_replace(case_5$feature[2], pattern='\\.', replacement=' ')` works *for* it almost equally. Not so much in for Case 5.
 
 ```{r rf_lime_vis2}
 plot_explanations(rf_explain)
@@ -864,7 +880,7 @@ save(rf_explain, file = 'data/rf_explain.RData')
 ```
 
 
-I don't use lime with the other models because the story is the pretty much the same.  Now that you know what to expect, feel free to try it out yourself.
+I don't use <span class="pack">lime</span> with the other models because the story is the pretty much the same.  Now that you know what to expect, feel free to try it out yourself.
 
 ### Strengths & Weaknesses
 
