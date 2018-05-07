@@ -290,10 +290,7 @@ I also made some decisions to deal with the notable collinearity in the data, wh
 wine %>% 
   select_if(is.numeric) %>% 
   cor %>% 
-  heatmaply::heatmaply_cor(dendrogram='none', width='75%', xaxis_font_size='75%') %>% 
-  plotly::hide_colorbar() %>% 
-  theme_plotly()
-  # heatR::corrheat(width='75%', xaxis_font_size='75%')
+  heatR::corrheat(width='75%', xaxis_font_size='75%') # if this blanks, delete the cache
 ```
 
 <br>
@@ -351,7 +348,7 @@ wine_trainplot %>%
 For the training set, it looks like alcohol content[^drunkratings] and volatile acidity separate most with regard to the 'good' class. While this might give us some food for thought, note that the figure does not give insight into interaction or nonlinear effects, which some methods we use will explore.
 
 
-## Regularized regression
+## Regularized Regression
 
 We discussed regularized regression previously, and can start with such models. This allows us to begin with the familiar (logistic) regression model we're used to, while incorporating concepts and techniques from the machine learning world.  
 
@@ -697,7 +694,7 @@ X2 -> Positive [label = " < 3", fontcolor="gray50" fontsize=7.5 color="#00aaff"]
 }')
 ```
 
-<img src="img/tree1.png" style="display:block; margin: 0 auto;" width=35%>
+<img src="img/tree1.png" style="display:block; margin: 0 auto;" width=25%>
 
 Now let's see what kind of tree we might come up with for our data. The example tree here is based on the wine training data set. It is interpreted as follows.  If the alcohol content is greater than 10.63%, a wine is classified as good. For those less than 10.63, if its volatile acidity is also less than .25, they are also classified as good, and of the remaining observations, if they are at least more than 9.85% in alcohol content (i.e. volatility >.25, alcohol between 9.85 and 10.63), they also get classified as good.  Any remaining observations are classified as bad wines.  In this way, the classification tree is getting at interactions among the variables involved- volatile acidity interacts with alcohol in predicting whether the wine is good or not.
 
@@ -727,7 +724,7 @@ va -> Good3 [label = " < 0.25", fontcolor="gray50" fontsize=7.5 color="#00aaff"]
 }')
 ```
 
-<img src="img/tree2.png" style="display:block; margin: 0 auto;">
+<img src="img/tree2.png" style="display:block; margin: 0 auto;" width=25%>
 
 Unfortunately, a single tree, while highly interpretable, does poorly for predictive purposes.  In standard situations, we will instead use the power of many trees, i.e. a <span class="emph">random forest</span>, based on repeated sampling of the original data.  So if we create 1000 new training data sets based on random samples of the original data (each of size N, i.e. a bootstrap of the original data set), we can run a tree for each, and assess the predictions each tree would produce for the observations for a hold-out set (or simply those observations which weren't selected during the sampling process, the 'out-of-bag' sample), in which the new data is 'run down the tree' to obtain predictions. The final class prediction for an observation is determined by majority vote across all trees.
 
@@ -893,6 +890,7 @@ save(md_plot, md_plot_inter, file='data/rf_explainer_min_depth.RData')
 load('data/rf_explainer_min_depth.RData')
 library(randomForestExplainer)
 md_plot$data = md_plot$data %>% drop_na()
+md_plot$layers[[1]]$geom_params$width =  .5  # bars
 md_plot$layers[[2]]$aes_params$colour =  'black'  # min depth line marker
 md_plot$layers[[2]]$aes_params$alpha =  .05  
 md_plot$layers[[2]]$geom_params$width =  0    # it adds no info so drop
@@ -923,7 +921,7 @@ md_plot_inter2 +
         title = element_text(color='gray25'))
 ```
 
-We can see at least one difference relative to the previous VIMP measures.  It appears that sulphates[^sulfph] importance may only be through its interaction with alcohol, rather than anything it was doing on its own. Chlorides interacts with both alcohol and volatile acidity, which may be why its minimal depth ranking is third after those two.  And finally, citric acid is valued fourth in terms of minimal depth, but is not among the most important interactions.  Here is an interactive plot of the alcohol-volatile acidity interaction, which had the minimal depth.  High alcohol and low acidity are very likely to be rated 'good', and vice versa.
+We can see at least one difference relative to the previous VIMP measures.  It appears that other measures' importance are due more to their interaction with alcohol.  Here is an interactive plot of the alcohol-volatile acidity interaction, which had the minimal depth.  High alcohol and low acidity are very likely to be rated 'good', and vice versa.
 
 ```{r plot_interaction, echo=FALSE}
 # someone forgot that a formula approach is not required for rf; plot is hideous anyway.
@@ -1119,11 +1117,11 @@ case_5 = rf_explain %>%
 ```
 
 
-Consider case 1. The predicted probability of the being a good wine is low at `r round(case_1$label_prob[1], 2)`.  The main *reasons* for this are that its `r str_replace(case_1$feature[1], pattern='\\.', replacement=' ')` is greater than .4, and its `r str_replace(case_1$feature[2], pattern='\\.', replacement=' ')` content is relatively low[^rf_lime_binning]. It's `r str_replace(case_1$feature[3], pattern='\\.', replacement=' ')` content is actually working *towards* a 'good' classification.  The <span class="emph">weights</span> give a us a good idea of how much the predicted probability would change if we did not have those features present.  The <span class="emph">explanation fit</span> is a measure of the fit of the simple model, basically just an R^2^.
+Consider case 1. The predicted probability of the being a good wine is low at `r round(case_1$label_prob[1], 2)`.  The main *reasons* for this are that its `r str_replace(case_1$feature[1], pattern='\\.', replacement=' ')` is greater than .4, and its `r str_replace(case_1$feature[2], pattern='\\.', replacement=' ')` content is relatively low[^rf_lime_binning]. It's `r str_replace(case_1$feature[3], pattern='\\.', replacement=' ')` content is actually working *towards* a 'good' classification.  The <span class="emph">weights</span> give a us a good idea of how much the predicted probability would change if we did not have that particular feature present.  The <span class="emph">explanation fit</span> is a measure of the fit of the simple model, basically just an R^2^.
 
-Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident understanding of the prediction.  Case three is a similar expected probability, but the value of that observation for volatile acidity actually makes us a little less confident.
+Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident understanding of the prediction.  Case three has a similar expected probability of being classified 'good', but the value of that observation for volatile acidity actually makes us a little less confident.
 
-With case 4 & 5, we see an interesting situation. Case 4 has a lower probability of being good, but the explanation is relatively better.  The `r str_replace(case_5$feature[1], pattern='\\.', replacement=' ')` works against a good classification in both cases.  For the Case 4 though,  the `r str_replace(case_5$feature[2], pattern='\\.', replacement=' ')` works *for* it almost equally. Not so much in for Case 5.
+With case 4 & 5, we see an interesting situation. Case 4 has a lower probability of being good, but the explanation is relatively better.  The `r str_replace(case_5$feature[1], pattern='\\.', replacement=' ')` works against a good classification in both cases.  For the Case 4 though,  the `r str_replace(case_5$feature[2], pattern='\\.', replacement=' ')` works *for* it almost as much. Not so for Case 5.
 
 
 The following plot shows the same thing albeit more succinctly.
@@ -1135,7 +1133,7 @@ plot_explanations(rf_explain)
 ```{r rf_lime_vis2_clean, echo=FALSE}
 plot_explanations(rf_explain) +
   # scale_fill_viridis(option='plasma')
-  scale_fill_gradient2(low='#ff5500', high = '#00aaff') +
+  scale_fill_gradient2(low='#ff5500', high = '#00aaff', mid = '#fffff8') +
   theme(panel.border = element_blank(),
         panel.grid.major.x = element_line(colour = 'gray92'))
 ```
@@ -1191,7 +1189,7 @@ d = data.frame(x,y,z,lab)
 
 gsvm = ggplot(aes(x,y), data=d) + 
   geom_point(aes(color=lab), size=3, pch=19) + 
-  scale_color_manual(values=c("#FF5500", "#00aaff")) +
+  scale_color_manual(values=c("#FF5500BF", "#00aaffBF")) +
   lazerhawk::theme_trueMinimal() +                       # since gg will not respect transparent background
   theme(
     legend.key = ggplot2::element_rect(fill='#fffff8', colour = NA),
@@ -1344,4 +1342,4 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^rf_lime_binning]: I used <span class="pack">lime's</span> default quantile binning approach which binarizes everything at their min, .25, .5, .75, and max quantile values. This makes for easier interpretation and comparison, but I also think that <span class="pack">lime</span> doesn't evaluate the pre-processing argument of the model, and thus would be using the original data and weights that would reflect variable scales more than their importance.
 
-[^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $Nxp$ matrix to an $NxN$ matrix when we compute a distance matrix for cluster analysis.
+[^svm_higherd]: Note that we regularly do this sort of thing in more mundane circumstances.  For example, we map an $\mathrm{N}\ \mathrm{x}\ \mathrm{p}$ matrix to an $\mathrm{N}\ \mathrm{x}\ \mathrm{N}$ matrix when we compute a distance matrix for cluster analysis.
