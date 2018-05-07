@@ -245,7 +245,7 @@ print("Accuracy: %f" % score)
 
 ### Other
 
-I wouldn't recommend a proprietary tool when better open source tools are available, but I will say **Matlab** is also very popular in machine learning, and specific areas like image processing. **Julia** has been coming along as well.  Of course, for maximum speed people still prefer lower level languages like **C++**, **Java**, and **Go**, and many of the Python modules are interfaces to such lower-level libraries. And for whatever reason, people are reinventing ML wheels in languages like **Javascript** and others.  See the [awesome list](https://github.com/josephmisiti/awesome-machine-learning) for more.
+I wouldn't recommend a proprietary tool when better open source tools are available, but I will say **Matlab** is also very popular in machine learning, and in specific areas like image processing. **Julia** has been coming along as well.  Of course, for maximum speed people still prefer lower level languages like **C++**, **Java**, and **Go**, and many of the Python modules are interfaces to such lower-level libraries. And for whatever reason, people are reinventing ML wheels in languages like **Javascript** and others.  See the [awesome list](https://github.com/josephmisiti/awesome-machine-learning) for more.
 
 What I can't recommend is a traditional statistics package like SPSS, SAS, or Stata. Not only did they miss this boat by well over a decade, their offerings are slim and less capable.  It seems SAS is probably the only one that's made serious effort here, and it has some audience in the business world due to its long entrenchment there.  And you don't have to take my word for it- here's a comparison of trends at [indeed.com](https://www.indeed.com/jobtrends/q-R-and-%28%22machine-learning%22-or-%22data-science%22%29-q-python-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SAS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-SPSS-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Stata-and-%28%22machine-learning%22-or-%22data-science%22%29-q-Matlab-and-%28%22machine-learning%22-or-%22data-science%22%29.html).
 
@@ -262,7 +262,32 @@ The general approach lime takes to achieving this goal is as follows:
 - Fit a simple model to the permuted data, explaining the complex model outcome with the m features from the permuted data weighted by its similarity to the original observation.
 - Extract the feature weights from the simple model and use these as explanations for the complex models local behavior.
 
-See @ribeiro2016 for details
+See @ribeiro2016 for details.
+
+
+## Various Variable Importance Measures
+
+This is taken from the <span class="pack">randomForestExplainer</span> package [vignette](https://cran.r-project.org/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html).
+
+For a given predictor variable $X_j$
+
+- **accuracy_decrease** (classification) – mean decrease of prediction accuracy after $X_j$ is permuted
+- **gini_decrease** (classification) – mean decrease in the Gini index of node impurity (i.e. increase of node purity) by splits on $X_j$
+- **mse_increase** (regression) – mean increase of mean squared error after $X_j$ is permuted
+- **node_purity_increase** (regression) – mean node purity increase by splits on $X_j$ as measured by the decrease in sum of squares
+- **mean_minimal_depth** – mean minimal depth calculated in one of three ways specified by the parameter mean_sample
+- **no_of_trees** – total number of trees in which a split on $X_j$ occurs
+- **no_of_nodes** – total number of nodes that use $X_j$ for splitting (it is usually equal to no_of_trees if trees are shallow)
+- **times_a_root** – total number of trees in which $X_j$ is used for splitting the root node (i.e., the whole sample is divided into two based on the value of $X_j$)
+- **p_value** – p-value for the one-sided binomial test using the following distribution:
+
+      $$\textrm{Binom}(\texttt{no_of_nodes}, P(\textrm{node splits on } X_j)$$
+      
+      where we calculate the probability of split on $X_j$ as if $X_j$ was uniformly drawn from the $r$ candidate variables
+      
+      $$P(\textrm{node splits on } X_j)=P(X_j \textrm{ is a candidate}) \cdot P(X_j \textrm{ is selected}) = \frac{r}{p} \cdot \frac{1}{r} = \frac{1}{p}$$
+      
+      This test tells us whether the observed number of successes (number of nodes in which $X_j$ was used for splitting) exceeds the theoretical number of successes if they were random (i.e. following the binomial distribution given above).
 
 ## Brief Glossary of Common Terms
 

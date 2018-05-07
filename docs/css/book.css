@@ -163,3 +163,12 @@ i {
     padding: .85em 1em;
     background: #fafafa;
 }
+
+
+/*
+bookdown css will evidently replace kable's bootstrapping options, reintroducing the idiotic striping effect. This will get rid of it but may have undesirable consequences for other tables.
+*/
+
+.book .book-body .page-wrapper .page-inner section.normal .kable_wrapper table tr:nth-child(2n) {
+    background-color: white;
+}

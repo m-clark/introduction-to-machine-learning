@@ -307,7 +307,18 @@ It is very easy to describe ***science*** without ever talking about statistical
 
 As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data.  The simplest validation approach would be to split the data available into a training and test set as discussed previously.  We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. The following displays a hypothetical learning curve from the results of such a process.  While the approach is fairly simple, other approaches are more commonly used and result in better estimates of predictive performance[^validation].
 
-<img src="img/learningcurve.svg" style="display:block; margin: 0 auto;" width=50%>
+```{r learning_curve, echo=FALSE}
+data_frame(complexity = 1:100,
+           complex_cen = complexity - mean(complexity),
+           error = -5*complex_cen + .15*complex_cen^2) %>% 
+  mutate(error = scales::rescale(error)+.1) %>% 
+  ggplot(aes(complexity, error)) +
+  geom_path(color='#ff5500') +
+  labs(x='Model Complexity Parameter', y='Test Error') +
+  theme_trueMinimal()
+```
+
+<!-- <img src="img/learningcurve.svg" style="display:block; margin: 0 auto;" width=50%> -->
 
 ### Adding Another Validation Set
 

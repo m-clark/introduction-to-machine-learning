@@ -76,7 +76,7 @@ library(ggplot2)
 
 senate = read.csv('data/Senate_Raw.csv')
 senate_atts = read.csv('data/senate_graph (Nodes).csv')
-adj0 = lazerhawk::createAdjacency(senate, n1='Vertex.1', n2='Vertex.2', 
+adj0 = lazerhawk::create_adjacency(senate, n1='Vertex.1', n2='Vertex.2', 
                                   value='Percent_Agreement', diagonal=0)
 adj = apply(adj0, 2, as.numeric) *100
 adj[adj<65] = 0
@@ -117,7 +117,7 @@ Other techniques are available to understand structure among observations or fea
 
 
 
-```{r echo=FALSE, dev='svglite', out.width=400}
+```{r ggsenate, echo=FALSE, dev='svglite', out.width=400}
 ggsenate
 ```
 <p style="font-size: 8pt">
@@ -182,7 +182,7 @@ Return $\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]$
 Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting.  A very popular implementation is [XGBoost](https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html) and its variants.  The following shows an implementation.
 
 
-```{r xgboost, echo=-18, eval=FALSE}
+```{r xgboost, echo=-21, eval=FALSE}
 library(xgboost)
 modelLookup("xgbLinear")
 modelLookup("xgbTree")

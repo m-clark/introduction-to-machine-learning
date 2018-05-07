@@ -60,11 +60,11 @@ To demonstrate other sources of classification information, we will use the foll
 <!-- between the combined failure of pander datatable and div in tufte (ignores width and other); a 3 coloumn hack gets clean tables side by side via a ghosted third column but still may screw up.  Keeping latex for now: see # see https://stackoverflow.com/questions/38386808/render-latex-tables-in-html-using-rmarkwown -->
 
 
-```{r confusionMatrix, echo=F}
-tex2markdown <- function(texstring) {
+```{r confusionMatrix_old, echo=F, eval=FALSE}
+tex2markdown = function(texstring) {
   writeLines(text = texstring,
              con = myfile <- tempfile(fileext = ".tex"))
-  texfile <- knitr::pandoc(input = myfile, format = "html")
+  texfile = knitr::pandoc(input = myfile, format = "html")
   cat(readLines(texfile), sep = "\n")
   unlink(c(myfile, texfile))
 }
@@ -102,19 +102,33 @@ tex2markdown <- function(texstring) {
 ```
 
 
-<div class="col2">
-|   | Actual = 1  | Actual = 0  |
-|:-:|:-:|:-:|
-| Predicted = 1  | 41 | 21 |
-| Predicted = 0  | 16 | 13 |
+```{r confusionMatrix, echo=FALSE}
+t1 = data_frame(` ` = c('Predicted = 1','Predicted = 0'),
+           `Actual = 1` = c(41, 16),
+           `Actual = 0` = c(21, 13))
+t2 = data_frame(` ` = c('Predicted = 1','Predicted = 0'),
+           `Actual = 1` = c('A', 'C'),
+           `Actual = 0` = c('B', 'D'))
+
+kable(list(t1, t2), format='html', align='cc') %>% 
+  kable_styling(full_width = T, bootstrap_options = 'basic')
+```
+
+
+<!-- <br> -->
+<!-- <div class="col2"> -->
+<!-- |   | Actual = 1  | Actual = 0  | -->
+<!-- |:-:|:-:|:-:| -->
+<!-- | Predicted = 1  | 41 | 21 | -->
+<!-- | Predicted = 0  | 16 | 13 | -->
 
 
 
-|   | Actual = 1  | Actual = 0  |
-|:-:|:-:|:-:|
-| Predicted = 1  | A | B |
-| Predicted = 0  | C | D |
-</div>
+<!-- |   | Actual = 1  | Actual = 0  | -->
+<!-- |:-:|:-:|:-:| -->
+<!-- | Predicted = 1  | A | B | -->
+<!-- | Predicted = 0  | C | D | -->
+<!-- </div> -->
 
 ```{r confmat_values, echo=FALSE}
 A = 41
@@ -164,7 +178,7 @@ Total = A + B + C + D
 Note the following summary of several measures where $N_+$ and $N_-$ are the total true positive values and total true negative values respectively, and $T_+$, $F_+$, $T_-$ and $F_-$ are true positive, false positive, etc.:
 
 
-```{r confusionMatrix2, echo=F, cache=F, results='asis', eval=T}
+```{r confusionMatrix2_old, echo=F, cache=F, results='asis', eval=T}
 # cm1 = matrix(c('', '', '', 'Actual',
 #                  '', '', '1', '0',
 #                  'Predicted', '1', 'T₊/N₊ = TPR = sensitivity = recall','\\(F₊/N₋\\) = FPR = Type I',
@@ -203,13 +217,15 @@ Note the following summary of several measures where $N_+$ and $N_-$ are the tot
 
 ```
 
+```{r confusionMatrix2, echo=FALSE}
+data_frame(` ` = c('Predicted = 1','Predicted = 0'),
+           `Actual = 1` = c('T~+~/N~+~ = TPR = sensitivity =recall', 'F~-~/N~+~ = Type II'),
+           `Actual = 0` = c('F~+~/N~-~ = Type I', 'T~-~/N~_+_~ = TNR = specificity')) %>% 
+  kable(list(t1, t2), format='html', align='cc') %>% 
+  kable_styling(full_width = F, bootstrap_options = 'basic')
+```
 
-<div class="" style="text-align:center; width:75%">
-|   | Actual = 1  | Actual = 0  |
-|:-:|:-:|:-:|
-| Predicted = 1  | T<sub>+</sub>/N<sub>+</sub> = TPR = sensitivity =recall  | F<sub>+</sub>/N<sub>-</sub> = Type I  |
-| Predicted = 0  |  F<sub>-</sub>/N<sub>+</sub> = Type II |  T<sub>-</sub>/N<sub>_+_</sub> = TNR = specificity |
-</div>
+
 
 
 
@@ -268,12 +284,16 @@ This data set is large enough to leave a holdout sample, allowing us to initiall
 
 I also made some decisions to deal with the notable collinearity in the data, which can severely hamper some methods.  We can look at the simple correlation matrix to start (hover for values).
 
+<br>
 
 ```{r winecor, echo=FALSE}
 wine %>% 
   select_if(is.numeric) %>% 
   cor %>% 
-  heatR::corrheat(width='75%', xaxis_font_size='75%')
+  heatmaply::heatmaply_cor(dendrogram='none', width='75%', xaxis_font_size='75%') %>% 
+  plotly::hide_colorbar() %>% 
+  theme_plotly()
+  # heatR::corrheat(width='75%', xaxis_font_size='75%')
 ```
 
 <br>
@@ -337,7 +357,7 @@ We discussed regularized regression previously, and can start with such models. 
 
 In this example, we'll use the <span class="pack">glmnet</span> package, which will allow for a mix of lasso and ridge regression approaches.  Thus, we'll have a penalty based on both absolute and squared values of the coefficients. In this case, if we set the mixing parameter `alpha` to 1, we have your standard lasso penalty, and 0 would be the ridge penalty.  We have another parameter, `lambda`, which controls the penalty amount.
 
-You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process[^tuning]. 
+You may be thinking- what should `alpha` and `lambda` be set to?  They are examples of tuning parameters, for which we have no knowledge about their value without doing some initial digging.  As such we will select their values as part of the validation process[^tuning2]. 
 
 The <span class="pack">caret</span> package provides several techniques for validation such as $k$-fold, bootstrap, leave-one-out and others.  We will use 10-fold cross validation.  We will also set up a range of values for `alpha` and `lambda`.  However, note that <span class="pack">caret</span> also has ways to search the space automatically.  One argument, `tuneLength`, will create a grid of that number of values for each tuning parameter (e.g. `tuneLength=3` for two parameters would create a 9x2 grid as we do below).  In addition, there is a `search` argument for `trainControl` that can search the parameter space randomly but create no more values than what is specified by `tuneLength`.
 
@@ -346,7 +366,7 @@ set.seed(1234)
 cv_opts = trainControl(method='cv', number=10)
 regreg_opts = expand.grid(.alpha = seq(.1, 1, length = 5),
                           .lambda = seq(.1, .5, length = 5))
-results_regreg <- train(good~., 
+results_regreg = train(good~., 
                         data=wine_train,
                         method = "glmnet", 
                         trControl = cv_opts,
@@ -399,7 +419,7 @@ confusionMatrix(preds_regreg, good_observed, positive='Good', mode='prec_recall'
 
 Perhaps the other approaches that follow will have more success, but note that the <span class="pack">caret</span> package does have the means to focus on other metrics during the training process besides accuracy, such as sensitivity, which might help.  Also, feature combination or other avenues might help improve the results as well.
 
-Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absoulte value of the coefficients, which is okay since we scaled the data as part of the process.
+Additional information from this modeling process reflects the importance of predictors. For most methods accessed by <span class="pack">caret</span>, the default variable importance metric regards the <span class="emph">area under the curve</span> or AUC from a ROC analysis with regard to each predictor, and is model independent. This is then normalized so that the least important is 0 and most important is 100[^dotplot].  For this approach, i.e. with <span class="pack">glmnet</span>, it merely reflects the absolute value of the coefficients, which is okay since we scaled the data as part of the process.
 
 
 <!-- Another thing one could do would require more work, as <span class="pack">caret</span> doesn't provide this, but a simple loop could still automate the process.  For a given predictor $x$, re-run the model without x, and note the decrease (or increase for poor variables) in accuracy that results.  One can then rank order those results.  I did so with this problem and notice that only alcohol content and volatile acidity were even useful for this model.  K nearest-neighbors is susceptible to irrelevant information (you're essentially determining neighbors on variables that don't matter), and one can see this in that, if only those two predictors are retained, test accuracy is the same (actually a slight increase).  This is old and from when knn was first example.   -->
@@ -511,7 +531,7 @@ g
 ```
 
 
-```{r knn_lime, echo=FALSE}
+```{r knn_lime, echo=FALSE, eval=FALSE}
 set.seed(1234)
 sample_index = sample(1:nrow(wine_test), 5)
 sample_test = wine_test %>% 
@@ -713,7 +733,7 @@ Unfortunately, a single tree, while highly interpretable, does poorly for predic
 
 Random forests are referred to as an <span class="emph">ensemble</span> method, one that is actually a combination of many models, and there are others we'll mention later.  There are other things to consider, such as how many variables to make available for consideration at each split, and this is the tuning parameter of consequence here (the argument `mtry`).  In this case we will investigate subsets of 2 through 6 possible predictors. With this value determined via cross-validation, we can apply the best approach to the hold out test data set.
 
-There's a lot going on here to be sure: there is a sampling process for cross-validation, there is resampling to produce the forest, there is random selection of `mtry` predictor variables, etc.  But in the end, we are just harnessing the power of many trees, any one of which would be highly interpretable.  In the following, the <span class="pack">randomForest</span> package does the work.
+There's a lot going on here to be sure: there is a sampling process for cross-validation, there is re-sampling to produce the forest, there is random selection of `mtry` predictor variables, etc.  But in the end, we are just harnessing the power of many trees, any one of which would be highly interpretable.  In the following, the <span class="pack">randomForest</span> package does the work.
 
 <!-- For all 9-1 splits of the data, -->
 <!-- Create 1000 random resamples of size $N_9$, -->
@@ -734,7 +754,7 @@ results_rf = train(good~.,
                    trControl = cv_opts,
                    tuneGrid = rf_opts,
                    localImp = T,
-                   n.tree=1000)
+                   ntree=1000)
 results_rf
 save(results_rf, file='data/results_rf.RData')
 ```
@@ -755,14 +775,13 @@ conf_rf = confusionMatrix(preds_rf, good_observed, positive='Good')
 
 This is our best result so far with `r round(conf_rf$overall[1]*100,1)`% accuracy, with a lower bound well beyond the 63% we'd have guessing.  Random forests do not suffer from some of the data-specific issues that might be influencing the other approaches, such as irrelevant and correlated predictors, and furthermore benefit from the combined information of many models.  Such performance increases are not a given, but random forests are generally a good method to consider given their flexibility, and will often by default do very well relative to other approaches[^rfasbaseline].
 
-Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
+Incidentally, the underlying <span class="func">randomForest</span> function here allows one to assess variable importance in a different manner[^rf_modelindie], and there are other functions used by caret that can produce their own metrics also.  In this case, randomForest can provide importance based on a version of the 'decrease in inaccuracy' approach we talked before (as well as another index known as Gini impurity).  The same two predictors are found to be most important and notably more than others- alcohol and volatile.acidity.
 
-### Understanding the results
+### Understanding the Results
 
-As we get further into black box models, it becomes harder to understand what is going on with the predictors.  If our only goal is prediction, we might not care that much.  However, advances continue to be made in helping us understand what's happening under the hood.
+As we get further into black box models, it becomes harder to understand what is going on with the predictors.  If our only goal is prediction, we might not care that much.  However, advances continue to be made in helping us understand what's happening under the hood.  In what follows we seek to understand exactly what is going on with this model. Some of what will follow is specific to forest/tree approaches, but others are more general. 
 
 #### Variable Importance
-
 
 ##### VIMP
 
@@ -772,7 +791,7 @@ To begin, we can get variable importance metrics as we did before with the regul
 
 - The second measure is the total decrease in node impurities from splitting on the variable, averaged over all trees. For classification, the node impurity is measured by the Gini index. For regression, it is measured by residual sum of squares.
 
-So the first compares the prediction of a variable with a random version of itself, while the second considers the error rates induced by splitting on a variable.  Either way, we can then see which variables are relatively more important. The following shows the normalized result where the best predictor is given a value of 100, and the worst 0.
+So, the first compares the prediction of a variable with a random version of itself, while the second considers the error rates induced by splitting on a variable.  Either way, we can then see which variables are relatively more important. The following shows the normalized result where the best predictor is given a value of 100, and the worst 0.
 
 ```{r rf_varimp, eval=FALSE}
 varImp(results_rf)
@@ -781,7 +800,8 @@ varImp(results_rf)
 ```{r rf_varimp_clean, echo=FALSE}
 varImp(results_rf)$importance %>% 
   rownames_to_column(var='Variable') %>% 
-  arrange(desc(Overall)) %>%
+  select(-Bad) %>% 
+  arrange(desc(Good)) %>%
   kable(format = 'html', digits = 2, align='lc') %>%
   kable_styling(full_width = F, bootstrap_options = c('basic', 'bordered', 'condensed')) %>% 
   row_spec(row=1:9, background="#fffff8")
@@ -789,9 +809,9 @@ varImp(results_rf)$importance %>%
 
 ##### Minimal depth
 
-There are some issues with the basic variable importance appoach outlined previously, such as being dependent on the type of prediction error used, and going much further than simply rank ordering variables.  <span class="emph">Minimal depth</span> provides a more formal assessment based on the tree structure.  Given the trees in a forest, more important variables are those that are split higher up the tree.  We can essentially get the average depth at which a variable occurs across all trees.
+There are some issues with the basic variable importance approach outlined previously, such as being dependent on the type of prediction error used, and going much further than simply rank ordering variables.  <span class="emph">Minimal depth</span> provides a more formal assessment based on the tree structure.  Given the trees in a forest, more important variables are those that are split higher up the tree.  We can essentially get the average depth at which a variable occurs across all trees.
 
-The first thing considered are the subtrees containing splits on the variable in question.  We want *maximal subtrees* where the variable is split. For example in our previous example the maximal subtree for alcohol is the entire tree, and its minimal depth is 0, as it is split at the root note[^zero_depth].
+The first thing considered are the subtrees containing splits on the variable in question.  We want *maximal subtrees* where the variable is split. For example, in our previous example the maximal subtree for alcohol is the entire tree, and its minimal depth is 0, as it is split at the root note[^zero_depth].
 
 ```{r max_sub_tree, echo=FALSE, eval=F, cache=FALSE}
 grViz('digraph tree {
@@ -873,44 +893,137 @@ save(md_plot, md_plot_inter, file='data/rf_explainer_min_depth.RData')
 load('data/rf_explainer_min_depth.RData')
 library(randomForestExplainer)
 md_plot$data = md_plot$data %>% drop_na()
+md_plot$layers[[2]]$aes_params$colour =  'black'  # min depth line marker
+md_plot$layers[[2]]$aes_params$alpha =  .05  
+md_plot$layers[[2]]$geom_params$width =  0    # it adds no info so drop
 md_plot +
-  scale_fill_viridis(begin=.8, end = 0, option = 'plasma', discrete = T) +
+  scale_fill_viridis(begin=.8, end = 0, option = 'plasma', alpha=.75, discrete = T) +
   theme_trueMinimal() +
-  theme(panel.border = element_blank())
+  theme(panel.border = element_blank(),
+        title = element_text(color='gray25'))
 
-md_plot_inter$layers[[1]]$geom_params$width = .5
+br()
+br()
+
+md_plot_inter$layers[[1]]$geom_params$width = .33
+md_plot_inter$layers[[1]]$aes_params$alpha = .75
+md_plot_inter$layers[[2]]$aes_params$colour =  alpha('#ff5500', .5)  # lollipop
 md_plot_inter$layers[[3]]$aes_params$colour =  alpha('#ff5500', .25)
-md_plot_inter +
-  scale_fill_viridis(end = .75, option = 'plasma') +
+md_plot_inter$layers[[3]]$aes_params$size =  1
+
+# put the bar behind and let the alpha allow the marking
+md_plot_inter2 = md_plot_inter
+md_plot_inter2$layers[[3]] = md_plot_inter$layers[[1]]
+md_plot_inter2$layers[[1]] = md_plot_inter$layers[[3]]
+md_plot_inter2 +
+  labs(y='Mean Minimal Depth', x = 'Interaction') +
+  scale_fill_viridis(end = .75, option = 'plasma', alpha=.5) +  # alpha suddenly does nothing (see previous)
   theme_trueMinimal() +
-  theme(panel.border = element_blank())
+  theme(panel.border = element_blank(),
+        title = element_text(color='gray25'))
 ```
 
-We can see at least one difference relative to the VIMP measures.  It appears that sulphates importance may only be through its interaction with alcohol, rather than anything it was doing on its own. Chlorides interacts with both alcohol and volatile acidity, which may be why its minimal depth ranking is third after those two.  And finally, citric acid is valued fourth in terms of minimal depth, but is not among the most important interactions.
+We can see at least one difference relative to the previous VIMP measures.  It appears that sulphates[^sulfph] importance may only be through its interaction with alcohol, rather than anything it was doing on its own. Chlorides interacts with both alcohol and volatile acidity, which may be why its minimal depth ranking is third after those two.  And finally, citric acid is valued fourth in terms of minimal depth, but is not among the most important interactions.  Here is an interactive plot of the alcohol-volatile acidity interaction, which had the minimal depth.  High alcohol and low acidity are very likely to be rated 'good', and vice versa.
 
-TODO: minimum depth https://cran.r-project.org/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html#various-variable-importance-measures
+```{r plot_interaction, echo=FALSE}
+# someone forgot that a formula approach is not required for rf; plot is hideous anyway.
+# plot_predict_interaction(results_rf$finalModel, data.frame(wine_train), "alcohol", "volatile.acidity")
+d = data.frame(
+  alcohol = seq(min(results_rf$trainingData$alcohol),
+                max(results_rf$trainingData$alcohol),
+                length.out = 100),
+  volatile.acidity = seq(min(results_rf$trainingData$volatile.acidity), 
+                         max(results_rf$trainingData$volatile.acidity), 
+                         length.out = 100)
+) 
 
-Minimal depth assumes that variables with high impact on the
-prediction are those that most frequently split nodes nearest to the trunks of the trees (i.e.
-at the root node) where they partition large samples of the population.
-Within a tree, node levels are numbered based on their relative distance to the trunk of the
-tree (with the root at 0). Minimal depth measures the important risk factors by averaging
-the depth of the rst split for each variable over all trees within the forest. Lower values of
-this measure indicate variables important in splitting large groups of patients.
-The maximal subtree for a variable x is the largest subtree whose root node splits on x. All
-parent nodes of x's maximal subtree have nodes that split on variables other than x. The
-largest maximal subtree possible is at the root node. If a variable does not split the root
-node, it can have more than one maximal subtree, or a maximal subtree may also not exist if
-there are no splits on the variable. The minimal depth of a variables is a surrogate measure of
-predictiveness of the variable. The smaller the minimal depth, the more impact the variable
-has sorting observations, and therefore on the forest prediction.
+pred_dat = create_prediction_data(model_data = scale(results_rf$trainingData[,-1]) %>%
+                                    data.frame(), 
+                                  conditional_data = scale(expand.grid(d)))
+
+zmat = randomForest:::predict.randomForest(results_rf$finalModel, newdata=pred_dat, type = 'prob')[,'Good'] %>% 
+  matrix(100, 100, byrow = T)
+
+a = list(
+  visible=FALSE
+)
+
+library(plotly)
+
+plot_ly(data=d, x=~alcohol, y=~volatile.acidity, z=zmat, 
+        type = 'surface', 
+        colors = viridis::plasma(1e3, alpha = .75)) %>% 
+  lazerhawk::theme_blank()
+# %>% 
+#   layout(plot_bgcolor='black',
+#          paper_bgcolor='black',
+#          scene = list(xaxis = a,
+#                       yaxis = a,
+#                       zaxis = a
+#          )
+#   )
+
+```
+
+##### Other Measures
+
+There are still other measures of importance we can obtain, and the following shows how to get them and plot them using <span class="pack">randomForestExplainer</span>.  Details about the measures can be found in the [appendix](appendix.html#various-variable-importance-measures). As one can see, they measure different things and thus will come to different conclusions.
+
+<!-- For some unknown reason, the actual section in the appendix for varimp cannot be linked -->
+
+```{r other_imps, echo=1:2, eval=FALSE}
+multi_imps = measure_importance(results_rf$finalModel)
+plot_importance_ggpairs(multi_imps)
+# save(multi_imps, file='data/rf_variable_importance.RData')
+```
+
+```{r other_imps_plot, echo=FALSE}
+plot_imp = function (importance_frame, 
+                     measures = names(importance_frame)[c(2, 4, 5, 3, 7)], 
+                     main = "Relations between measures of importance") 
+{
+  require(GGally)
+  if ("randomForest" %in% class(importance_frame)) {
+    importance_frame = measure_importance(importance_frame)
+    if ("predicted" %in% measures) {
+      names(importance_frame)[c(2, 4, 5, 3, 7)]
+    }
+  }
+  plot = ggpairs(importance_frame[, measures],
+                 # mapping = list(color = I('#ff5500')),
+                 upper = list(continuous = wrap("cor")),
+                 lower = list(continuous = wrap("points", color = I('#ff5500'))),
+                 diag = list(continuous = wrap("densityDiag", color = I('#ff5500'), fill = I('#ff550080'))),
+                 title = main) + 
+    theme_bw() +          # gets rid of grids
+    theme_trueMinimal() +
+    theme(panel.border = element_rect(color = 'gray92'),
+          axis.text.x = element_text(angle=-45, hjust = 0),
+          axis.text.y = element_text(size = 6),
+          title = element_text(color='gray25'))
+  
+  if (!is.null(main)) {
+    plot = plot + ggtitle(main)
+  }
+  return(plot)
+}
 
 
-#### Effects plots
+load('data/rf_variable_importance.RData')
+plot_imp(multi_imps)
+```
+
+
+In the end, you'll have a good idea of what predictor variables are driving your result.
+
+
+#### Effects
+
+##### Visualization
 
 So we can see that alcohol content and volatile acidity are the most important, but what is the nature of the relationship? <span class="emph">Partial dependence plots</span> allow us to understand the predictive effect of any particular covariate, controlling for the effects of others.  This is particularly important in the case where we have nonlinear relationships as we do here.
 
-The ggRandomForests package provides such plots, as well as other ways to explore variable importance we'll look at.  Unfortunately, they forgot to work with the basic randomForest class objects, so we'll use the randomForestSRC package it is associated with.
+The <span class="pack">ggRandomForests</span> package provides such plots, as well as other ways to explore variable importance we'll look at.  Unfortunately, they forgot to work with the basic <span class="objclass">randomForest</span> class objects, so we'll use the <span class="pack">randomForestSRC</span> package it is associated with.  In general, you could get something similar by using the basic <span class="func">predict</span> function and a little effort.
 
 
 ```{r run_rfsrc}
@@ -923,46 +1036,45 @@ rf2 = rfsrc(formula = good ~.,
 ```
 
 
-```{r rf_pd_plot}
+```{r rf_pd_plot, echo=1:6, eval=FALSE}
 gg_v = gg_variable(rf2)
-gg_md <- gg_minimal_depth(rf2)
+gg_md = gg_minimal_depth(rf2)
 
-# We want the top ranked minimal depth variables only, plotted in minimal depth
-# rank order.
-xvar <- gg_md$topvars[1:2]
-# plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1)
+# We want the top two ranked minimal depth variables only
+xvar = gg_md$topvars[1:2]
+plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1)
 
-
-# plot the variable list in a single panel plot
-plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1) +
-  labs(y='Probability Good', x="") +
-  scale_color_manual(values=c("#FF5500", "#4EC172")) + 
-  geom_smooth(aes(group=1), color="#98244C") +
-  theme_trueMinimal()
+save(gg_v, gg_md, file = 'data/rf_ggrf_min_depth.RData')
 ```
 
+```{r rf_pd_plot_true, echo=FALSE}
+load('data/rf_ggrf_min_depth.RData')
+xvar = gg_md$topvars[1:2]
+
+plot(gg_v, xvar=xvar, panel=TRUE, partial=TRUE, alpha=.1) +
+  labs(y='Probability Good', x="") +
+  scale_color_manual(values=c("#FF5500", "#00aaff")) + 
+  geom_smooth(aes(group=1), color="#98244C") +
+  guides(colour = guide_legend(override.aes = list(alpha=1))) +
+  theme_trueMinimal() +
+  theme(legend.title = element_blank())
+```
+
+We can see with alcohol that the increasing probability of a good classification with increasing alcohol content only really starts with at least alcohol of 10% and only up until about 12.5% after which it's not going to do much better.  With volatile acidity, the trend is generally negative for increasing acidity.  Note that you can think of these as edge-on views of the previous 3D image.
 
 
+##### LIME
 
-#### LIME
+A relatively newer approach to understanding black box methods allows us to understand effects down to specific observations.
+The <span class="emph">Local Interpretable Model-agnostic Explanations</span> (LIME) approach is applicable to any model, and the basic idea is to provide a human interpretable prediction- not just a prediction, but also provide *why* that prediction was made.  People using the model have some idea of what's going on in a substantive sense (i.e. domain knowledge), but they will *trust* the prediction of such a model if they understand the reasoning behind it.  Examining this prediction reasoning at representative or otherwise key settings of the predictors allows for a more global understanding of the model as a whole.
 
+Here is the gist of the approach (slightly more detail in [appendix][local-interpretable-model-agnostic-explanations]):
 
-MC explanation:
-
-Permute the data n times to create data with similar distributional properties to the original.
-
-Get similarity scores of the permuted observations to the observations you wish to explain.
-
-Make predictions with the permuted data based on the ML model.
-
-Select m features (e.g. forward selection, lasso) best describing the complex model outcome from the permuted data.
-
-Fit a simple model, e.g. regression, predicting the predictions from the ML model with the m features, where observations are weighted by similarity to the to-be-eplained observations.
-
-The coefficients from the simple model serve as the feature weights. The 'explanation fit' is R2 from that simple model.
-
-The basic idea is to create a human interpretable prediction- not just a prediction but why that prediction was made.  People using the model have some idea of what's going on with the model (i.e. domain knowledge), but they will trust the prediction of such a model if they understand the reasoning behind it.  Examining this prediction reasoning at representative or otherwise key settings of the predictors allows for a more global understanding of the model as a whole.
-
+- Permute the data $n$ times to create data with similar distributional properties to the original.
+- Get similarity scores of the permuted observations to the observations you wish to explain.
+- Make predictions with the permuted data based on the ML model.
+- Select $m$ features (e.g. forward selection, lasso) best describing the complex model outcome from the permuted data.
+- Fit a simple model, e.g. standard regression, predicting the predictions from the ML model with the $m$ features, where observations are weighted by similarity to the to-be-explained observations.
 
 Perhaps if we look at the product we can get more information.  We get some sample observations, create an 'explainer', and then explain the predictions of those observations.
 
@@ -990,7 +1102,7 @@ plot_features(rf_explain)
 
 ```{r rf_lime_vis1_clean, echo=FALSE}
 plot_features(rf_explain) +
-  scale_fill_manual(values=c('#ff5500BF', '#00aaffBF'))
+  scale_fill_manual(values=c('#00aaffBF', '#ff5500BF'))
 ```
 
 ```{r rf_lime_misc_proc, echo=FALSE}
@@ -1007,9 +1119,9 @@ case_5 = rf_explain %>%
 ```
 
 
-Consider case 1. The predicted probability of the being a good wine is low at .38.  The main *reasons* for this are that its `r str_replace(case_1$feature[1], pattern='\\.', replacement=' ')` is greater than .4, and its `r str_replace(case_1$feature[2], pattern='\\.', replacement=' ')` content is relatively low[^rf_lime_binning]. It's `r str_replace(case_1$feature[3], pattern='\\.', replacement=' ')` content is actually working *towards* a 'good' classification.  The weights give a us a good idea of how much the predicted probability would change if we did not have those features present.  The explanation fit is a measure of the fit of the simple model, basically just an R^2^.
+Consider case 1. The predicted probability of the being a good wine is low at `r round(case_1$label_prob[1], 2)`.  The main *reasons* for this are that its `r str_replace(case_1$feature[1], pattern='\\.', replacement=' ')` is greater than .4, and its `r str_replace(case_1$feature[2], pattern='\\.', replacement=' ')` content is relatively low[^rf_lime_binning]. It's `r str_replace(case_1$feature[3], pattern='\\.', replacement=' ')` content is actually working *towards* a 'good' classification.  The <span class="emph">weights</span> give a us a good idea of how much the predicted probability would change if we did not have those features present.  The <span class="emph">explanation fit</span> is a measure of the fit of the simple model, basically just an R^2^.
 
-Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident undertanding of the prediction.  Case three is a similar expected probability, but the volatile acidity actually makes us a little less confident.
+Now for case 2.  This is very strongly classified as a good wine, with high alcohol and low acidity.  Without those, this would be a much less confident understanding of the prediction.  Case three is a similar expected probability, but the value of that observation for volatile acidity actually makes us a little less confident.
 
 With case 4 & 5, we see an interesting situation. Case 4 has a lower probability of being good, but the explanation is relatively better.  The `r str_replace(case_5$feature[1], pattern='\\.', replacement=' ')` works against a good classification in both cases.  For the Case 4 though,  the `r str_replace(case_5$feature[2], pattern='\\.', replacement=' ')` works *for* it almost equally. Not so much in for Case 5.
 
@@ -1054,10 +1166,11 @@ I don't use <span class="pack">lime</span> with the other models because the sto
 
 ### Final Thoughts
 
-Random forests are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^rf_notcontinuous], are relatively fast, allow for an assessment of variable importance, and just plain work.  Unless you have massive amounts of data, even all the complicated neural net approaches out there will struggle to do better[^rf_100sclassifiers].  
+Random forests (and similar ensemble tree methods like boosting) are one of the better off-the-shelf classifiers you'll come across.  They handle a variety of the most common data scenarios[^rf_notcontinuous], are relatively fast, allow for an assessment of variable importance, and just plain work.  Unless you have massive amounts of data, even all the complicated neural net approaches out there will struggle to do better[^rf_100sclassifiers] in many common data situations without far more effort.  
+
+
 
 ## Support Vector Machines
-
 
 ```{r svm_plot, echo=FALSE, eval=T}
 #### svm plots
@@ -1197,7 +1310,7 @@ Support vector machines can provide very good prediction in a variety of setting
 
 [^dotplot]: You can quickly obtain this plot via the <span class="func">dotplot</span> function.
 
-[^tuning]: Its now possible to use a model select the tuning parameters themselves, i.e. in which the parameters are outputs to the model, and the estimates would then be fed into the main model.  Services such as [Google's CloudML](https://cloud.google.com/blog/big-data/2017/08/hyperparameter-tuning-in-cloud-machine-learning-engine-using-bayesian-optimization) already offer this, thus paving the way for data scientists to be fully automated well before truck drivers or fast food workers.
+[^tuning2]: Its now possible to use a model select the tuning parameters themselves, i.e. in which the parameters are outputs to the model, and the estimates would then be fed into the main model.  Services such as [Google's CloudML](https://cloud.google.com/blog/big-data/2017/08/hyperparameter-tuning-in-cloud-machine-learning-engine-using-bayesian-optimization) already offer this, thus paving the way for data scientists to be fully automated well before truck drivers or fast food workers.
 
 [^knn_dist]: See the function <span class="func">dist</span> in base R, for example.
 
@@ -1224,6 +1337,8 @@ Support vector machines can provide very good prediction in a variety of setting
 [^rf_100sclassifiers]: See @fernandez2014 for a recent assessment, but there have been others that come to similar conclusions.
 
 [^zero_depth]: Some might start with depth = 1.
+
+[^sulfph]: In case anyone is wondering, sulfates (American English) vs. sulphates (British English).  I'm just going with what's in the data set.
 
 [^rf_lime_permute]: This could be done in different ways.  For example, given a numeric feature add some random noise given its place in the distribution of values seen for that feature. In the plots shown, the values, e.g. 9.5 and 10.3, are at quantiles (.25 and .5) of the alcohol.  The data has been permuted within those quantile bins.
 
