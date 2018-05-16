@@ -9,5 +9,5 @@ Contents include:
 - Examples including regularized regression, random forests, neural nets, and more
 - An overview of extensions and ties to other methods
 
-<img src="img/readmeimg.png" style="display:block; margin: 0 auto;">
-<img src="img/biasvar_gp.png" style="display:block; margin: 0 auto;">
+<img src="img/readmeimg1.png" style="display:block; margin: 0 auto;">
+<img src="img/biasvar_gp.svg" style="display:block; margin: 0 auto;">
