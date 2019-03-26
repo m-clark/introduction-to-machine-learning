@@ -4,3 +4,14 @@ language:
     chapter_name: "Chapter "
 output_dir: "docs"
 delete_merged_file: true
+
+rmd_files: [
+  "index.Rmd",
+  "preface.Rmd",
+  "intro.Rmd",
+  'concepts.Rmd',
+  'blackbox.Rmd',
+  'other.Rmd',
+  'appendix.Rmd',
+  'references.Rmd'
+]

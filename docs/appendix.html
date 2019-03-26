@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Machine Learning</title>
+  <title>Appendix | Machine Learning</title>
   <meta name="description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Machine Learning" />
+  <meta property="og:title" content="Appendix | Machine Learning" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/" />
   <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
@@ -17,24 +17,25 @@
   <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Machine Learning" />
+  <meta name="twitter:title" content="Appendix | Machine Learning" />
   
   <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
   <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
 
 
 
-<meta name="date" content="2018-05-06">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="wrap-up.html">
+<link rel="prev" href="other.html">
 <link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -46,7 +47,7 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
 <script src="libs/datatables-binding-0.4/datatables.js"></script>
 <link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -59,55 +60,81 @@
 <script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
 <script src="libs/d3-tip-0.6.6/index.js"></script>
 <script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
-<script src="libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
 <script src="libs/viz-0.3/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="libs/grViz-binding-1.0.0/grViz.js"></script>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="css/book.css" type="text/css" />
-<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" type="text/css" />
 </head>
 
 <body>
@@ -120,19 +147,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class='before'><a href="https://m-clark.github.io/">Machine Learning</span></a></li>
+<li class='before'><a href="./">Machine Learning</a></li>
 
 <li class="divider"></li>
 <li><a href="index.html#section"></a></li>
 <li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
@@ -156,58 +183,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li><a href="blackbox.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
@@ -223,9 +250,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
-<li class='after'><a href="https://m-clark.github.io/"><img src="img/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
-<li class='after'><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="img/ccbysa.png" /></a></li>
-
+<li class='after'">
+   <a href="https://m-clark.github.io/">
+      <img src="img/mc_logo.png" style="width:25%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo">
+   </a>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a href="https://github.com/m-clark/">
+         <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+      </a>
+   </div>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+         <i class="fab fa-creative-commons fa-lg"></i>
+         <i class="fab fa-creative-commons-by fa-lg"></i>
+         <i class="fab fa-creative-commons-sa fa-lg"></i>
+      </a>
+   </div>
+</li>
 </ul>
 
       </nav>
@@ -235,7 +280,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Machine Learning</a>
           </h1>
         </div>
 
@@ -247,7 +292,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Appendix</h1>
 <div id="bias-variance-demo" class="section level2">
 <h2>Bias Variance Demo</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 x =<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)
 ytrue =<span class="st"> </span><span class="kw">sin</span>(<span class="dv">3</span><span class="op">*</span>pi<span class="op">*</span>x)
 basedat =<span class="st"> </span><span class="kw">cbind</span>(x,ytrue)[<span class="kw">order</span>(x),]
@@ -345,7 +390,7 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
     <span class="dt">plot.background =</span> ggplot2<span class="op">::</span><span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;#fffff8&quot;</span>, <span class="dt">colour =</span> <span class="ot">NA</span>)
   )
  
-<span class="kw">grid.arrange</span>(g1, g2, g3, g4, <span class="dt">ncol=</span><span class="dv">2</span>)</code></pre></div>
+<span class="kw">grid.arrange</span>(g1, g2, g3, g4, <span class="dt">ncol=</span><span class="dv">2</span>)</code></pre>
 </div>
 <div id="programming-languages" class="section level2">
 <h2>Programming Languages</h2>
@@ -355,13 +400,13 @@ g4 =<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">dat
 <div id="deep-learning-example" class="section level4">
 <h4>Deep learning example</h4>
 <p>The following is a deep learning example using the same data from the previous examples, using <span class="pack">keras</span>. The package is an R wrapper for the <span class="pack">keras</span> module in Python, which itself is a wrapper for <span class="pack">tensorflow</span>. For more on using TensorFlow with R, check out <a href="https://tensorflow.rstudio.com/">RStudio’s documentation</a>.</p>
-<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn59" class="footnoteRef" id="fnref59"><sup>59</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
+<p>This is a <span class="emph">sequential neural net</span> with three layers. I also add some <span class="emph">dropout</span> at each layer, which, given the material presented, you can think of as a means of regularization to avoid overfitting<a href="#fn59" class="footnote-ref" id="fnref59"><sup>59</sup></a>. Note that keras works a bit differently, in that its objects are mutable, hence the there is no reassignment of the <span class="objclass">model</span>. This R implementation also provides some nice visualizations to keep your interest while it runs.</p>
 <p>This is just a starting point, so don’t expect any better performance than those shown previously, but it’ll give you something to play with. Note that there is plenty to learn, and such models require copious amounts of tuning to work well.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
 
-X_train =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(good <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="dv">1</span>, <span class="dt">data=</span>wine_train)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scale</span>()
+X_train =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(good <span class="op">~</span><span class="st"> </span>. <span class="dv">-1</span>, <span class="dt">data=</span>wine_train)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scale</span>()
 y_train =<span class="st"> </span><span class="kw">as.numeric</span>(wine_train<span class="op">$</span>good) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
-X_test =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(good <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="dv">1</span>, <span class="dt">data=</span>wine_test)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scale</span>()
+X_test =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(good <span class="op">~</span><span class="st"> </span>. <span class="dv">-1</span>, <span class="dt">data=</span>wine_test)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scale</span>()
 y_test =<span class="st"> </span><span class="kw">as.numeric</span>(wine_test<span class="op">$</span>good) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
 
 model =<span class="st"> </span><span class="kw">keras_model_sequential</span>() 
@@ -396,50 +441,50 @@ history =<span class="st"> </span>model <span class="op">%&gt;%</span><span clas
 <span class="co"># model %&gt;% evaluate(X_test, y_test)</span>
 
 ypred =<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">predict_classes</span>(X_test)
-caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_test, <span class="dt">positive=</span><span class="st">&#39;1&#39;</span>)</code></pre></div>
+caret<span class="op">::</span><span class="kw">confusionMatrix</span>(ypred, y_test, <span class="dt">positive=</span><span class="st">&#39;1&#39;</span>)</code></pre>
 </div>
 </div>
 <div id="python" class="section level3">
 <h3>Python</h3>
-<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn60" class="footnoteRef" id="fnref60"><sup>60</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
+<p>If your data fits on your machine and/or your analysis time is less than a couple hours, R is hands down the easiest to use to go from data to document, including if that document is an interactive website. That said, R probably isn’t even the most popular ML tool, because in many situations we have a lot more data, or simply need the predictions without frills and as fast as possible<a href="#fn60" class="footnote-ref" id="fnref60"><sup>60</sup></a>. As such Python is the de facto standard in such situations, and probably the most popular development environment for machine learning.</p>
 <p>One can start with the <span class="pack">scikit-learn</span> module, using it much in the same way as was demonstrated with <span class="pack">caret</span>. It will get you very far, but for some situations, you may need more heavy-duty options like <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, etc.</p>
 <!-- Though no change was made to the code, nor any need to re-evaluate what was alrady displayed, something caused knitr to do so and empty lines are now ignored; separate chunks until fixed -->
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> pandas <span class="im">as</span> pd
+<pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> pandas <span class="im">as</span> pd
 <span class="im">import</span> numpy <span class="im">as</span> np
 <span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split
 <span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler
 <span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier
 <span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, accuracy_score
 <span class="co"># from os import chdir            # if desired</span>
-<span class="co"># chdir(&#39;your_directory&#39;)</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># import data</span>
-wine <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/wine.csv&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># data preprocessing</span>
+<span class="co"># chdir(&#39;your_directory&#39;)</span></code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># import data</span>
+wine <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/wine.csv&#39;</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># data preprocessing</span>
 np.random.seed(<span class="dv">1234</span>)
 X <span class="op">=</span> wine.drop([<span class="st">&#39;free.sulfur.dioxide&#39;</span>, <span class="st">&#39;density&#39;</span>, <span class="st">&#39;quality&#39;</span>, <span class="st">&#39;color&#39;</span>, <span class="st">&#39;white&#39;</span>,<span class="st">&#39;good&#39;</span>], axis<span class="op">=</span><span class="dv">1</span>)
 X <span class="op">=</span> MinMaxScaler().fit_transform(X)  <span class="co"># by default on 0, 1 scale</span>
 y <span class="op">=</span> wine[<span class="st">&#39;good&#39;</span>]
-X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># train model</span>
+X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># train model</span>
 rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">1000</span>)
-rf_train <span class="op">=</span> rf.fit(X_train, y_train)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># get test predictions</span>
-rf_predict <span class="op">=</span> rf_train.predict(X_test)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># create confusion matrix, and accuracy</span>
+rf_train <span class="op">=</span> rf.fit(X_train, y_train)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># get test predictions</span>
+rf_predict <span class="op">=</span> rf_train.predict(X_test)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co"># create confusion matrix, and accuracy</span>
 cm <span class="op">=</span> confusion_matrix(y_test,rf_predict)
 cm_prob <span class="op">=</span> cm <span class="op">/</span> np.<span class="bu">sum</span>(cm)  <span class="co"># as probs</span>
-<span class="bu">print</span>(cm_prob)</code></pre></div>
+<span class="bu">print</span>(cm_prob)</code></pre>
 <pre><code>[[ 0.26692308  0.09076923]
  [ 0.07615385  0.56615385]]</code></pre>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">acc <span class="op">=</span> accuracy_score(y_test, rf_predict)
+<pre class="sourceCode python"><code class="sourceCode python">acc <span class="op">=</span> accuracy_score(y_test, rf_predict)
 acc <span class="op">=</span> pd.DataFrame(np.array([acc]), columns<span class="op">=</span>[<span class="st">&#39;Accuracy&#39;</span>])
-<span class="bu">print</span>(acc)</code></pre></div>
+<span class="bu">print</span>(acc)</code></pre>
 <pre><code>   Accuracy
 0  0.833077</code></pre>
 <div id="deep-learning-example-1" class="section level4">
 <h4>Deep learning example</h4>
-<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn61" class="footnoteRef" id="fnref61"><sup>61</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow.contrib.learn <span class="im">as</span> skflow
+<p>Here is a bit of code to get you started with a scikit approach to deep learning. This is a ‘deep neural net’ with seven layers. I also add some ‘dropout’. This isn’t too viable a model as far as settings go, and won’t do any better than those shown previously<a href="#fn61" class="footnote-ref" id="fnref61"><sup>61</sup></a>, but it’ll run fine on your machine so you can at least play with it.</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow.contrib.learn <span class="im">as</span> skflow
 <span class="im">from</span> sklearn <span class="im">import</span> metrics
 feats <span class="op">=</span> skflow.infer_real_valued_columns_from_input(X_train)
 classifier_tf <span class="op">=</span> skflow.DNNClassifier(feature_columns<span class="op">=</span>feats, 
@@ -449,7 +494,7 @@ classifier_tf <span class="op">=</span> skflow.DNNClassifier(feature_columns<spa
 classifier_tf.fit(X_train, y_train, steps<span class="op">=</span><span class="dv">10000</span>)
 predictions <span class="op">=</span> <span class="bu">list</span>(classifier_tf.predict(X_test, as_iterable<span class="op">=</span><span class="va">True</span>))
 score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
-<span class="bu">print</span>(<span class="st">&quot;Accuracy: </span><span class="sc">%f</span><span class="st">&quot;</span> <span class="op">%</span> score)</code></pre></div>
+<span class="bu">print</span>(<span class="st">&quot;Accuracy: </span><span class="sc">%f</span><span class="st">&quot;</span> <span class="op">%</span> score)</code></pre>
 </div>
 </div>
 <div id="other" class="section level3">
@@ -462,7 +507,7 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 <h2>Local Interpretable Model-agnostic Explanations</h2>
 <p>The general approach lime takes to achieving this goal is as follows:</p>
 <ul>
-<li>For each prediction to explain, permute the observations n times<a href="#fn62" class="footnoteRef" id="fnref62"><sup>62</sup></a>.</li>
+<li>For each prediction to explain, permute the observations n times<a href="#fn62" class="footnote-ref" id="fnref62"><sup>62</sup></a>.</li>
 <li>Let the complex model predict the outcome of all permuted observations.</li>
 <li>Calculate the distance from all permutations to the original observation.</li>
 <li>Convert the distance to a similarity score.</li>
@@ -486,10 +531,13 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 <li><strong>no_of_nodes</strong> – total number of nodes that use <span class="math inline">\(X_j\)</span> for splitting (it is usually equal to no_of_trees if trees are shallow)</li>
 <li><strong>times_a_root</strong> – total number of trees in which <span class="math inline">\(X_j\)</span> is used for splitting the root node (i.e., the whole sample is divided into two based on the value of <span class="math inline">\(X_j\)</span>)</li>
 <li><p><strong>p_value</strong> – p-value for the one-sided binomial test using the following distribution:</p>
-<p><span class="math display">\[\textrm{Binom}(\texttt{no_of_nodes}, P(\textrm{node splits on } X_j)\]</span></p>
-<p>where we calculate the probability of split on <span class="math inline">\(X_j\)</span> as if <span class="math inline">\(X_j\)</span> was uniformly drawn from the <span class="math inline">\(r\)</span> candidate variables</p>
-<p><span class="math display">\[P(\textrm{node splits on } X_j)=P(X_j \textrm{ is a candidate}) \cdot P(X_j \textrm{ is selected}) = \frac{r}{p} \cdot \frac{1}{r} = \frac{1}{p}\]</span></p>
-<p>This test tells us whether the observed number of successes (number of nodes in which <span class="math inline">\(X_j\)</span> was used for splitting) exceeds the theoretical number of successes if they were random (i.e. following the binomial distribution given above).</p></li>
+<pre><code>$$\textrm{Binom}(\texttt{no_of_nodes}, P(\textrm{node splits on } X_j)$$
+
+where we calculate the probability of split on $X_j$ as if $X_j$ was uniformly drawn from the $r$ candidate variables
+
+$$P(\textrm{node splits on } X_j)=P(X_j \textrm{ is a candidate}) \cdot P(X_j \textrm{ is selected}) = \frac{r}{p} \cdot \frac{1}{r} = \frac{1}{p}$$
+
+This test tells us whether the observed number of successes (number of nodes in which $X_j$ was used for splitting) exceeds the theoretical number of successes if they were random (i.e. following the binomial distribution given above).</code></pre></li>
 </ul>
 </div>
 <div id="brief-glossary-of-common-terms" class="section level2">
@@ -507,6 +555,7 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 <p><span class="emph">target, label</span>: dependent variable, response, the outcome of interest</p>
 <p><span class="emph">unsupervised</span>: no dependent variable (or rather, only dependent variables); think clustering, PCA etc.</p>
 <p><span class="emph">weights</span>: coefficients, parameters</p>
+
 </div>
 </div>
 <h3>References</h3>
@@ -518,10 +567,10 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
 <div class="footnotes">
 <hr />
 <ol start="59">
-<li id="fn59"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="appendix.html#fnref59">↩</a></p></li>
-<li id="fn60"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref60">↩</a></p></li>
-<li id="fn61"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="appendix.html#fnref61">↩</a></p></li>
-<li id="fn62"><p>This could be done in different ways. For example, given a numeric feature add some random noise given its place in the distribution of values seen for that feature. In the plots shown, the values, e.g. 9.5 and 10.3, are at quantiles (.25 and .5) of the alcohol. The data has been permuted within those quantile bins.<a href="appendix.html#fnref62">↩</a></p></li>
+<li id="fn59"><p>You can obtain near perfect accuracy on the training set without dropout, but will do no better at test.<a href="appendix.html#fnref59" class="footnote-back">↩</a></p></li>
+<li id="fn60"><p>Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.<a href="appendix.html#fnref60" class="footnote-back">↩</a></p></li>
+<li id="fn61"><p>Just for giggles I let that particular one go for 100000 steps and it finally started to get into &gt; 81% on the test set.<a href="appendix.html#fnref61" class="footnote-back">↩</a></p></li>
+<li id="fn62"><p>This could be done in different ways. For example, given a numeric feature add some random noise given its place in the distribution of values seen for that feature. In the plots shown, the values, e.g. 9.5 and 10.3, are at quantiles (.25 and .5) of the alcohol. The data has been permuted within those quantile bins.<a href="appendix.html#fnref62" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -529,7 +578,7 @@ score <span class="op">=</span> metrics.accuracy_score(y_test, predictions)
           </div>
         </div>
       </div>
-<a href="wrap-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="other.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -550,9 +599,10 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["twitter", "facebook", "google", "weibo", "instapaper"]
+"all": ["twitter", "facebook", "google", "weibo", "instapaper"],
+"instapper": false
 },
 "fontsettings": {
 "theme": "white",
@@ -560,12 +610,17 @@ gitbook.start({
 "size": 2
 },
 "edit": null,
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section",
 "depth": 2,
 "scroll_highlight": true
 },
+"df_print": "kable",
 "highlight": "pygments",
 "search": true
 });
@@ -577,8 +632,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

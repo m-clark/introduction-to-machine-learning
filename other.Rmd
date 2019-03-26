@@ -226,7 +226,7 @@ Such models require massive amounts of data, a lot of tuning, and generally seri
 
 Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable.  It's fine to use a sentiment analysis model based on twitter feeds on other data from a review website.  It's another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays.  However, don't be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.
 
-You can start your journey into this sort of stuff at http://deeplearning.net/, and I have a minimal demos for R and Python in the [appendix][Deep learning example].
+You can start your journey into this sort of stuff at [http://deeplearning.net/](http://deeplearning.net/), and I have a minimal demos for R and Python in the [appendix][Deep learning example].
 
 
 ## Feature Selection & Importance

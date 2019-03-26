@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Machine Learning</title>
+  <title>Preface | Machine Learning</title>
   <meta name="description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Machine Learning" />
+  <meta property="og:title" content="Preface | Machine Learning" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/" />
   <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
@@ -17,14 +17,14 @@
   <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Machine Learning" />
+  <meta name="twitter:title" content="Preface | Machine Learning" />
   
   <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
   <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
 
 
 
-<meta name="date" content="2018-05-06">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,9 +32,10 @@
   
   
 <link rel="prev" href="index.html">
-<link rel="next" href="introduction.html">
+<link rel="next" href="intro.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -46,7 +47,7 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
 <script src="libs/datatables-binding-0.4/datatables.js"></script>
 <link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -59,55 +60,81 @@
 <script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
 <script src="libs/d3-tip-0.6.6/index.js"></script>
 <script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
-<script src="libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
 <script src="libs/viz-0.3/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="libs/grViz-binding-1.0.0/grViz.js"></script>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="css/book.css" type="text/css" />
-<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" type="text/css" />
 </head>
 
 <body>
@@ -120,19 +147,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class='before'><a href="https://m-clark.github.io/">Machine Learning</span></a></li>
+<li class='before'><a href="./">Machine Learning</a></li>
 
 <li class="divider"></li>
 <li><a href="index.html#section"></a></li>
 <li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
@@ -156,58 +183,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li><a href="blackbox.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
@@ -223,9 +250,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
-<li class='after'><a href="https://m-clark.github.io/"><img src="img/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
-<li class='after'><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="img/ccbysa.png" /></a></li>
-
+<li class='after'">
+   <a href="https://m-clark.github.io/">
+      <img src="img/mc_logo.png" style="width:25%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo">
+   </a>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a href="https://github.com/m-clark/">
+         <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+      </a>
+   </div>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+         <i class="fab fa-creative-commons fa-lg"></i>
+         <i class="fab fa-creative-commons-by fa-lg"></i>
+         <i class="fab fa-creative-commons-sa fa-lg"></i>
+      </a>
+   </div>
+</li>
 </ul>
 
       </nav>
@@ -235,7 +280,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Machine Learning</a>
           </h1>
         </div>
 
@@ -245,10 +290,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="preface" class="section level1">
 <h1>Preface</h1>
-<p><span class="newthought">The purpose of this document is to provide a conceptual introduction</span> to statistical or machine learning (ML) techniques for those that would not normally be exposed to such approaches during their typical required statistical training. <span class="emph">Machine learning</span><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> can be described as a form of statistical analysis, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in applied disciplines. The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.</p>
-<p>If one surveys the number of techniques available in ML without any context, one can easily be overwhelmed in terms of the sheer number of approaches, as well as the various tweaks and variations of them. However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional techniques as well. While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> and kept at the conceptual level as much as possible. Note that Python versions of the model examples are available <a href="https://github.com/m-clark/introduction-to-machine-learning/blob/master/black_box.ipynb">here</a>. In addition, Marcio Mourao has provided <a href="https://github.com/marcio-mourao/intro2MachineLearning/blob/master/Workshop.ipynb">additional Python examples</a>.</p>
+<p><span class="newthought">The purpose of this document is to provide a conceptual introduction</span> to statistical or machine learning (ML) techniques for those that would not normally be exposed to such approaches during their typical required statistical training. <span class="emph">Machine learning</span><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> can be described as a form of statistical analysis, often even utilizing well-known and familiar techniques, that has bit of a different focus than traditional analytical practice in applied disciplines. The key notion is that flexible, automatic approaches are used to detect patterns within the data, with a primary focus on making predictions on future data.</p>
+<p>If one surveys the number of techniques available in ML without any context, one can easily be overwhelmed in terms of the sheer number of approaches, as well as the various tweaks and variations of them. However, the specifics of the techniques are not as important as more general concepts that would be applicable in most every ML setting, and indeed, many traditional techniques as well. While there will be examples using the R statistical environment and descriptions of a few specific approaches, the focus here is more on ideas than application<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and kept at the conceptual level as much as possible. Note that Python versions of the model examples are available <a href="https://github.com/m-clark/introduction-to-machine-learning/blob/master/black_box.ipynb">here</a>. In addition, Marcio Mourao has provided <a href="https://github.com/marcio-mourao/intro2MachineLearning/blob/master/Workshop.ipynb">additional Python examples</a>.</p>
 <p>As for prerequisite knowledge, I will assume a basic familiarity with regression analyses typically presented in applied disciplines. Regarding programming, none is really required to follow most of the content here, but some knowledge of R would be helpful if one wants to do the examples. Note that I won’t do much explaining of the code, as I will be more concerned with getting to a result than clearly detailing the path to it. Armed with even introductory knowledge, if there are parts of R code that are unclear, there are many resources to investigate and discover the details on one’s own, which results in more learning anyway.</p>
-<p>The latest version of this document is dated 2018-05-06. It was originally written in March 2013, when there was much more need for it in academia, at least outside of CS and Engineering departments. For all the buzz of machine learning, deep learning, AI, etc., that need still exists, as most applied disciplines still do not teach such techniques as a core part of their training (yet). However, the number of tools and information, within the realm of R and Python especially, has exploded, so you’ll have plenty to keep you occupied. Indeed, I’m not sure how much of the specific techniques and tools demonstrated in this document will be viable in another five years, so be prepared to keep up.</p>
+<p>The latest version of this document is dated 2019-03-25. It was originally written in March 2013, when there was much more need for it in academia, at least outside of CS and Engineering departments. For all the buzz of machine learning, deep learning, AI, etc., that need still exists, as most applied disciplines still do not teach such techniques as a core part of their training (yet). However, the number of tools and information, within the realm of R and Python especially, has exploded, so you’ll have plenty to keep you occupied. Indeed, I’m not sure how much of the specific techniques and tools demonstrated in this document will be viable in another five years, so be prepared to keep up.</p>
 <p>Color coding in text:</p>
 <ul>
 <li><span class="emph">emphasis</span></li>
@@ -262,8 +307,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>Also referred to as applied statistical learning, statistical engineering, data science or data mining in various academic, professional, and other contexts (correctly or not).<a href="preface.html#fnref1">↩</a></p></li>
-<li id="fn2"><p>Indeed, there is evidence that with large enough samples many techniques converge to similar performance.<a href="preface.html#fnref2">↩</a></p></li>
+<li id="fn1"><p>Also referred to as applied statistical learning, statistical engineering, data science or data mining in various academic, professional, and other contexts (correctly or not).<a href="preface.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Indeed, there is evidence that with large enough samples many techniques converge to similar performance.<a href="preface.html#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -272,7 +317,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="intro.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -292,9 +337,10 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["twitter", "facebook", "google", "weibo", "instapaper"]
+"all": ["twitter", "facebook", "google", "weibo", "instapaper"],
+"instapper": false
 },
 "fontsettings": {
 "theme": "white",
@@ -302,12 +348,17 @@ gitbook.start({
 "size": 2
 },
 "edit": null,
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section",
 "depth": 2,
 "scroll_highlight": true
 },
+"df_print": "kable",
 "highlight": "pygments",
 "search": true
 });
@@ -319,8 +370,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

@@ -1,38 +1,15 @@
 ---
-title: <span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span>
-subtitle: <span style="font-size:125%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">An Introduction</span>
+title: Machine Learning
 author:  |
-  <span style="font-size:100%; font-style:normal; font-variant:small-caps; font-family:'Open Sans'">Michael Clark</span> <br>
-  <span class="" style="font-size:75%">https://m-clark.github.io</span><br><br>
-  <img src="img/CSCAR_logos/signature-acronym.png" style="width:30%; padding:10px 0;" alt="University of Michigan: CSCAR"> <br>
-  <img src="img/ARC_logos/ARC-acronym-signature.png" style="width:21%; padding:10px 0;" alt="University of Michigan: Advanced Research Computing"> 
-
-date: <span style="font-style:normal;font-family:'Open Sans'">`r Sys.Date()`</span>
+  <span class="noem">Michael Clark</span> 
+  https://m-clark.github.io/
+  <img class='arc' src="img/signature-acronym.png" alt="University of Michigan: CSCAR">
+  <img class='cscar' src="img/ARC-acronym-signature.png" alt="University of Michigan: Advanced Research Computing"> 
+date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-output:
-  bookdown::gitbook:
-    css: [css/book.css, css/standard_html.css]
-    highlight: pygments
-    number_sections: false
-    config:
-      toc:
-        depth: 2
-        collapse: section
-        scroll_highlight: yes
-      edit : null
-      download: null
-      search: yes
-      sharing:
-        facebook: no
-        twitter: no
-        google: no
-        weibo: no
-        instapper: no
-        vk: no
-        all: ['twitter', 'facebook', 'google', 'weibo', 'instapaper']
+output: 
+    bookdown::gitbook
 always_allow_html: yes
-# font-import: https://fonts.googleapis.com/css?family=Roboto|Open+Sans
-# font-family: 'Roboto'
 documentclass: book
 bibliography: MLtechrep.bib
 biblio-style: apalike
@@ -57,7 +34,7 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
 ```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
-library(lazerhawk); library(caret); library(DT); library(viridis); library(kableExtra)
+library(tidyext); library(visibly); library(caret); library(DT); library(viridis); library(kableExtra)
 library(broom); library(pander); library(tidyverse); library(htmltools)
 ```
 
@@ -67,9 +44,6 @@ knitr::include_graphics('img/198R.png', dpi = NA)
 ```
 
 
-```{r ccimg, fig.align='center',  out.width=0, fig.show='hide', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
-# otherwise will not include in menu
-knitr::include_graphics('img/ccbysa.png', dpi = NA)
-knitr::include_graphics('img/mc.png', dpi = NA)
+```{r logo, fig.align='center', out.width=0, fig.show='hide', echo=FALSE}
+knitr::include_graphics('img/mc_logo.png', dpi = NA)
 ```
-

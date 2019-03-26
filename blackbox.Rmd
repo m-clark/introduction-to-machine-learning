@@ -951,15 +951,26 @@ library(plotly)
 plot_ly(data=d, x=~alcohol, y=~volatile.acidity, z=zmat, 
         type = 'surface', 
         colors = viridis::plasma(1e3, alpha = .75)) %>% 
-  lazerhawk::theme_blank()
-# %>% 
-#   layout(plot_bgcolor='black',
-#          paper_bgcolor='black',
-#          scene = list(xaxis = a,
-#                       yaxis = a,
-#                       zaxis = a
-#          )
-#   )
+  lazerhawk::theme_blank() #%>%
+# the following was used for readme img
+  # hide_colorbar() %>% 
+  # layout(#plot_bgcolor='black',
+  #        #paper_bgcolor='black',
+  #        scene = list(
+  #          xaxis = list(title='Alcohol', 
+  #                       titlefont=list(family='Roboto, sans',
+  #                                      size=12,
+  #                                      color='#7f7f7f')),
+  #          yaxis = list(title='Volatile Acidity', 
+  #                       titlefont=list(family='Roboto, sans',
+  #                                      size=12,
+  #                                      color='#7f7f7f')),
+  #          zaxis = list(title='Probability Good', 
+  #                       titlefont=list(family='Roboto, sans',
+  #                                      size=12,
+  #                                      color='#7f7f7f'))
+  #        )
+  # )
 
 ```
 
@@ -1021,7 +1032,7 @@ In the end, you'll have a good idea of what predictor variables are driving your
 
 So we can see that alcohol content and volatile acidity are the most important, but what is the nature of the relationship? <span class="emph">Partial dependence plots</span> allow us to understand the predictive effect of any particular covariate, controlling for the effects of others.  This is particularly important in the case where we have nonlinear relationships as we do here.
 
-The <span class="pack">ggRandomForests</span> package provides such plots, as well as other ways to explore variable importance we'll look at.  Unfortunately, they forgot to work with the basic <span class="objclass">randomForest</span> class objects, so we'll use the <span class="pack">randomForestSRC</span> package it is associated with.  In general, you could get something similar by using the basic <span class="func">predict</span> function and a little effort.
+The <span class="pack">ggRandomForests</span> package provides such plots, as well as other ways to explore variable importance we'll look at.  Unfortunately, despite appearances to the contrary, I could find no example that used a basic <span class="objclass">randomForest</span> class object, and none worked with the final model, so we'll use the <span class="pack">randomForestSRC</span> package it is primarily associated with.  In general though, you could get something similar by using the basic <span class="func">predict</span> function and a little effort.
 
 
 ```{r run_rfsrc}

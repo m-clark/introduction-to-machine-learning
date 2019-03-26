@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Machine Learning</title>
+  <title>Concepts | Machine Learning</title>
   <meta name="description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Machine Learning" />
+  <meta property="og:title" content="Concepts | Machine Learning" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/" />
   <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
@@ -17,24 +17,25 @@
   <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Machine Learning" />
+  <meta name="twitter:title" content="Concepts | Machine Learning" />
   
   <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
   <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
 
 
 
-<meta name="date" content="2018-05-06">
+<meta name="date" content="2019-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="introduction.html">
-<link rel="next" href="opening-the-black-box.html">
+<link rel="prev" href="intro.html">
+<link rel="next" href="blackbox.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -46,7 +47,7 @@
 
 
 
-<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
 <script src="libs/datatables-binding-0.4/datatables.js"></script>
 <link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -59,55 +60,81 @@
 <script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
 <script src="libs/d3-tip-0.6.6/index.js"></script>
 <script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
-<script src="libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
 <script src="libs/viz-0.3/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="libs/grViz-binding-1.0.0/grViz.js"></script>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="css/book.css" type="text/css" />
-<link rel="stylesheet" href="css/standard_html.css" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" type="text/css" />
 </head>
 
 <body>
@@ -120,19 +147,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class='before'><a href="https://m-clark.github.io/">Machine Learning</span></a></li>
+<li class='before'><a href="./">Machine Learning</a></li>
 
 <li class="divider"></li>
 <li><a href="index.html#section"></a></li>
 <li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
@@ -156,58 +183,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li><a href="opening-the-black-box.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li><a href="blackbox.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
-<li class="chapter" data-level="" data-path="opening-the-black-box.html"><a href="opening-the-black-box.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
-<li class="chapter" data-level="" data-path="wrap-up.html"><a href="wrap-up.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
@@ -223,9 +250,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
-<li class='after'><a href="https://m-clark.github.io/"><img src="img/mc.png" style="width:50%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo"></a></li>
-<li class='after'><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="width:50%; border-width:0; display:block; margin: 0 auto;" src="img/ccbysa.png" /></a></li>
-
+<li class='after'">
+   <a href="https://m-clark.github.io/">
+      <img src="img/mc_logo.png" style="width:25%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo">
+   </a>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a href="https://github.com/m-clark/">
+         <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+      </a>
+   </div>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+         <i class="fab fa-creative-commons fa-lg"></i>
+         <i class="fab fa-creative-commons-by fa-lg"></i>
+         <i class="fab fa-creative-commons-sa fa-lg"></i>
+      </a>
+   </div>
+</li>
 </ul>
 
       </nav>
@@ -235,7 +280,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><span style="font-size:125%; font-family:Roboto; font-style:normal">Machine Learning</span></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Machine Learning</a>
           </h1>
         </div>
 
@@ -263,14 +308,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="negative-log-likelihood" class="section level4">
 <h4>Negative Log-likelihood</h4>
-<p>We can also think of our usual likelihood methods learned in a standard applied statistics course<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> as incorporating a loss function that is the <em>negative</em> log-likelihood pertaining to the model of interest. Such methods seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize its negative value. As an example, if we assume a normal distribution for the response we can note the loss function as:</p>
+<p>We can also think of our usual likelihood methods learned in a standard applied statistics course<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> as incorporating a loss function that is the <em>negative</em> log-likelihood pertaining to the model of interest. Such methods seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize its negative value. As an example, if we assume a normal distribution for the response we can note the loss function as:</p>
 <p><span class="math display">\[L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2\]</span></p>
 <p>In this case it would converge to the same answer as the squared error/least squares solution.</p>
 </div>
 <div id="r-example" class="section level4">
 <h4>R Example</h4>
-<p>The following provides conceptual code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (<span class="math inline">\(\beta\)</span> from before) based on minimizing the squared error. <code>X</code> is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept. <code>y</code> is the continuous variable to be modeled. In the following, the true values for the intercept and other coefficients are <code>(0, -.5, .5)</code>. We can then compare the results with the <span class="func">lm</span> function from base R<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sqerrloss =<span class="st"> </span><span class="cf">function</span>(beta, X, y){
+<p>The following provides conceptual code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients (<span class="math inline">\(\beta\)</span> from before) based on minimizing the squared error. <code>X</code> is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept. <code>y</code> is the continuous variable to be modeled. In the following, the true values for the intercept and other coefficients are <code>(0, -.5, .5)</code>. We can then compare the results with the <span class="func">lm</span> function from base R<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">sqerrloss =<span class="st"> </span><span class="cf">function</span>(beta, X, y){
   mu =<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta
   <span class="kw">sum</span>((y<span class="op">-</span>mu)<span class="op">^</span><span class="dv">2</span>)
 }
@@ -279,7 +324,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">set.seed</span>(<span class="dv">123</span>)                              <span class="co"># for reproducibility</span>
 N =<span class="st"> </span><span class="dv">100</span>                                    <span class="co"># sample size</span>
 X =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="dt">X1=</span><span class="kw">rnorm</span>(N), <span class="dt">X2=</span><span class="kw">rnorm</span>(N))     <span class="co"># model matrix: intercept, 2 predictors</span>
-beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>.<span class="dv">5</span>, .<span class="dv">5</span>)                       <span class="co"># true coef values</span>
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">-.5</span>, <span class="fl">.5</span>)                       <span class="co"># true coef values</span>
 y =<span class="st">  </span><span class="kw">rnorm</span>(N, X<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">1</span>)              <span class="co"># target</span>
 
 <span class="co"># results</span>
@@ -291,7 +336,7 @@ our_func =<span class="st"> </span><span class="kw">optim</span>(<span class="dt
 lm_result =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>., <span class="kw">data.frame</span>(X[,<span class="op">-</span><span class="dv">1</span>]))  <span class="co"># check with lm </span>
 
 <span class="kw">rbind</span>(<span class="dt">optim=</span><span class="kw">c</span>(our_func<span class="op">$</span>par, our_func<span class="op">$</span>value), 
-      <span class="dt">lm=</span><span class="kw">c</span>(<span class="kw">coef</span>(lm_result), <span class="dt">loss=</span><span class="kw">sum</span>(<span class="kw">resid</span>(lm_result)<span class="op">^</span><span class="dv">2</span>)))</code></pre></div>
+      <span class="dt">lm=</span><span class="kw">c</span>(<span class="kw">coef</span>(lm_result), <span class="dt">loss=</span><span class="kw">sum</span>(<span class="kw">resid</span>(lm_result)<span class="op">^</span><span class="dv">2</span>)))</code></pre>
 <pre><code>      (Intercept)         X1        X2     loss
 optim   0.1350654 -0.6331715 0.5238113 87.78187
 lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
@@ -300,7 +345,7 @@ lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
 </div>
 <div id="categorical-outcomes" class="section level3">
 <h3>Categorical Outcomes</h3>
-<p>Here we’ll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a>. Generally though, we’ll have different options.</p>
+<p>Here we’ll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>. Generally though, we’ll have different options.</p>
 <div id="misclassification" class="section level4">
 <h4>Misclassification</h4>
 <p>Probably the most straightforward is misclassification, or 0-1 loss. If we note <span class="math inline">\(f\)</span> as the prediction, and for convenience we assume a [-1,1] response instead of a [0,1] response:</p>
@@ -330,19 +375,19 @@ lm      0.1350654 -0.6331715 0.5238113 87.78187</code></pre>
 </div>
 <div id="regularization" class="section level2">
 <h2>Regularization</h2>
-<p><span class="newthought">It is important to note</span> that a model fit to a single data set might do very well with the data at hand, but then suffer when predicting independent data<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>. Also, oftentimes we are interested in a ‘best’ subset of predictors among a great many, and in this scenario the estimated coefficients are overly optimistic. This general issue can be improved by shrinking estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction.</p>
+<p><span class="newthought">It is important to note</span> that a model fit to a single data set might do very well with the data at hand, but then suffer when predicting independent data<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>. Also, oftentimes we are interested in a ‘best’ subset of predictors among a great many, and in this scenario the estimated coefficients are overly optimistic. This general issue can be improved by shrinking estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction.</p>
 <p>Penalized estimation will provide estimates with some shrinkage, and we can use it with little additional effort with our common procedures. Concretely, let’s apply this to the standard linear model, where we are finding estimates of <span class="math inline">\(\beta\)</span> that minimize the squared error loss.</p>
 <p><span class="math display">\[\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2}\]</span></p>
 <p>In words, we’re finding the coefficients that minimize the sum of the squared residuals. Now we just add a penalty component to the procedure as follows.</p>
 <p><span class="math display">\[\hat\beta = \underset{\beta}{\mathrm{arg\, min}} \sum{(y-X\beta)^2} + \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}\]</span></p>
-<p>In the above equation, <span class="math inline">\(\lambda\)</span> is our penalty term<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> for which larger values will result in more shrinkage. It’s applied to the <span class="math inline">\(L_1\)</span> or Manhattan norm of the coefficients, <span class="math inline">\(\beta_1,\beta_2...\beta_p\)</span>, i.e. <em>not including the intercept</em> <span class="math inline">\(\beta_0\)</span>, and is the sum of their absolute values (commonly referred to as the <span class="emph">lasso</span><a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a>). For generalized linear and additive models, we can conceptually express a penalized likelihood as follows:</p>
+<p>In the above equation, <span class="math inline">\(\lambda\)</span> is our penalty term<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a> for which larger values will result in more shrinkage. It’s applied to the <span class="math inline">\(L_1\)</span> or Manhattan norm of the coefficients, <span class="math inline">\(\beta_1,\beta_2...\beta_p\)</span>, i.e. <em>not including the intercept</em> <span class="math inline">\(\beta_0\)</span>, and is the sum of their absolute values (commonly referred to as the <span class="emph">lasso</span><a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>). For generalized linear and additive models, we can conceptually express a penalized likelihood as follows:</p>
 <p><span class="math display">\[l_p(\beta) = l(\beta) - \lambda\overset{p}{\underset{j=1}{\sum}}{\left|\beta_j\right|}\]</span></p>
 <p>As we are maximizing the likelihood, the penalty is a subtraction, but nothing inherently different is shown. If we are minimizing the negative (log) likelihood, we then add the penalty. This basic idea of adding a penalty term will be applied to all machine learning approaches, but as shown, we can apply such a tool to classical methods to boost prediction performance.</p>
-<p>It should be noted that we can go about the regularization in different ways. For example, using the squared <span class="math inline">\(L_2\)</span> norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization)<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a>, and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. We’ll see an example of this later.</p>
+<p>It should be noted that we can go about the regularization in different ways. For example, using the squared <span class="math inline">\(L_2\)</span> norm results in what is called <span class="emph"></span> (a.k.a. Tikhonov regularization)<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a>, and using a weighted combination of the lasso and ridge penalties gives us <span class="emph">elastic net</span> regularization. We’ll see an example of this later.</p>
 <div id="r-example-1" class="section level3">
 <h3>R Example</h3>
-<p>In the following example, we take a look at the lasso approach for a standard linear model. We add the regularization component, with a fixed penalty <span class="math inline">\(\lambda\)</span> for demonstration purposes<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a>. However, you should insert your own values for <span class="math inline">\(\lambda\)</span> in the <span class="func">optim</span> line to see how the results are affected. I’ve also increased the number of predictors to 10.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># data setup</span>
+<p>In the following example, we take a look at the lasso approach for a standard linear model. We add the regularization component, with a fixed penalty <span class="math inline">\(\lambda\)</span> for demonstration purposes<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>. However, you should insert your own values for <span class="math inline">\(\lambda\)</span> in the <span class="func">optim</span> line to see how the results are affected. I’ve also increased the number of predictors to 10.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># data setup</span>
 <span class="kw">set.seed</span>(<span class="dv">123</span>)
 N =<span class="st"> </span><span class="dv">100</span>
 X =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">matrix</span>(<span class="kw">rnorm</span>(N<span class="op">*</span><span class="dv">10</span>), <span class="dt">ncol=</span><span class="dv">10</span>))
@@ -360,12 +405,13 @@ regularized_result =<span class="st"> </span><span class="kw">optim</span>(<span
                            <span class="dt">fn=</span>sqerrloss_reg, 
                            <span class="dt">X=</span>X, 
                            <span class="dt">y=</span>y, 
-                           <span class="dt">method=</span><span class="st">&#39;BFGS&#39;</span>)</code></pre></div>
+                           <span class="dt">method=</span><span class="st">&#39;BFGS&#39;</span>)</code></pre>
 <p><br></p>
 <p><div id="htmlwidget-ac291b881a17a3904e44" style="width:50%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac291b881a17a3904e44">{"x":{"filter":"none","data":[["(Intercept)","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.145,-0.27,0.586,0.385,0.844,0.511,0.423,0.304,-0.076,0.547,0.625],[0.114,-0.001,0.01,0.001,0.335,0.003,0.003,0,-0,0.001,0.165]],"container":"<table class=\"compact|nowrap\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Standard LM<\/th>\n      <th>Regularized Model<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":11,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,11,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'background-color':'#fffff8'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'background-color':'#fffff8'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'background-color':'#fffff8'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'background-color':'#fffff8'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script> <br></p>
+<script type="application/json" data-for="htmlwidget-ac291b881a17a3904e44">{"x":{"filter":"none","data":[["(Intercept)","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.145,-0.27,0.586,0.385,0.844,0.511,0.423,0.304,-0.076,0.547,0.625],[0.114,-0.001,0.01,0.001,0.335,0.003,0.003,0,-0,0.001,0.165]],"container":"<table class=\"compact|nowrap\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Standard LM<\/th>\n      <th>Regularized Model<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":11,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,11,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'background-color':'#fffff8'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'background-color':'#fffff8'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'background-color':'#fffff8'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'background-color':'#fffff8'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<br></p>
 <p>From the above, we can see in this case that the penalized coefficients have indeed shrunk toward zero. Now we move to testing. Normally both the training and test sets will be a random split of the original set, for this demo we’ll generate the test as we did with the training.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create test data</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create test data</span>
 N_test =<span class="st"> </span><span class="dv">50</span>
 X_test =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">matrix</span>(<span class="kw">rnorm</span>(N_test<span class="op">*</span><span class="dv">10</span>), <span class="dt">ncol=</span><span class="dv">10</span>))
 y_test =<span class="st"> </span><span class="kw">rnorm</span>(N_test, X_test<span class="op">%*%</span>beta, <span class="dt">sd=</span><span class="dv">2</span>)
@@ -376,16 +422,16 @@ fits_reg =<span class="st"> </span>X<span class="op">%*%</span>regularized_resul
 
 <span class="co"># loss on training set</span>
 <span class="kw">data.frame</span>(<span class="dt">lm_train =</span> <span class="kw">crossprod</span>(y <span class="op">-</span><span class="st"> </span>fits_lm),
-           <span class="dt">regularized_train =</span> <span class="kw">crossprod</span>(y <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre></div>
+           <span class="dt">regularized_train =</span> <span class="kw">crossprod</span>(y <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre>
 <pre><code>  lm_train regularized_train
 1 402.2046          583.3891</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fits on test set</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fits on test set</span>
 fits_lm =<span class="st"> </span><span class="kw">predict</span>(lm_result, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(X_test))
 fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_result<span class="op">$</span>par
 
 <span class="co"># loss on test set</span>
 <span class="kw">data.frame</span>(<span class="dt">lm_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_lm),
-           <span class="dt">regularized_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre></div>
+           <span class="dt">regularized_test =</span> <span class="kw">crossprod</span>(y_test <span class="op">-</span><span class="st"> </span>fits_reg))</code></pre>
 <pre><code>   lm_test regularized_test
 1 254.0681         232.4942</code></pre>
 <p>We can see that the residual sum of squares has increased just a tad for the regularized fit on the training data. On the test data however, the squared error loss is lower.</p>
@@ -394,12 +440,12 @@ fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_
 </div>
 <div id="bias-variance-tradeoff" class="section level2">
 <h2>Bias-Variance Tradeoff</h2>
-<p>In most of science, we are concerned with reducing uncertainty in our knowledge of some phenomenon. The more we know about the factors involved or related to some outcome of interest, the better we can predict that outcome upon the influx of new information. The initial step is to take the data at hand, and determine how well a model or set of models fit the data in various fashions. In many applications however, this part is also more or less the end of the game as well<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a>.</p>
+<p>In most of science, we are concerned with reducing uncertainty in our knowledge of some phenomenon. The more we know about the factors involved or related to some outcome of interest, the better we can predict that outcome upon the influx of new information. The initial step is to take the data at hand, and determine how well a model or set of models fit the data in various fashions. In many applications however, this part is also more or less the end of the game as well<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>.</p>
 <p>Unfortunately, such an approach, in which we only fit models to one data set, does not give a very good sense of <span class="emph">generalization</span> performance, i.e. the performance we would see with new data. While typically not reported, most researchers, if they are spending appropriate time with the data, are actually testing a great many models, among which the ‘best’ is then provided in detail in the end report. Without some generalization performance check however, such performance is overstated when it comes to new data.</p>
-<p>In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class="emph">training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a>. We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data. So, in addition to the previously noted goal of finding the ‘best’ model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).</p>
+<p>In the following, consider a standard linear model scenario, e.g. with squared-error loss function and perhaps some regularization, and a data set in which we split the observations in some random fashion into a <span class="emph">training set</span>, for initial model fit, and a <span class="emph">test set</span>, which will be kept separate and independent, and used to measure generalization performance<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a>. We note <span class="emph">training error</span> as the (average) loss over the training set, and <span class="emph">test error</span> as the (average) prediction error obtained when a model resulting from the training data is fit to the test data. So, in addition to the previously noted goal of finding the ‘best’ model (<span class="emph">model selection</span>), we are interested further in estimating the prediction error with new data (<span class="emph">model performance</span>).</p>
 <div id="bias-variance" class="section level3">
 <h3>Bias &amp; Variance</h3>
-<p>We start<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> with a true data generating process for some target <span class="math inline">\(y\)</span>, expressed as a function of features <span class="math inline">\(X\)</span>. We can specify the true model as</p>
+<p>We start<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a> with a true data generating process for some target <span class="math inline">\(y\)</span>, expressed as a function of features <span class="math inline">\(X\)</span>. We can specify the true model as</p>
 <p><span class="math display">\[y = f(X) + \epsilon\]</span></p>
 <p>where <span class="math inline">\(f(x)\)</span> is the expected value of <span class="math inline">\(y\)</span> given <span class="math inline">\(X\)</span>, i.e. <span class="math inline">\(f(x) = E(y|X)\)</span>. The expected value of the error, <span class="math inline">\(E(\epsilon)=0\)</span>, has some variance, <span class="math inline">\(\textrm{Var}(\epsilon) = \sigma^2_\epsilon\)</span>. In other words, we are talking about the standard regression model we all know and love. Now we can conceptually think of the <em>expected prediction error</em> at a specific input <span class="math inline">\(X = x_*\)</span> as:</p>
 <p><span class="math display">\[\text{Error}_{x_*} = \text{Irreducible Error} + \text{Bias}^2 + \text{Variance}\]</span></p>
@@ -417,7 +463,7 @@ fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_
 <p>The results from this process might look like the following, taken from <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-hastie_elements_2009">2009</a>)</span>. With regard to the training data, we have <span class="math inline">\(\mathrm{error}_{\mathrm{train}}\)</span> for one hundred training sets for each level of model complexity. The bold blue line notes this average error over the 100 sets by model complexity, and we can see that more complex models fit the data better. The bold red line is the average test error (<span class="math inline">\(\mathrm{error}_{\mathrm{test}}\)</span>) across the 100 test data sets, and it tells a different story. When models get too complex, the test error starts to <em>increase</em>.</p>
 <p><img src="img/biasvar2.svg" style="display:block; margin: 0 auto;" width=50%></p>
 <p>Ideally we’d like to see low bias and (relatively) low variance, but things are not so easy. One thing we can see clearly is that <span class="math inline">\(\mathrm{error}_{\mathrm{train}}\)</span> is not a good estimate of <span class="math inline">\(\mathrm{error}_{\mathrm{test}}\)</span>, which is now our focus in terms of performance. If we think of the training error as what we would see in typical research where one does everything with a single data set, we are using the same data set to fit the model and assess error. As the model is adapted to that data set specifically, it will be overly optimistic in the estimate of the error, that optimism being the difference between the error rate we see based on the training data versus the average of what we would get with many test data sets. We can think of this as a problem of overfitting to the training data. Models that do not incorporate any regularization or validation process of any kind are likely overfit to the data presented.</p>
-<p>Generally speaking, the more complex the model, the lower the bias, but the higher the variance, as depicted in the graphic. Specifically however, the situation is more nuanced, where the type of problem (classification with 0-1 loss vs. continuous response with squared error loss<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a>) and technique (a standard linear model vs. regularized fit) will exhibit different bias-variance relationships.</p>
+<p>Generally speaking, the more complex the model, the lower the bias, but the higher the variance, as depicted in the graphic. Specifically however, the situation is more nuanced, where the type of problem (classification with 0-1 loss vs. continuous response with squared error loss<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a>) and technique (a standard linear model vs. regularized fit) will exhibit different bias-variance relationships.</p>
 </div>
 <div id="diagnosing-bias-variance-issues-possible-solutions" class="section level3">
 <h3>Diagnosing Bias-Variance Issues <em>&amp;</em> Possible Solutions</h3>
@@ -444,12 +490,12 @@ fits_reg =<span class="st"> </span>X_test<span class="op">%*%</span>regularized_
 <div id="bias-variance-summary" class="section level3">
 <h3>Bias-Variance Summary</h3>
 <p>One of the key ideas any applied researcher can take from machine learning concerns the bias-variance trade-off and issues of overfitting in particular. Typical applied practice involves potentially dozens of models fit to the same data set without any validation whatsoever, yet only one or two are actually presented in publication. Many disciplines report nothing but the statistical significance, and yet one can have statistically significant predictors and have predictive capability that is no different from guessing. Furthermore, very complex models are often fit to small data sets, compounding the problem.</p>
-<p>It is very easy to describe <strong><em>science</em></strong> without ever talking about statistical significance. It is impossible to talk about science without talking about prediction. The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a>.</p>
+<p>It is very easy to describe <strong><em>science</em></strong> without ever talking about statistical significance. It is impossible to talk about science without talking about prediction. The bias-variance trade-off is one way to bring the concerns of prediction to the forefront, and any applied researcher can benefit from thinking about its implications<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a>.</p>
 </div>
 </div>
 <div id="cross-validation" class="section level2">
 <h2>Cross-Validation</h2>
-<p>As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data. The simplest validation approach would be to split the data available into a training and test set as discussed previously. We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. The following displays a hypothetical learning curve from the results of such a process. While the approach is fairly simple, other approaches are more commonly used and result in better estimates of predictive performance<a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a>.</p>
+<p>As noted in the previous section, in machine learning approaches we are particularly concerned with prediction error on new data. The simplest validation approach would be to split the data available into a training and test set as discussed previously. We estimate the model on the training data, and apply the model to the test data, get the predictions and measure our test error, selecting whichever model results in the least test error. The following displays a hypothetical learning curve from the results of such a process. While the approach is fairly simple, other approaches are more commonly used and result in better estimates of predictive performance<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a>.</p>
 <p><img src="introduction-to-machine-learning_files/figure-html/learning_curve-1.svg" width="672" style="display: block; margin: auto;" /></p>
 <!-- <img src="img/learningcurve.svg" style="display:block; margin: 0 auto;" width=50%> -->
 <div id="adding-another-validation-set" class="section level3">
@@ -467,7 +513,7 @@ An illustration of 3-fold classification.
 <div id="leave-one-out-cross-validation" class="section level4">
 <h4>Leave-one-out Cross-Validation</h4>
 <p>Leave-one-out (LOO) cross-validation is the same thing but where <span class="math inline">\(\kappa=N\)</span>. In other words, we train a model for all observations except the <span class="math inline">\(\kappa^{th}\)</span> one, assessing fit on the observation that was left out. We then cycle through until all observations have been left out once to obtain an average accuracy.</p>
-<p>Of the two, K-fold may have relatively higher bias but less variance, while LOO would have the converse problem, as well as possible computational issues<a href="#fn24" class="footnoteRef" id="fnref24"><sup>24</sup></a>. K-fold’s additional bias would be diminished would with increasing sample sizes, and generally 5 or 10-fold cross-validation is recommended. However, many model selection techniques (e.g. via AIC) have a leave-one-out interpretation.</p>
+<p>Of the two, K-fold may have relatively higher bias but less variance, while LOO would have the converse problem, as well as possible computational issues<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a>. K-fold’s additional bias would be diminished would with increasing sample sizes, and generally 5 or 10-fold cross-validation is recommended. However, many model selection techniques (e.g. via AIC) have a leave-one-out interpretation.</p>
 </div>
 </div>
 <div id="bootstrap" class="section level3">
@@ -487,7 +533,7 @@ An illustration of 3-fold classification.
 <p>Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction, Second Edition</em>. 2nd ed. 2017. Corr. 12th Printing. Springer.</p>
 </div>
 <div id="ref-domingos_few_2012">
-<p>Domingos, Pedro. 2012. “A Few Useful Things to Know About Machine Learning.” <em>Commun. ACM</em> 55 (10). doi:<a href="https://doi.org/10.1145/2347736.2347755">10.1145/2347736.2347755</a>.</p>
+<p>Domingos, Pedro. 2012. “A Few Useful Things to Know About Machine Learning.” <em>Commun. ACM</em> 55 (10). <a href="https://doi.org/10.1145/2347736.2347755">https://doi.org/10.1145/2347736.2347755</a>.</p>
 </div>
 <div id="ref-murphy_machine_2012">
 <p>Murphy, Kevin P. 2012. <em>Machine Learning: A Probabilistic Perspective</em>. The MIT Press.</p>
@@ -496,21 +542,21 @@ An illustration of 3-fold classification.
 <div class="footnotes">
 <hr />
 <ol start="10">
-<li id="fn10"><p>Well some of you. Many applied methods courses don’t teach the basic maximum likelihood approach, even though it’s the most widely used estimation technique for statistical inference.<a href="concepts.html#fnref10">↩</a></p></li>
-<li id="fn11"><p>Type <code>?optim</code> at the console for more detail.<a href="concepts.html#fnref11">↩</a></p></li>
-<li id="fn12"><p>For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also. We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).<a href="concepts.html#fnref12">↩</a></p></li>
-<li id="fn13"><p>In terminology we will discuss further later, such models might have low bias but notable variance.<a href="concepts.html#fnref13">↩</a></p></li>
-<li id="fn14"><p>This can be set explicitly or also estimated via a validation approach. As we do not know it beforehand, we can estimate it on a validation data set (not the test set) and then use the estimated value when estimating coefficients via cross-validation with the test set. We will talk more about validation later.<a href="concepts.html#fnref14">↩</a></p></li>
-<li id="fn15"><p>See Tibshirani (1996) Regression shrinkage and selection via the lasso.<a href="concepts.html#fnref15">↩</a></p></li>
-<li id="fn16"><p>Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the <span class="math inline">\(\beta_j\)</span>.<a href="concepts.html#fnref16">↩</a></p></li>
-<li id="fn17"><p>As noted previously, in practice <span class="math inline">\(\lambda\)</span> would be estimated via some validation procedure.<a href="concepts.html#fnref17">↩</a></p></li>
-<li id="fn18"><p>I should note that I do not make any particular claim about the quality of such analysis. In many situations, the cost of data collection is very high, and for all the current enamorment with ‘big’ data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations). In these situations, getting new data for which one might make predictions is extremely difficult.<a href="concepts.html#fnref18">↩</a></p></li>
-<li id="fn19"><p>In typical settings, there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The <span class="math inline">\(\lambda\)</span> penalty parameter in regularized regression is one example of such a <span class="emph">tuning parameter</span>. In the best case scenario, we would also have a <span class="emph">validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen. However, methods are available to us in which we can approximate the validation step in other ways.<a href="concepts.html#fnref19">↩</a></p></li>
-<li id="fn20"><p>Much of the following is essentially a paraphrase of parts of <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-hastie_elements_2009">2009</a>)</span> (chapters 2 and 7).<a href="concepts.html#fnref20">↩</a></p></li>
-<li id="fn21"><p>See Friedman (1996) <em>On Bias, Variance, 0/1 Loss and the Curse of Dimensionality</em> for the unusual situations that can arise in dealing with classification error with regard to bias and variance.<a href="concepts.html#fnref21">↩</a></p></li>
-<li id="fn22"><p>Note that the bias-variance tradeoff doesn’t readily apply to classification problems, at least not in the same way. To begin, the relationship is multiplicative, and depending on which side of the decision boundary one is on (correct vs. not), it might even be useful to increase the variance. However, if one thinks in terms of predicted probabilities rather than predicted class, one can more or less keep the same mindset.<a href="concepts.html#fnref22">↩</a></p></li>
-<li id="fn23"><p>Along with some of the other works cited, see <span class="citation">Harrell (<a href="#ref-harrell2015regression">2015</a>)</span> for a good discussion of model validation.<a href="concepts.html#fnref23">↩</a></p></li>
-<li id="fn24"><p>For squared-error loss situations, there is a Generalized cross-validation (GCV) that can be estimated more directly without actually going to the entire LOO procedure, and functions similarly to AIC.<a href="concepts.html#fnref24">↩</a></p></li>
+<li id="fn10"><p>Well some of you. Many applied methods courses don’t teach the basic maximum likelihood approach, even though it’s the most widely used estimation technique for statistical inference.<a href="concepts.html#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p>Type <code>?optim</code> at the console for more detail.<a href="concepts.html#fnref11" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p>For example, if dealing with probabilities, we technically could use minimize squared errors in the case of classification also. We could use a maximum likelihood for either setting (or minimize the negative log likelihood to turn it into a loss function).<a href="concepts.html#fnref12" class="footnote-back">↩</a></p></li>
+<li id="fn13"><p>In terminology we will discuss further later, such models might have low bias but notable variance.<a href="concepts.html#fnref13" class="footnote-back">↩</a></p></li>
+<li id="fn14"><p>This can be set explicitly or also estimated via a validation approach. As we do not know it beforehand, we can estimate it on a validation data set (not the test set) and then use the estimated value when estimating coefficients via cross-validation with the test set. We will talk more about validation later.<a href="concepts.html#fnref14" class="footnote-back">↩</a></p></li>
+<li id="fn15"><p>See Tibshirani (1996) Regression shrinkage and selection via the lasso.<a href="concepts.html#fnref15" class="footnote-back">↩</a></p></li>
+<li id="fn16"><p>Interestingly, the lasso and ridge regression results can be seen as a Bayesian approach using a zero mean Laplace and Normal prior distribution respectively for the <span class="math inline">\(\beta_j\)</span>.<a href="concepts.html#fnref16" class="footnote-back">↩</a></p></li>
+<li id="fn17"><p>As noted previously, in practice <span class="math inline">\(\lambda\)</span> would be estimated via some validation procedure.<a href="concepts.html#fnref17" class="footnote-back">↩</a></p></li>
+<li id="fn18"><p>I should note that I do not make any particular claim about the quality of such analysis. In many situations, the cost of data collection is very high, and for all the current enamorment with ‘big’ data, a lot of folks will never have access to big data for their situation (e.g. certain clinical populations). In these situations, getting new data for which one might make predictions is extremely difficult.<a href="concepts.html#fnref18" class="footnote-back">↩</a></p></li>
+<li id="fn19"><p>In typical settings, there are parameters specific to some analytical technique for which one would have no knowledge, and which must be estimated along with the usual parameters of the standard models. The <span class="math inline">\(\lambda\)</span> penalty parameter in regularized regression is one example of such a <span class="emph">tuning parameter</span>. In the best case scenario, we would also have a <span class="emph">validation set</span>, where we could determine appropriate values for such parameters based on performance with the validation data set, and then assess generalization performance on the test set when the final model has been chosen. However, methods are available to us in which we can approximate the validation step in other ways.<a href="concepts.html#fnref19" class="footnote-back">↩</a></p></li>
+<li id="fn20"><p>Much of the following is essentially a paraphrase of parts of <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-hastie_elements_2009">2009</a>)</span> (chapters 2 and 7).<a href="concepts.html#fnref20" class="footnote-back">↩</a></p></li>
+<li id="fn21"><p>See Friedman (1996) <em>On Bias, Variance, 0/1 Loss and the Curse of Dimensionality</em> for the unusual situations that can arise in dealing with classification error with regard to bias and variance.<a href="concepts.html#fnref21" class="footnote-back">↩</a></p></li>
+<li id="fn22"><p>Note that the bias-variance tradeoff doesn’t readily apply to classification problems, at least not in the same way. To begin, the relationship is multiplicative, and depending on which side of the decision boundary one is on (correct vs. not), it might even be useful to increase the variance. However, if one thinks in terms of predicted probabilities rather than predicted class, one can more or less keep the same mindset.<a href="concepts.html#fnref22" class="footnote-back">↩</a></p></li>
+<li id="fn23"><p>Along with some of the other works cited, see <span class="citation">Harrell (<a href="#ref-harrell2015regression">2015</a>)</span> for a good discussion of model validation.<a href="concepts.html#fnref23" class="footnote-back">↩</a></p></li>
+<li id="fn24"><p>For squared-error loss situations, there is a Generalized cross-validation (GCV) that can be estimated more directly without actually going to the entire LOO procedure, and functions similarly to AIC.<a href="concepts.html#fnref24" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -518,8 +564,8 @@ An illustration of 3-fold classification.
           </div>
         </div>
       </div>
-<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="opening-the-black-box.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="blackbox.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -539,9 +585,10 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["twitter", "facebook", "google", "weibo", "instapaper"]
+"all": ["twitter", "facebook", "google", "weibo", "instapaper"],
+"instapper": false
 },
 "fontsettings": {
 "theme": "white",
@@ -549,12 +596,17 @@ gitbook.start({
 "size": 2
 },
 "edit": null,
+"history": {
+"link": null,
+"text": null
+},
 "download": null,
 "toc": {
 "collapse": "section",
 "depth": 2,
 "scroll_highlight": true
 },
+"df_print": "kable",
 "highlight": "pygments",
 "search": true
 });
@@ -566,8 +618,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

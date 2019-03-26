@@ -319,8 +319,6 @@ For a given predictor variable $X_j$
 <span class="emph">weights</span>:  coefficients, parameters
 
 
-# References
-
 
 [^rfaster]: Actually, for this <span class="func">rf.fit</span> was slower than the default <span class="func">randomForest</span> function in R by about a second under similar settings.
 

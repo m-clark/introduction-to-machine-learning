@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Wrap-up | Machine Learning</title>
+  <meta name="description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Wrap-up | Machine Learning" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://m-clark.github.io/introduction-to-machine-learning/" />
+  <meta property="og:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
+  <meta property="og:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
+  <meta name="github-repo" content="m-clark/introduction-to-machine-learning/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Wrap-up | Machine Learning" />
+  
+  <meta name="twitter:description" content="This document provides an introduction to machine learning for applied researchers. While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn." />
+  <meta name="twitter:image" content="https://m-clark.github.io/introduction-to-machine-learning/img/nineteeneightyR.png" />
+
+
+
+<meta name="date" content="2019-03-25">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="blackbox.html">
+<link rel="next" href="appendix.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.4/datatables.js"></script>
+<link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/d3-3.5.3/./d3.min.js"></script>
+<link href="libs/d3heatmapcore-0.0.0/heatmapcore.css" rel="stylesheet" />
+<script src="libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
+<script src="libs/d3-tip-0.6.6/index.js"></script>
+<script src="libs/d3heatmap-binding-0.6.1.2/d3heatmap.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
+<script src="libs/viz-0.3/viz.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/grViz-binding-1.0.0/grViz.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="css/book.css" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class='before'><a href="./">Machine Learning</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#explanation-prediction"><i class="fa fa-check"></i>Explanation &amp; Prediction</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#terminology"><i class="fa fa-check"></i>Terminology</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#supervised-vs.unsupervised"><i class="fa fa-check"></i>Supervised vs. Unsupervised</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#tools-you-already-have"><i class="fa fa-check"></i>Tools you already have</a><ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#the-standard-linear-model"><i class="fa fa-check"></i>The Standard Linear Model</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#logistic-regression"><i class="fa fa-check"></i>Logistic Regression</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#expansions-of-those-tools"><i class="fa fa-check"></i>Expansions of Those Tools</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html"><i class="fa fa-check"></i>Concepts</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#loss-functions"><i class="fa fa-check"></i>Loss Functions</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#continuous-outcomes"><i class="fa fa-check"></i>Continuous Outcomes</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#categorical-outcomes"><i class="fa fa-check"></i>Categorical Outcomes</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#regularization"><i class="fa fa-check"></i>Regularization</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#r-example-1"><i class="fa fa-check"></i>R Example</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-tradeoff"><i class="fa fa-check"></i>Bias-Variance Tradeoff</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance"><i class="fa fa-check"></i>Bias &amp; Variance</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#the-tradeoff"><i class="fa fa-check"></i>The Tradeoff</a></li>
+<li><a href="concepts.html#diagnosing-bias-variance-issues-possible-solutions">Diagnosing Bias-Variance Issues <em>&amp;</em> Possible Solutions</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bias-variance-summary"><i class="fa fa-check"></i>Bias-Variance Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#cross-validation"><i class="fa fa-check"></i>Cross-Validation</a><ul>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#adding-another-validation-set"><i class="fa fa-check"></i>Adding Another Validation Set</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#k-fold-cross-validation"><i class="fa fa-check"></i>K-fold Cross-Validation</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#bootstrap"><i class="fa fa-check"></i>Bootstrap</a></li>
+<li class="chapter" data-level="" data-path="concepts.html"><a href="concepts.html#other-stuff"><i class="fa fa-check"></i>Other Stuff</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html"><i class="fa fa-check"></i>Opening the Black Box</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#process-overview"><i class="fa fa-check"></i>Process Overview</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#data-preparation"><i class="fa fa-check"></i>Data Preparation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-selection"><i class="fa fa-check"></i>Model Selection</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#model-assessment"><i class="fa fa-check"></i>Model Assessment</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#the-dataset"><i class="fa fa-check"></i>The Dataset</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#r-implementation"><i class="fa fa-check"></i>R Implementation</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#feature-selection-the-data-partition"><i class="fa fa-check"></i>Feature Selection &amp; The Data Partition</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#regularized-regression"><i class="fa fa-check"></i>Regularized Regression</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li><a href="blackbox.html#k-nearest-neighbors"><span class="math inline">\(k\)</span>-nearest Neighbors</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-1"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-1"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#neural-networks"><i class="fa fa-check"></i>Neural Networks</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-2"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-2"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#trees-forests"><i class="fa fa-check"></i>Trees &amp; Forests</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#understanding-the-results"><i class="fa fa-check"></i>Understanding the Results</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-3"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-3"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#support-vector-machines"><i class="fa fa-check"></i>Support Vector Machines</a><ul>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#strengths-weaknesses-4"><i class="fa fa-check"></i>Strengths &amp; Weaknesses</a></li>
+<li class="chapter" data-level="" data-path="blackbox.html"><a href="blackbox.html#final-thoughts-4"><i class="fa fa-check"></i>Final Thoughts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html"><i class="fa fa-check"></i>Wrap-up</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#unsupervised-learning"><i class="fa fa-check"></i>Unsupervised Learning</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#clustering"><i class="fa fa-check"></i>Clustering</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#latent-variable-models"><i class="fa fa-check"></i>Latent Variable Models</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#graphical-structure"><i class="fa fa-check"></i>Graphical Structure</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#imputation"><i class="fa fa-check"></i>Imputation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#ensembles"><i class="fa fa-check"></i>Ensembles</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bagging"><i class="fa fa-check"></i>Bagging</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#boosting"><i class="fa fa-check"></i>Boosting</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#stacking"><i class="fa fa-check"></i>Stacking</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#deep-learning"><i class="fa fa-check"></i>Deep Learning</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#feature-selection-importance"><i class="fa fa-check"></i>Feature Selection &amp; Importance</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#natural-language-processingtext-analysis"><i class="fa fa-check"></i>Natural Language Processing/Text Analysis</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#bayesian-approaches"><i class="fa fa-check"></i>Bayesian Approaches</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#more-stuff"><i class="fa fa-check"></i>More Stuff</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#summary"><i class="fa fa-check"></i>Summary</a><ul>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#cautionary-notes"><i class="fa fa-check"></i>Cautionary Notes</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#some-guidelines"><i class="fa fa-check"></i>Some Guidelines</a></li>
+<li class="chapter" data-level="" data-path="other.html"><a href="other.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i>Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#bias-variance-demo"><i class="fa fa-check"></i>Bias Variance Demo</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#programming-languages"><i class="fa fa-check"></i>Programming Languages</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#r"><i class="fa fa-check"></i>R</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#python"><i class="fa fa-check"></i>Python</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#other"><i class="fa fa-check"></i>Other</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#local-interpretable-model-agnostic-explanations"><i class="fa fa-check"></i>Local Interpretable Model-agnostic Explanations</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#various-variable-importance-measures"><i class="fa fa-check"></i>Various Variable Importance Measures</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#brief-glossary-of-common-terms"><i class="fa fa-check"></i>Brief Glossary of Common Terms</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li class='after'">
+   <a href="https://m-clark.github.io/">
+      <img src="img/mc_logo.png" style="width:25%; padding:0px 0; display:block; margin: 0 auto;" alt="MC logo">
+   </a>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a href="https://github.com/m-clark/">
+         <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+      </a>
+   </div>
+</li>
+<li class='after'">
+   <div style='text-align:center'>
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+         <i class="fab fa-creative-commons fa-lg"></i>
+         <i class="fab fa-creative-commons-by fa-lg"></i>
+         <i class="fab fa-creative-commons-sa fa-lg"></i>
+      </a>
+   </div>
+</li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Machine Learning</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="wrap-up" class="section level1">
+<h1>Wrap-up</h1>
+<p><span class="newthought">In this section, I note some other techniques</span> one may come across, and others that will provide additional insight into machine learning applications.</p>
+<div id="unsupervised-learning" class="section level2">
+<h2>Unsupervised Learning</h2>
+<p><span class="emph">Unsupervised learning</span> generally speaking involves techniques in which we are utilizing unlabeled data. In this case we have our typical set of features we are interested in, but no particular response to map them to. In this situation, we are more interested in the discovery of structure within the data. For more examples, see this <a href="https://m-clark.github.io/sem/FA_notes.html">document</a>.</p>
+<div id="clustering" class="section level3">
+<h3>Clustering</h3>
+<p>Many of the techniques used in unsupervised learning are commonly taught in various disciplines as simply “cluster” analysis. The gist is that we are seeking an unknown class structure rather than seeing how various inputs relate to a known class structure. Common techniques include k-means, hierarchical clustering, and model based approaches (e.g. mixture models).</p>
+</div>
+<div id="latent-variable-models" class="section level3">
+<h3>Latent Variable Models</h3>
+<div style="width:50%; margin: 0 25%; bgcolor=&#39;transparent&#39;">
+<div id="htmlwidget-c802c7baa17b2802737e" style="width:100%;height:100%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c802c7baa17b2802737e">{"x":{"diagram":"\ndigraph DAG2 {\n # Intialization of graph attributes\n graph [overlap = false rankdir=TB bgcolor=transparent]\n \n # Initialization of node attributes\n node [shape = circle,\n fontname = Helvetica,\n color = gray80,\n type = box,\n fixedsize = true]\n \n # Node statements\n node [width=.75, height=.75, shape=circle, color=gray80];\n LV1 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>1<\/sub>>];\n LV2 [style=filled, fillcolor=lightblue, color=gray75,  fontcolor=gray50, label=<LV<sub>2<\/sub>>];\n \n node [width=1, shape=square, color=gray50, fontcolor=gray25]\n\n # oddly ordered to deal with random reordering by Diagrammer\n subgraph {\n    rank=same;\n    X2 [width=.5 height=.5 label=<X<sub>2<\/sub>>]; \n    X1 [width=.5 height=.5 label=<X<sub>1<\/sub>>]; \n    X4 [width=.5 height=.5 label=<X<sub>4<\/sub>>]; \n    X3 [width=.5 height=.5 label=<X<sub>3<\/sub>>]; \n    X5 [width=.5 height=.5 label=<X<sub>5<\/sub>>]; \n    X6 [width=.5 height=.5 label=<X<sub>6<\/sub>>]; \n }\n # Initialization of edge attributes\n edge [color = gray50, rel = yields minlen=2]\n \n # Edge statements\n LV1 -> {X1 X2 X3 X4};\n LV2 -> {X3 X4} [style=dashed] ;\n LV2 -> {X5 X6};\n}\n ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<!-- <span class="marginnote"><img src="img/lvmodel.png" style="display:block; margin: 0 auto;"></span> -->
+<p>Sometimes the desire is to reduce the dimensionality of the inputs to a more manageable set of information. In this manner we are thinking that much of the data can be seen as having only a few sources of variability, often called latent variables or factors. Again, this takes familiar forms such as principal components and (“exploratory”) factor analysis, but would also include independence components analysis and partial least squares techniques. Note also that these can be part of a supervised technique (e.g. principal components regression) or the main focus of analysis (as with latent variable models in structural equation modeling).</p>
+</div>
+<div id="graphical-structure" class="section level3">
+<h3>Graphical Structure</h3>
+<!-- <span class="marginnote"><img src="img/senate.png" style="display:block; margin: 0 auto;" width=50%></span> -->
+<p>Other techniques are available to understand structure among observations or features. Among the many approaches is the popular <span class="emph">network analysis</span>, where we can obtain links among observations and examine visually the structure of those data points, where observations are placed closer together that have closer ties to one another in some way. In still other situations, we aren’t so interested in the structure as we are in modeling the relationships and making predictions from the attributes of nodes. One can examine <a href="https://m-clark.github.io/sem">my document</a> that covers more of these and latent variable approaches.</p>
+<img src="introduction-to-machine-learning_files/figure-html/ggsenate-1.svg" width="400" style="display: block; margin: auto;" />
+<p style="font-size: 8pt">
+An example network graph of U.S. senators in 2006. Node size is based on the <em>betweeness</em> centrality measure, edge size the percent agreement (graph filtered to edges &gt;= 65%). Color is based on the clustering discovered within the graph <a href="http://support.google.com/fusiontables/answer/2566732?hl=en&amp;ref_topic=2572801">(link to data)</a>.
+</p>
+</div>
+<div id="imputation" class="section level3">
+<h3>Imputation</h3>
+<p>We can also use ML techniques when we are missing data, as a means to impute the missing values. While many are familiar with this problem and standard techniques for dealing with it, it may not be obvious that ML techniques may also be used. For example, both k-nearest neighbors and random forest techniques have been applied to imputation<a href="#fn52" class="footnote-ref" id="fnref52"><sup>52</sup></a>.</p>
+<p>Beyond this we can infer values that are otherwise unavailable in a different sense. Consider Netflix, Amazon and other sites that suggest various products based on what you already like or are interested in. In this case the suggested products have missing values for the user which are imputed or inferred based on their available data and other consumers similar to them who have rated the product in question. Such <span class="emph">recommender systems</span> are widely used these days.</p>
+</div>
+</div>
+<div id="ensembles" class="section level2">
+<h2>Ensembles</h2>
+<p>In many situations we can combine the information of multiple models to enhance prediction. This can take place within a specific technique, e.g. random forests, or between models that utilize different techniques. I will discuss some standard techniques, but there are a great variety of forms in which model combination might take place.</p>
+<div id="bagging" class="section level3">
+<h3>Bagging</h3>
+<p><span class="emph">Bagging</span>, or <em>bootstrap aggregation</em>, uses bootstrap sampling to create many data sets on which a procedure is then performed. The final prediction is based on an average of all the predictions made for each observation. In general, bagging helps reduce the variance while leaving bias unaffected. A conceptual outline of the procedure is provided.</p>
+<p><em>Model Generation</em></p>
+<ol style="list-style-type: decimal">
+<li>Sample <span class="math inline">\(N\)</span> observations with replacement <span class="math inline">\(B\)</span> times to create <span class="math inline">\(B\)</span> data sets of size <span class="math inline">\(N\)</span>.</li>
+<li>Apply the learning technique to each of <span class="math inline">\(B\)</span> data sets to create <span class="math inline">\(t\)</span> models.</li>
+<li>Store the <span class="math inline">\(t\)</span> results.</li>
+</ol>
+<p><em>Classification</em></p>
+<p>For each of <span class="math inline">\(t\)</span> number of models:</p>
+<ol style="list-style-type: decimal">
+<li>Predict the class of <span class="math inline">\(N\)</span> observations of the original data set.</li>
+<li>Return the class predicted most often across the <span class="math inline">\(t\)</span> number of models (or alternatively, the proportion <span class="math inline">\(t =1\)</span> as a probability).</li>
+</ol>
+<p>The approach would be identical for the continuous target domain, where the final prediction would be the average across all models.</p>
+</div>
+<div id="boosting" class="section level3">
+<h3>Boosting</h3>
+<p>With <span class="emph">boosting</span> we take a different approach to refitting models. Consider a classification task in which we start with a basic learner and apply it to the data of interest. Next, the learner is refit, but with more weight (importance) given to <em>misclassified</em> observations. This process is repeated until some stopping rule is reached (e.g. reaching some <span class="math inline">\(M\)</span> iterations). An example of the AdaBoost algorithm is provided (in the following <span class="math inline">\(\mathbb{I}\)</span> is the indicator function).</p>
+<p>Set initial weights <span class="math inline">\(w_i\)</span> to <span class="math inline">\(1/N\)</span>.</p>
+<p>for <span class="math inline">\(m=1:M\)</span> {</p>
+<ul>
+<li><p>Fit a classifier <span class="math inline">\(m\)</span> with given weights to the data resulting in predictions <span class="math inline">\(f^{(m)}_i\)</span> that minimizes some loss function.</p></li>
+<li><p>Compute the error rate <span class="math inline">\(\text{err}_m = \frac{{\sum_{i=1}^N}\mathbb{I}(y_i\ne f^{(m)}_i)}{\sum^N_{i=1}w^{(m)}_i}\)</span></p></li>
+<li><p>Compute <span class="math inline">\(\alpha_m = \log[(1-err_m)/err_m]\)</span></p></li>
+<li><p>Set <span class="math inline">\(w_i \leftarrow w_i\exp[\alpha_m \mathbb{I}(y_i\ne f^{(m)}_i)]\)</span></p></li>
+</ul>
+<p>}</p>
+<p>Return <span class="math inline">\(\textrm{sign} [\sum^M_{m=1}\alpha_m f^{(m)}]\)</span></p>
+<p>Boosting can be applied to a variety of tasks and loss functions, and in general is highly resistant to overfitting. A very popular implementation is <a href="https://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html">XGBoost</a> and its variants. The following shows an implementation.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xgboost)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbLinear&quot;</span>)
+<span class="kw">modelLookup</span>(<span class="st">&quot;xgbTree&quot;</span>)
+
+xgb_opts =<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">eta=</span><span class="kw">c</span>(.<span class="dv">3</span>,.<span class="dv">4</span>),
+                       <span class="dt">max_depth=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">12</span>),
+                       <span class="dt">colsample_bytree=</span><span class="kw">c</span>(.<span class="dv">6</span>,.<span class="dv">8</span>),
+                       <span class="dt">subsample=</span><span class="kw">c</span>(.<span class="dv">5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),
+                       <span class="dt">nrounds=</span><span class="dv">1000</span>,
+                       <span class="dt">min_child_weight=</span><span class="dv">1</span>,
+                       <span class="dt">gamma=</span><span class="dv">0</span>)
+
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+results_xgb =<span class="st"> </span><span class="kw">train</span>(good<span class="op">~</span>., 
+                    <span class="dt">data=</span>wine_train, 
+                    <span class="dt">method=</span><span class="st">&#39;xgbTree&#39;</span>,
+                    <span class="dt">preProcess=</span><span class="kw">c</span>(<span class="st">&#39;center&#39;</span>, <span class="st">&#39;scale&#39;</span>), 
+                    <span class="dt">trControl=</span>cv_opts, 
+                    <span class="dt">tuneGrid=</span>xgb_opts)
+results_xgb
+preds_gb =<span class="st"> </span><span class="kw">predict</span>(results_xgb, wine_test)
+<span class="kw">confusionMatrix</span>(preds_gb, good_observed, <span class="dt">positive=</span><span class="st">&#39;Good&#39;</span>)</code></pre>
+</div>
+<div id="stacking" class="section level3">
+<h3>Stacking</h3>
+<p><span class="emph">Stacking</span> is a method that can generalize beyond a single fitting technique, though it can be applied in a fashion similar to boosting for a single technique. Here we will use it broadly to mean any method to combine models of different forms. Consider the four approaches we demonstrated earlier: k-nearest neighbors, neural net, random forest, and the support vector machine. We saw that they do not have the same predictive accuracy, though they weren’t bad in general. Perhaps by combining their respective efforts, we could get even better prediction than using any particular one.</p>
+<p>The issue then is how we might combine them. We really don’t have to get too fancy with it, and can even use a simple voting scheme as in bagging. For each observation, note the predicted class on new data across models. The final prediction is the class that receives the most votes. Another approach would be to use a weighted vote, where the votes are weighted by the accuracy of their respective models.</p>
+<p>Another approach would use the predictions on the test set to create a data set of just the predicted probabilities from each learning scheme. We can then use this data to train a meta-learner using the test labels as the response. With the final meta-learner chosen, we then retrain the original models on the entire data set (i.e. including the test data). In this manner, the initial models and the meta-learner are trained separately and you get to eventually use the entire data set to train the original models. Now when new data becomes available, you feed them to the base level learners, get the predictions, and then feed the predictions to the meta-learner for the final prediction.</p>
+</div>
+</div>
+<div id="deep-learning" class="section level2">
+<h2>Deep Learning</h2>
+<p><span class="emph">Deep learning</span> is all the rage these days, and for good reason- it keeps working and is highly flexible. Many techniques are largely focused on AI applications, but are not restricted to those. They’ve been employed successfully in a wide range of areas, e.g. facial recognition, computer vision, speech recognition, and natural language processing. Common techniques include deep feed forward neural networks<a href="#fn53" class="footnote-ref" id="fnref53"><sup>53</sup></a>, convolutional neural networks, and recurrent/recursive neural networks. Armed with a basic knowledge of neural networks as presented earlier, you can see these as the next step.</p>
+<p>Such models require massive amounts of data, a lot of tuning, and generally serious hardware<a href="#fn54" class="footnote-ref" id="fnref54"><sup>54</sup></a>. Python generally has the latest implementation of tools, through modules such as <span class="pack">tensorflow</span>, <span class="pack">pytorch</span>, and <span class="pack">keras</span>. There are tools in R, but they are wrappers for the Python modules, and the memory usage alone precludes standard R implementation, though packages like <span class="pack">sparklyr</span> and <span class="pack">keras</span> may eventually allow this.</p>
+<p>Because of the difficulty training such models, pre-trained models are often being applied in various situations. This can be a very dangerous situation if the data are not comparable. It’s fine to use a sentiment analysis model based on twitter feeds on other data from a review website. It’s another matter to use a model that was used for pedestrian detection in road data to look for tumors in x-rays. However, don’t be surprised if you see this stuff in drop-down menus for Excel in the not too distant future #whatcouldpossiblygowrong.</p>
+<p>You can start your journey into this sort of stuff at <a href="http://deeplearning.net/">http://deeplearning.net/</a>, and I have a minimal demos for R and Python in the <a href="appendix.html#deep-learning-example-1">appendix</a>.</p>
+</div>
+<div id="feature-selection-importance" class="section level2">
+<h2>Feature Selection &amp; Importance</h2>
+<p>We hit on this topic some before, but much like there are a variety of ways to gauge performance, there are different approaches to select features and/or determine their importance. Invariably feature selection takes place from the outset when we choose what data to collect in the first place. Hopefully guided by theory, in other cases it may be restricted by user input, privacy issues, time constraints and so forth. But once we obtain the initial data set however, we may still want to trim the models under consideration.</p>
+<p>In standard approaches we might have in the past used forward or other selection procedure, or perhaps some more explicit model comparison approach. Concerning the content here, take for instance the lasso regularization procedure we spoke of earlier. ‘Less important’ variables may be shrunk entirely to zero, and thus feature selection is an inherent part of the process, and is useful in the face of many, many predictors, sometimes outnumbering our sample points. As another example, consider any particular approach where the importance metric might be something like the drop in accuracy when the variable is excluded.</p>
+<p>Variable importance was given almost full weight in the discussion of typical applied research in the past, based on statistical significance results from a one-shot analysis, and virtually ignorant of prediction on new data. We still have the ability to focus on feature performance with ML techniques, while shifting more of the focus toward prediction at the same time. For the uninitiated, it might require new ways of thinking about how one measures importance though.</p>
+</div>
+<div id="natural-language-processingtext-analysis" class="section level2">
+<h2>Natural Language Processing/Text Analysis</h2>
+<p>In some situations, the data of interest is not in a typical matrix form but in the form of textual content, e.g. a corpus of documents (loosely defined). In this case, much of the work (like in most analyses but perhaps even more so) will be in the data preparation, as text is rarely if ever in a ready-to-analyze state. The eventual goals may include using the discovery of latent topics, parts-of-speech tagging, sentiment analysis, language identification, word usage in the prediction of an outcome, or examining the structure of the term usage graphically as in a network model. In addition, machine learning processes might be applied to sounds (acoustic data) to discern the speech characteristics and other information. Deep learning has been widely applied in this realm. For some applied examples of basic text analysis in R, see <a href="http://m-clark.github.io/text-analysis-with-R/">this</a>.</p>
+</div>
+<div id="bayesian-approaches" class="section level2">
+<h2>Bayesian Approaches</h2>
+<p>It should be noted that the approaches outlined in this document are couched in the frequentist tradition. But one should be aware that many of the concepts and techniques would carry over into the Bayesian perspective, and even some machine learning techniques might only be feasible or make more sense within the Bayesian framework (e.g. online learning). However the core nature of Bayesian estimation makes it difficult to implement in ways that scale to even moderately large data situations.</p>
+</div>
+<div id="more-stuff" class="section level2">
+<h2>More Stuff</h2>
+<p>Aside from what has already been noted, there still exists a great many applications for ML such as data set shift<a href="#fn55" class="footnote-ref" id="fnref55"><sup>55</sup></a>, semi-supervised learning<a href="#fn56" class="footnote-ref" id="fnref56"><sup>56</sup></a>, online learning<a href="#fn57" class="footnote-ref" id="fnref57"><sup>57</sup></a>, and many more.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<div id="cautionary-notes" class="section level3">
+<h3>Cautionary Notes</h3>
+<p>A standard mantra in machine learning and statistics generally is that there is <a href="http://www.no-free-lunch.org/">no free lunch</a>. All methods have certain assumptions, and if those don’t hold the results will be problematic at best. Also, even if in truth learner A is better than B, B can often outperform A in the finite situations we actually deal with in practice.</p>
+<p>In general, without context, no algorithm can be said to be any better than another on average. Furthermore, being more complicated doesn’t mean a technique is better. As previously noted, simply incorporating regularization and cross-validation goes a long way toward to improving standard techniques, and may perform quite well in many situations. The basic conclusion is that</p>
+<blockquote>
+<p><em>Machine learning <strong>is not</strong> magic!</em></p>
+</blockquote>
+<p>ML does not prove your theories, it does not make your data better, and the days of impressing someone simply because you’re using it have long since passed. Like any statistical technique, the reason to use ML is that is well-suited to the problem at hand.</p>
+</div>
+<div id="some-guidelines" class="section level3">
+<h3>Some Guidelines</h3>
+<p>Here are some thoughts to keep in mind, though these may be applicable to applied statistical practice generally.</p>
+<ul>
+<li><p>More data beats a cleverer algorithm, but a lot of data is not enough by itself (<span class="citation">Domingos (<a href="#ref-domingos_few_2012">2012</a>)</span>).</p></li>
+<li><p>Avoid overfitting.</p></li>
+<li><p>Let the data speak for itself.</p></li>
+<li><p>“Nothing is more practical than a good theory.”<a href="#fn58" class="footnote-ref" id="fnref58"><sup>58</sup></a></p></li>
+<li><p>While getting used to ML, it might be best to start from simpler approaches and then work towards more black box ones that require more tuning. For example, regularized logistic regression <span class="math inline">\(\rightarrow\)</span> random forest <span class="math inline">\(\rightarrow\)</span> your-fancy-technique. Don’t get too excited if you aren’t doing significantly better than a random forest with default settings.</p></li>
+<li><p>Drawing up a visual diagram of your process is a good way to keep your analysis on the path to your goal. Some programs can even make this explicit.</p></li>
+<li><p>Keep the tuning parameter/feature selection process separate from the final test process for assessing error.</p></li>
+<li><p>Learn multiple models, selecting the best or possibly combining them.</p></li>
+</ul>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion</h3>
+<p>It is hoped that this document sheds some light on a few areas that might otherwise be unfamiliar to some in more applied disciplines. The fields of statistics, computer science, engineering and related have rapidly evolved over the past couple decades. The tools available from them are myriad, and expanding all the time. Rather than feeling intimidated or overwhelmed, one should embrace the choice available, and have some fun with your data!</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-domingos_few_2012">
+<p>Domingos, Pedro. 2012. “A Few Useful Things to Know About Machine Learning.” <em>Commun. ACM</em> 55 (10). <a href="https://doi.org/10.1145/2347736.2347755">https://doi.org/10.1145/2347736.2347755</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="52">
+<li id="fn52"><p>Imputation and related techniques may fall under the broad heading of <span class="emph">matrix completion</span>.<a href="other.html#fnref52" class="footnote-back">↩</a></p></li>
+<li id="fn53"><p>Such models are no different than the neural nets of the 80s and 90s, save for maybe newer or more efficient optimization implementations.<a href="other.html#fnref53" class="footnote-back">↩</a></p></li>
+<li id="fn54"><p>You can run any model on small data and your own machine, it would just likely waste your time in the case of these models.<a href="other.html#fnref54" class="footnote-back">↩</a></p></li>
+<li id="fn55"><p>Used when fundamental changes occur between the data a learner is trained on and the data coming in for further analysis.<a href="other.html#fnref55" class="footnote-back">↩</a></p></li>
+<li id="fn56"><p>Learning with both labeled and unlabeled data.<a href="other.html#fnref56" class="footnote-back">↩</a></p></li>
+<li id="fn57"><p>Learning from a continuous stream of data.<a href="other.html#fnref57" class="footnote-back">↩</a></p></li>
+<li id="fn58"><p>Kurt Lewin, and iterated by V. Vapnik for the machine learning context.<a href="other.html#fnref58" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="blackbox.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="appendix.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["twitter", "facebook", "google", "weibo", "instapaper"],
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"depth": 2,
+"scroll_highlight": true
+},
+"df_print": "kable",
+"highlight": "pygments",
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
