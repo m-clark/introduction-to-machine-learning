@@ -1,11 +1,9 @@
 ---
 title: Machine Learning
+subtitle: An introduction to concepts and application
 author:  |
-  <span class="noem">Michael Clark</span> 
-  https://m-clark.github.io/
-  <img class='arc' src="img/signature-acronym.png" alt="University of Michigan: CSCAR">
-  <img class='cscar' src="img/ARC-acronym-signature.png" alt="University of Michigan: Advanced Research Computing"> 
-date: "`r Sys.Date()`"
+  <span class="noem">Michael Clark</span> <br>
+  [m-clark.github.io](https://m-clark.github.io/)
 site: bookdown::bookdown_site
 output: 
     bookdown::gitbook
@@ -14,9 +12,10 @@ documentclass: book
 bibliography: MLtechrep.bib
 biblio-style: apalike
 link-citations: yes
-description: "This document provides an introduction to machine learning for applied researchers.  While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn."
+description: "This document provides an introduction to machine learning.  While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples are also provided in Python via scikit-learn."
 cover-image: 'img/nineteeneightyR.png'
 url: 'https\://m-clark.github.io/introduction-to-machine-learning/'  # evidently the \: is required or you'll get text in the title/toc area
+favicon: 'img/R.ico'
 github-repo:  'm-clark/introduction-to-machine-learning/'
 nocite: | 
   @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
@@ -27,15 +26,40 @@ nocite: |
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=NA, R.options=list(width=220),   # code 
-                      dev.args=list(bg = 'transparent'), dev='svg', fig.align='center',                 # viz
-                      cache.rebuild=F, cache=T)                                                         # cache
+knitr::opts_chunk$set(
+  # code
+  echo      = TRUE,
+  message   = FALSE,
+  warning   = FALSE,
+  error     = FALSE,
+  comment   = NA,
+  R.options = list(width = 220),
+  # viz
+  dev.args  = list(bg = 'transparent'),
+  dev       = 'svglite',
+  fig.align = 'center',
+  out.width = '75%',
+  fig.asp   = .75,
+  # cache
+  cache.rebuild = FALSE,
+  cache         = TRUE
+)
+
+options(knitr.kable.NA = '')
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
 ```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
-library(tidyext); library(visibly); library(caret); library(DT); library(viridis); library(kableExtra)
-library(broom); library(pander); library(tidyverse); library(htmltools)
+library(tidyext)
+library(visibly)
+library(caret)
+library(DT)
+library(viridis)
+library(kableExtra)
+library(broom)
+library(pander)
+library(tidyverse)
+library(htmltools)
 ```
 
 # 
