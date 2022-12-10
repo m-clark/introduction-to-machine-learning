@@ -1,30 +1,33 @@
 # Concepts
 
 
-<span class="newthought">Given a set of predictor variables</span> $X$ and some target $y$, we look for some function, $f(X)$, to make predictions of y from those input variables.  We also need a function to penalize errors in prediction, i.e. a <span class="emph">loss function</span>.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  We will start with the familiar and note a couple others that might be used.
+Given a set of features $X$ and some target $y$, we look for some function of the features, $f(X)$, to make predictions for y.  We also need a function to penalize errors in prediction, i.e. a *loss function*.  With a chosen loss function, we then find the model which will minimize loss, generally speaking.  Here we will cover a some common loss functions and some other concepts related to model fitting.
 
 
 ## Loss Functions
 
-### Continuous Outcomes
+### Numeric Outcomes
 
 #### Squared Error
 
-The classic loss function for linear models with a continuous numeric response is the squared error loss function, or the residual sum of squares.
+The classic loss function for linear models with a continuous numeric response[^regression] is the squared error loss function, or the residual sum of squares.
 
 
 $$L(Y, f(X)) = \sum(y-f(X))^2$$
 
-Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  Often they are not taught that it is one of many possible approaches.  However, the average, or <span class="emph">mean squared error</span> is commonly used as a metric of performance (or it's square root).
+Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  In plain words, we are considering the error in prediction, i.e. how far off our estimate based on X- $f(X)$ or often $\hat{y}$ in statistical texts.  We take that difference in the true vs. predicted value and square it so that whether we underpredict or overpredict is treated similarly. Then we just and add up all those prediction errors for every observation.
+
+In many ML contexts we like to think in terms of the average, or *mean squared error* (*MSE*). That or the square root (root mean square error or *RMSE*) is very commonly used as a metric of performance.
 
 
 
 #### Absolute Error
 
-For an approach that is more robust to extreme observations, we might choose absolute rather than squared error.  In this case, predictions are a conditional median rather than a conditional mean.
+For an approach that is more robust to extreme observations, we might choose absolute rather than squared error.  Squaring would exacerbate the more extreme errors, giving those observations more weight in the result than we might want.  In this case however, predictions are a conditional median rather than a conditional mean.
 
 
 $$L(Y, f(X)) = \sum|(y-f(X))|$$
+
 
 #### Negative Log-likelihood
 
@@ -42,9 +45,9 @@ The following provides conceptual code that one could use with the <span class="
 
 
 ```{r squareloss}
-sqerrloss = function(beta, X, y){
+sqerrloss = function(beta, X, y) {
   mu = X %*% beta
-  sum((y-mu)^2)
+  sum((y - mu) ^ 2)
 }
 
 # data setup
@@ -55,16 +58,24 @@ beta = c(0, -.5, .5)                       # true coef values
 y =  rnorm(N, X%*%beta, sd=1)              # target
 
 # results
-our_func = optim(par=c(0,0,0),             # starting values
-                 fn=sqerrloss, 
-                 X=X, 
-                 y=y, 
-                 method='BFGS')
-lm_result = lm(y ~ ., data.frame(X[,-1]))  # check with lm 
-
-rbind(optim=c(our_func$par, our_func$value), 
-      lm=c(coef(lm_result), loss=sum(resid(lm_result)^2)))
+our_func = optim(
+  par = c(0, 0, 0),  # starting values
+  fn  = sqerrloss,
+  X   = X,
+  y   = y,
+  method = 'BFGS'
+)
+lm_result = lm(y ~ ., data.frame(X[, -1]))  # check with lm
 ```
+
+
+```{r squareloss-result, echo=FALSE}
+rbind(optim = c(our_func$par, our_func$value),
+      lm = c(coef(lm_result), loss = sum(resid(lm_result) ^ 2))) %>% 
+  as_tibble(rownames = 'Approach') %>% 
+  gt()
+```
+
 
 While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.  Just to be clear, this is an exercise to understand how optimization works, not something you'd ever do for the standard regression setting.  However, many ML tools will require you to supply your data as a model matrix, specify target(s), and select both a loss function and optimizer, and even possibly additional options for the latter.
 
@@ -355,9 +366,7 @@ Along with the above there are variations such as repeated cross validation, the
 
 
 
-
-
-
+[^regression]: It's never made sense to refer to the numeric outcome case as 'regression' to distinguish it from 'classification' for the binary.  What is logistic regression then? Ordinal regression?  I wouldn't recommend it, but you can use linear regression or any numeric target approach on discrete and even binary targets.   It's fine to call something a classification problem for clarity, but 'regression' is just a general term that implies regressing some y on some X in some fashion.  The adherence to regression vs. classification by many in the ML world, which seems to have come from computer science, is just bizarre in my opinion, and ignores more than a [century of established terminology](https://en.wikipedia.org/wiki/Regression_analysis#History).
 
 [^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used estimation technique for statistical inference.
 
