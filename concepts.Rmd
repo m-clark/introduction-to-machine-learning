@@ -13,7 +13,7 @@ Given a set of features $X$ and some target $y$, we look for some function of th
 The classic loss function for linear models with a continuous numeric response[^regression] is the squared error loss function, or the residual sum of squares.
 
 
-$$L(Y, f(X)) = \sum(y-f(X))^2$$
+$$\textrm{Loss} = \sum(y-f(X))^2$$
 
 Everyone who has taken a statistics course is familiar with this 'least-squares' approach on some level.  In plain words, we are considering the error in prediction, i.e. how far off our estimate based on X- $f(X)$ or often $\hat{y}$ in statistical texts.  We take that difference in the true vs. predicted value and square it so that whether we underpredict or overpredict is treated similarly. Then we just and add up all those prediction errors for every observation.
 
@@ -26,7 +26,7 @@ In many ML contexts we like to think in terms of the average, or *mean squared e
 For an approach that is more robust to extreme observations, we might choose absolute rather than squared error.  Squaring would exacerbate the more extreme errors, giving those observations more weight in the result than we might want.  In this case however, predictions are a conditional median rather than a conditional mean.
 
 
-$$L(Y, f(X)) = \sum|(y-f(X))|$$
+$$\textrm{Loss} = \sum|(y-f(X))|$$
 
 
 #### Negative Log-likelihood
@@ -34,99 +34,165 @@ $$L(Y, f(X)) = \sum|(y-f(X))|$$
 We can also think of our usual likelihood methods learned in a standard applied statistics course[^maxlike] as incorporating a loss function that is the *negative* log-likelihood pertaining to the model of interest.  Such methods seek to maximize the likelihood of the data given the parameters. To turn it into a loss function, we simply minimize its negative value.  As an example, if we assume a normal distribution for the response we can note the loss function as:
 
 
-$$L(Y, f(X)) = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
+$$\textrm{Loss} = n\ln{\sigma} + \sum \frac{1}{2\sigma^2}(y-f(X))^2$$
 
 In this case it would converge to the same answer as the squared error/least squares solution.
 
 
 #### R Example
 
-The following provides conceptual code that one could use with the <span class="func">optim</span> function in R to find estimates of regression coefficients ($\beta$ from before) based on minimizing the squared error.  `X` is a design matrix of our predictor variables with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous variable to be modeled.  In the following, the true values for the intercept and other coefficients are `(0, -.5, .5)`. We can then compare the results with the <span class="func">lm</span> function from base R[^optimfunc].
+Let's help make the concepts more solid by playing with some data.  For our toy example, we will have two features for our data `X`, and we will want to estimate a coefficient or weight for each feature, plus the intercept.  We can create the data `X` as the *model matrix* of our features, with the first column a vector of 1s in order to estimate the intercept.  `y` is the continuous target to be modeled.  
 
+
+```{r squareloss-data}
+# data setup
+set.seed(123)                                # for reproducibility
+N = 100                                      # sample size
+X = cbind(1, X1 = rnorm(N), X2 = rnorm(N))   # model matrix: intercept, 2 predictors
+beta = c(0, -.5, .5)                         # true coef values
+
+head(X)
+```
+
+The true values for the intercept and other coefficients above are `(0, -.5, .5)`, and we multiply those by our model matrix to create `y`.  In matrix terminology, we take the *crossproduct* of `X` and the coefficients, but conceptually it is just multiplying each column by its respective coefficient, and then summing each row. If we just use the coefficients, our result would end up with perfect predictions when we run our model later, and that would not be realistic or fun. In keeping with standard regression, we assume y is normally distributed with some noise that is determined by the `sd` value, and can create it like so.
+
+
+```{r squareloss-data-2}
+mu = X %*% beta    # %*% is matrix multiplication
+# mu = X[,1]*beta[1] + X[,2]*beta[2] + X[,3]*beta[3] # same thing!
+y =  rnorm(N, mu, sd = 1)                 # target
+
+cbind(head(X), y = head(y))
+```
+
+In the usual situation, we have no idea what the weights should be, so we have to estimate them.  Let's try guessing. Then we can see if what our squared error loss would be.
+
+```{r squareloss-ex1}
+prediction = X %*% c(1, 1, 1)
+
+sum((y - prediction)^2)
+```
+
+Try other values closer to what we know are the values that generated the `y`.
+
+```{r squareloss-ex2}
+prediction = X %*% c(0, -1, 1)
+
+sum((y - prediction)^2)
+```
+
+The loss is smaller! And this is the basic idea. We want estimates that minimize the error in prediction.  What if we used what we know are the 'true' values?
+
+
+```{r squareloss-ex3}
+prediction = X %*% c(0, -.5, .5)
+
+sum((y - prediction)^2)
+```
+
+Our loss is even lower, but it's not zero. Why? Because the data is noisy, imperfect, and not complete, just like people are. In modeling, the best we can do is come up with *parameter estimates*, i.e. our coefficients (or weights) in this context, that minimize the loss, because that represents our best guess as to what they might be. The closer the loss gets to zero, the better, but we'll never have perfect prediction, and we'll never know what the true values really are.
+
+I don't know about you but I don't want to randomly guess over and over and hope for the best.  The following provides conceptual code using the <span class='func'>optim</span> function to find estimates of regression coefficients based on minimizing the squared error[^optimfunc].  Given a minimizing function like our loss function, <span class='func'>optim</span> uses one of several available algorithms to search efficiently for estimates that lower the value returned by the loss function. It will use an internal stopping rule, e.g. if the loss doesn't change by more than a very small amount, to finally come to an end and provide final estimates.  This process is in essence what we typically always are doing in machine learning- using some optimization technique to iteratively obtain better parameter estimates.
+
+To use <span class='func'>optim</span> we have to create a function that can calculate the loss, and then let <span class='func'>optim</span> do the rest.   It also needs a starting point for the parameters to begin its search for the best values, which can be random, zeros, or whatever you want. As a sanity check, we can then compare our results with the <span class="func">lm</span> function from base R.  
 
 ```{r squareloss}
-sqerrloss = function(beta, X, y) {
-  mu = X %*% beta
-  sum((y - mu) ^ 2)
+sqerr_loss <- function(beta, X, y) {
+  mu   = X %*% beta
+  loss = (y - mu) ^ 2
+  sum(loss)
 }
 
-# data setup
-set.seed(123)                              # for reproducibility
-N = 100                                    # sample size
-X = cbind(1, X1=rnorm(N), X2=rnorm(N))     # model matrix: intercept, 2 predictors
-beta = c(0, -.5, .5)                       # true coef values
-y =  rnorm(N, X%*%beta, sd=1)              # target
-
-# results
-our_func = optim(
-  par = c(0, 0, 0),  # starting values
-  fn  = sqerrloss,
-  X   = X,
-  y   = y,
-  method = 'BFGS'
+optim_result = optim(
+  par    = c(0, 0, 0),  # starting values for the coefficients
+  fn     = sqerr_loss,  # minimizing function
+  X      = X,           # other arguments to pass to the loss function
+  y      = y,
+  method = 'BFGS'       # several algorithms to choose from.
 )
+
 lm_result = lm(y ~ ., data.frame(X[, -1]))  # check with lm
 ```
 
 
+
 ```{r squareloss-result, echo=FALSE}
-rbind(optim = c(our_func$par, our_func$value),
-      lm = c(coef(lm_result), loss = sum(resid(lm_result) ^ 2))) %>% 
+rbind(optim = c(optim_result$par, optim_result$value),
+      lm = c(coef(lm_result), loss = sum(resid(lm_result)^2))) %>% 
   as_tibble(rownames = 'Approach') %>% 
   gt()
 ```
 
 
-While <span class="func">lm</span> uses a different approach, they are both going to result in the 'least-squares' estimates.  Just to be clear, this is an exercise to understand how optimization works, not something you'd ever do for the standard regression setting.  However, many ML tools will require you to supply your data as a model matrix, specify target(s), and select both a loss function and optimizer, and even possibly additional options for the latter.
+While <span class="func">lm</span> uses a different estimation approach, they are both going to result in  'least-squares' estimates.  Just to be clear, this is an exercise to understand how optimization and estimation conceptually works, not something you'd ever need to do for the standard regression setting.  However, many ML tools will require you to supply your data as a model matrix, specify target(s), and select both a loss function and optimizer, and even possibly additional options for the latter, so it's good to get an idea of what all is going on.
 
 
 
 ### Categorical Outcomes
 
-Here we'll also look at some loss functions useful in classification problems. Note that there is not necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though, we'll have different options.
+Let's now pivot to some loss functions useful in classification problems. Note that there is not a necessary exclusion in loss functions for continuous vs. categorical outcomes[^catregloss]. Generally though, we'll have different options.
+
+For the following we follow the ESL text notation [@hastie_elements_2009], where we note $f$ as the prediction, and for convenience we assume a [-1,1] response instead of a [0,1] response.  This allows us to provide simpler looking formulas, but doesn't matter conceptually.
+
 
 #### Misclassification
 
-Probably the most straightforward is misclassification, or 0-1 loss.  If we note $f$ as the prediction, and for convenience we assume a [-1,1] response instead of a [0,1] response:
+Probably the most straightforward is *misclassification* loss:
 
 
-$$L(Y, f(X)) = \sum I(y\neq \mathrm{sign}(f))$$
+$$\textrm{Loss} = \sum I(y\neq \mathrm{sign}(f))$$
 
-In the above, $I$ is the indicator function, and so we are simply summing misclassifications.
+In the above, $I$ is the *indicator function*, where it's a 1 when true, and zero if not, and so we are simply summing misclassifications.
 
 
 #### Binomial log-likelihood
 
+We can use the binomial distribution for a (log) likelihood function:
 
-$$L(Y, f(X)) = \sum \ln(1 + e^{-2yf})$$
+$$\textrm{Loss} = \sum \ln(1 + e^{-2yf})$$
 
-The above is in deviance form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance.  This loss is equivalent to binomial log likelihood when $y$ is on the 0-1 scale.
+The above is in *deviance* form. If you're not familiar, deviance can conceptually be thought of as the GLM version of residual variance, i.e. sum of squared errors, that we have in standard linear regression for a numeric outcome.  This loss is equivalent to binomial log likelihood when $y$ is a binary [0, 1].
+
+
+```{r binom-ll, echo=FALSE, eval=FALSE}
+y = sample(0:1, 100, replace = TRUE)
+mod = glm(y ~ 1, family = binomial)
+y_ = ifelse(y == 0, -1, 1)
+
+mod$deviance/2
+logLik(mod)
+sum(log(1 + exp(-2*y_*predict(mod))))
+```
+
+
 
 #### Exponential
 
-Exponential loss is yet another loss function at our disposal.
+*Exponential loss* is yet another loss function at our disposal for the classification setting.
 
 
-$$L(Y, f(X)) = \sum e^{-yf}$$
+$$\textrm{Loss} = \sum e^{-yf}$$
+
 
 #### Hinge Loss
 
-A final loss function to consider, typically used with support vector machines, is the hinge loss function.
+A final loss function to consider is the *hinge loss* function.
 
-$$L(Y, f(X)) = \max(1-yf, 0)$$
+$$\textrm{Loss} = \max(1-yf, 0)$$
 
 Here negative values of $yf$ are misclassifications, and so correct classifications do not contribute to the loss.  We could also note it as $\sum (1-yf)_+$ , i.e. summing only those positive values of $1-yf$.  
 
 The following image compares these (from @hastie_elements_2009, fig. 10.4).  As before we are assuming y is {-1,1}, and here f is our prediction, where positive values are classified as 1 and negative values are classified as -1.  $yf$, the margin, is akin to the residual from regression, where positive values indicate correct classification.  
 
-<img src="img/lossfuncs.png" style="display:block; margin: 0 auto;" width=50%>
 
-Which of these might work best may be specific to the situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  
+![](img/lossfuncs.png){width=75%}
+
+Which loss function might work best for a given scenario will be specific to that situation, but the gist is that they penalize negative values (misclassifications) more heavily and increasingly (except for misclassification error, which penalizes all misclassifications equally), with their primary difference in how heavy that penalty is.  
 
 
 ## Regularization
 
-<span class="newthought">It is important to note</span> that a model fit to a single data set might do very well with the data at hand, but then suffer when predicting independent data[^biasvar].  Also, oftentimes we are interested in a 'best' subset of predictors among a great many, and in this scenario the estimated coefficients are overly optimistic.  This general issue can be improved by shrinking estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction.
+It is very important to understand that a model fit to a single data set might do very well with that data, but then suffer when predicting independent data that the model did not see[^biasvar].  Also, oftentimes we are interested in a 'best' subset of features among a great many, and in that type of scenario the estimated coefficients can be overly optimistic.  This general issue can be improved by *shrinking* estimates toward zero, such that some of the performance in the initial fit is sacrificed for improvement with regard to prediction on new data.
 
 Penalized estimation will provide estimates with some shrinkage, and we can use it with little additional effort with our common procedures.  Concretely, let's apply this to the standard linear model, where we are finding estimates of $\beta$ that minimize the squared error loss.
 
@@ -366,9 +432,9 @@ Along with the above there are variations such as repeated cross validation, the
 
 
 
-[^regression]: It's never made sense to refer to the numeric outcome case as 'regression' to distinguish it from 'classification' for the binary.  What is logistic regression then? Ordinal regression?  I wouldn't recommend it, but you can use linear regression or any numeric target approach on discrete and even binary targets.   It's fine to call something a classification problem for clarity, but 'regression' is just a general term that implies regressing some y on some X in some fashion.  The adherence to regression vs. classification by many in the ML world, which seems to have come from computer science, is just bizarre in my opinion, and ignores more than a [century of established terminology](https://en.wikipedia.org/wiki/Regression_analysis#History).
+[^regression]: It's never made sense to refer to the numeric outcome case as 'regression' to distinguish it from 'classification' for the binary case.  What is logistic regression then? Ordinal regression?  I wouldn't recommend it, but you can use linear regression or any numeric target approach on discrete and even binary targets.   It's fine to call something a classification problem for clarity, but 'regression' is just a general term that implies regressing some y on some X in some fashion.  The adherence to regression vs. classification by many in the ML world, which seems to have come from computer science, is just bizarre in my opinion, and ignores more than a [century of established terminology](https://en.wikipedia.org/wiki/Regression_analysis#History).
 
-[^maxlike]: Well some of you. Many applied methods courses don't teach the basic maximum likelihood approach, even though it's the most widely used estimation technique for statistical inference.
+[^maxlike]: Many applied analysis courses sadly don't teach the basic maximum likelihood approach, even though it's the most widely used estimation technique for statistical inference.
 
 [^optimfunc]: Type `?optim` at the console for more detail.
 
